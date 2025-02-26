@@ -11,6 +11,7 @@ components:
       discriminator:
         propertyName: detail-type
       oneOf:
+      - $ref: '#/components/schemas/ae.user-info.advisory.data-source-updated'
       - $ref: '#/components/schemas/ae.service.request'
       - $ref: '#/components/schemas/ae.service.order-placed'
       - $ref: '#/components/schemas/ae.service.waived'
@@ -20,9 +21,10 @@ components:
       - $ref: '#/components/schemas/ae.service.order-rejected'
       - $ref: '#/components/schemas/ae.service.order-updated'
       - $ref: '#/components/schemas/ae.asset.service.eligibility-updated'
+      - $ref: '#/components/schemas/ae.notification.request-delivery'
+      - $ref: '#/components/schemas/ae.deal.upserted'
       - $ref: '#/components/schemas/ae.document.asset.added'
       - $ref: '#/components/schemas/ae.document.asset.removed'
-      - $ref: '#/components/schemas/ae.deal.upserted'
       - $ref: '#/components/schemas/ae.asset.updated.ams'
       - $ref: '#/components/schemas/ae.asset.sold-status-updated'
       - $ref: '#/components/schemas/ae.asset.paid-status-updated'
@@ -57,7 +59,6 @@ components:
       - $ref: '#/components/schemas/ae.advisory.account.ams'
       - $ref: '#/components/schemas/ae.advisory.account.representatives.ams'
       - $ref: '#/components/schemas/ae.accounting.payment.source.updated'
-      - $ref: '#/components/schemas/ae.notification.request-delivery'
       - $ref: '#/components/schemas/ae.account.payment-source.upsert.ams'
       - $ref: '#/components/schemas/ae.account.payment-source.removed.ams'
       - $ref: '#/components/schemas/ae.account.representative.payer-authorized'
@@ -66,7 +67,6 @@ components:
       - $ref: '#/components/schemas/ae.account.representative.removed.ams'
       - $ref: '#/components/schemas/ae.account.upserted.ams'
       - $ref: '#/components/schemas/ae.account.removed.ams'
-      - $ref: '#/components/schemas/ae.user-info.advisory.data-source-updated'
       - $ref: '#/components/schemas/ae.asset.gatepass.send-email'
       - $ref: '#/components/schemas/ae.asset.gatepass.created'
       - $ref: '#/components/schemas/ae.asset.gatepass.voided'
@@ -962,6 +962,52 @@ components:
           description: Service parameter value checked against
           type: string
       type: object
+    ae.user-info.advisory.data-source-updated:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.user-info.advisory.data-source-updated-detail'
+      required:
+      - detail
+      type: object
+    ae.user-info.advisory.data-source-updated-detail:
+      additionalProperties: false
+      description: Advisory message for user-info
+      properties:
+        version:
+          example: "0"
+          minLength: 1
+          type: string
+        bucket:
+          $ref: '#/components/schemas/ae_user_info_advisory_data_source_updated_detail_bucket'
+        object:
+          $ref: '#/components/schemas/ae_user_info_advisory_data_source_updated_detail_object'
+        request-id:
+          example: JFK4SWXNXV7K65B1
+          type: string
+        requester:
+          example: "125147775665"
+          type: string
+        source-ip-address:
+          example: 127.0.0.1
+          type: string
+        reason:
+          example: PutObject
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - bucket
+      - object
+      - reason
+      - request-id
+      - requester
+      - source-ip-address
+      - version
+      type: object
     ae.service.request:
       additionalProperties: false
       allOf:
@@ -1413,6 +1459,134 @@ components:
       - initiator
       - updated-at
       type: object
+    ae.notification.request-delivery:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.notification.request-delivery-detail'
+      required:
+      - detail
+      type: object
+    ae.notification.request-delivery-detail:
+      description: Notification to be delivered
+      properties:
+        message:
+          description: The message to be delivered
+          example: Your vehicle is ready for pickup
+          type: string
+        target-list:
+          items:
+            $ref: '#/components/schemas/notification-target'
+          minItems: 1
+          type: array
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - message
+      - target-list
+      type: object
+    notification-target:
+      description: The target to deliver the notification to
+      properties:
+        delivery-method:
+          description: The method to deliver the notification
+          enum:
+          - email
+          - sms
+          example: email
+          type: string
+        delivery-address:
+          description: The address to deliver the notification to
+          type: string
+      required:
+      - delivery-address
+      - delivery-method
+      type: object
+    ae.deal.upserted:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.deal.upserted-detail'
+      required:
+      - detail
+      type: object
+    ae.deal.upserted-detail:
+      additionalProperties: false
+      description: Deal entity
+      properties:
+        id:
+          description: Unique id for a deal
+          example: 250127-81941
+          type: string
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        seller:
+          description: Source's unique identifier for account
+          example: 503519-20210827T144732
+          type: string
+        seller-agent:
+          description: The representative id an AMS account
+          example: "1"
+          nullable: false
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        sale-listing:
+          description: Uniquie identifier for a sale listing.
+          type: string
+        sold-at:
+          description: The time in ISO-8601 formatted at which the asset was sold
+          example: 2024-05-24T13:19:23.238Z
+          format: date-time
+          type: string
+        buyer:
+          description: Source's unique identifier for account
+          example: 503519-20210827T144732
+          type: string
+        buyer-agent:
+          description: The representative id an AMS account
+          example: "1"
+          nullable: false
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        amount:
+          $ref: '#/components/schemas/common.currency'
+        sold-method:
+          description: The type of sale the deal was made in.
+          enum:
+          - inlane
+          - online
+          example: inlane
+          type: string
+        updated-at:
+          description: The time in ISO-8601 format in UTC timezone at which the record
+            was generated
+          example: 2024-05-24T13:19:23.238Z
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - amount
+      - asset
+      - auction-id
+      - buyer
+      - id
+      - initiator
+      - sale-listing
+      - seller
+      - sold-at
+      - updated-at
+      type: object
     ae.document.asset.added:
       additionalProperties: false
       allOf:
@@ -1567,88 +1741,6 @@ components:
       - window_sticker
       - work_order
       type: string
-    ae.deal.upserted:
-      additionalProperties: false
-      allOf:
-      - $ref: '#/components/schemas/BaseEdgeEvent'
-      description: Notification that a service order has been placed
-      properties:
-        detail:
-          $ref: '#/components/schemas/ae.deal.upserted-detail'
-      required:
-      - detail
-      type: object
-    ae.deal.upserted-detail:
-      additionalProperties: false
-      description: Deal entity
-      properties:
-        id:
-          description: Unique id for a deal
-          example: 250127-81941
-          type: string
-        auction-id:
-          description: Auction Edge unique identifier for an auction.
-          example: daanw
-          type: string
-        asset:
-          $ref: '#/components/schemas/common.ams.asset-pointer'
-        seller:
-          description: Source's unique identifier for account
-          example: 503519-20210827T144732
-          type: string
-        seller-agent:
-          description: The representative id an AMS account
-          example: "1"
-          nullable: false
-          type: string
-          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
-        sale-listing:
-          description: Uniquie identifier for a sale listing.
-          type: string
-        sold-at:
-          description: The time in ISO-8601 formatted at which the asset was sold
-          example: 2024-05-24T13:19:23.238Z
-          format: date-time
-          type: string
-        buyer:
-          description: Source's unique identifier for account
-          example: 503519-20210827T144732
-          type: string
-        buyer-agent:
-          description: The representative id an AMS account
-          example: "1"
-          nullable: false
-          type: string
-          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
-        amount:
-          $ref: '#/components/schemas/common.currency'
-        sold-method:
-          description: The type of sale the deal was made in.
-          enum:
-          - inlane
-          - online
-          example: inlane
-          type: string
-        updated-at:
-          description: The time in ISO-8601 format in UTC timezone at which the record
-            was generated
-          example: 2024-05-24T13:19:23.238Z
-          format: date-time
-          type: string
-        initiator:
-          $ref: '#/components/schemas/common.initiator'
-      required:
-      - amount
-      - asset
-      - auction-id
-      - buyer
-      - id
-      - initiator
-      - sale-listing
-      - seller
-      - sold-at
-      - updated-at
-      type: object
     ae.asset.updated.ams:
       additionalProperties: false
       allOf:
@@ -3546,52 +3638,6 @@ components:
       - reversed
       - failed
       type: string
-    ae.notification.request-delivery:
-      additionalProperties: false
-      allOf:
-      - $ref: '#/components/schemas/BaseEdgeEvent'
-      description: Notification that a service order has been placed
-      properties:
-        detail:
-          $ref: '#/components/schemas/ae.notification.request-delivery-detail'
-      required:
-      - detail
-      type: object
-    ae.notification.request-delivery-detail:
-      description: Notification to be delivered
-      properties:
-        message:
-          description: The message to be delivered
-          example: Your vehicle is ready for pickup
-          type: string
-        target-list:
-          items:
-            $ref: '#/components/schemas/notification-target'
-          minItems: 1
-          type: array
-        initiator:
-          $ref: '#/components/schemas/common.initiator'
-      required:
-      - message
-      - target-list
-      type: object
-    notification-target:
-      description: The target to deliver the notification to
-      properties:
-        delivery-method:
-          description: The method to deliver the notification
-          enum:
-          - email
-          - sms
-          example: email
-          type: string
-        delivery-address:
-          description: The address to deliver the notification to
-          type: string
-      required:
-      - delivery-address
-      - delivery-method
-      type: object
     ae.account.payment-source.upsert.ams:
       additionalProperties: false
       allOf:
@@ -3942,52 +3988,6 @@ components:
       required:
       - auction-id
       - id
-      type: object
-    ae.user-info.advisory.data-source-updated:
-      additionalProperties: false
-      allOf:
-      - $ref: '#/components/schemas/BaseEdgeEvent'
-      description: Notification that a service order has been placed
-      properties:
-        detail:
-          $ref: '#/components/schemas/ae.user-info.advisory.data-source-updated-detail'
-      required:
-      - detail
-      type: object
-    ae.user-info.advisory.data-source-updated-detail:
-      additionalProperties: false
-      description: Advisory message for user-info
-      properties:
-        version:
-          example: "0"
-          minLength: 1
-          type: string
-        bucket:
-          $ref: '#/components/schemas/ae_user_info_advisory_data_source_updated_detail_bucket'
-        object:
-          $ref: '#/components/schemas/ae_user_info_advisory_data_source_updated_detail_object'
-        request-id:
-          example: JFK4SWXNXV7K65B1
-          type: string
-        requester:
-          example: "125147775665"
-          type: string
-        source-ip-address:
-          example: 127.0.0.1
-          type: string
-        reason:
-          example: PutObject
-          type: string
-        initiator:
-          $ref: '#/components/schemas/common.initiator'
-      required:
-      - bucket
-      - object
-      - reason
-      - request-id
-      - requester
-      - source-ip-address
-      - version
       type: object
     ae.asset.gatepass.send-email:
       additionalProperties: false
@@ -4742,6 +4742,35 @@ components:
       required:
       - requested
       type: object
+    ae_user_info_advisory_data_source_updated_detail_bucket:
+      properties:
+        name:
+          example: ae-pdp-production
+          type: string
+      required:
+      - name
+      type: object
+    ae_user_info_advisory_data_source_updated_detail_object:
+      properties:
+        key:
+          example: auth-data/spark-api.json
+          minLength: 1
+          type: string
+        size:
+          example: 777319
+          type: integer
+        etag:
+          example: 4e3f4656cae1e3d9427df4fb92773d6c
+          type: string
+        sequencer:
+          example: 0066E47DA09EE2B277
+          type: string
+      required:
+      - etag
+      - key
+      - sequencer
+      - size
+      type: object
     ae_service_order_placed_detail_service:
       properties:
         class:
@@ -4978,35 +5007,6 @@ components:
             example: true
             type: boolean
         type: object
-    ae_user_info_advisory_data_source_updated_detail_bucket:
-      properties:
-        name:
-          example: ae-pdp-production
-          type: string
-      required:
-      - name
-      type: object
-    ae_user_info_advisory_data_source_updated_detail_object:
-      properties:
-        key:
-          example: auth-data/spark-api.json
-          minLength: 1
-          type: string
-        size:
-          example: 777319
-          type: integer
-        etag:
-          example: 4e3f4656cae1e3d9427df4fb92773d6c
-          type: string
-        sequencer:
-          example: 0066E47DA09EE2B277
-          type: string
-      required:
-      - etag
-      - key
-      - sequencer
-      - size
-      type: object
     ae_asset_gatepass_buyer_releasable_detail_auction:
       description: required info about an auction
       properties:

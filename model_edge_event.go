@@ -576,842 +576,1258 @@ func AeUserInfoAdvisoryDataSourceUpdatedAsEdgeEvent(v *AeUserInfoAdvisoryDataSou
 // Unmarshal JSON data into one of the pointers in the struct
 func (dst *EdgeEvent) UnmarshalJSON(data []byte) error {
 	var err error
-	// use discriminator value to speed up the lookup
-	var jsonDict map[string]interface{}
-	err = newStrictDecoder(data).Decode(&jsonDict)
-	if err != nil {
-		return fmt.Errorf("failed to unmarshal JSON into map for the discriminator lookup")
-	}
-
-	// check if the discriminator value is 'ae.account.payment-source.removed.ams'
-	if jsonDict["detail-type"] == "ae.account.payment-source.removed.ams" {
-		// try to unmarshal JSON data into AeAccountPaymentSourceRemovedAms
-		err = json.Unmarshal(data, &dst.AeAccountPaymentSourceRemovedAms)
-		if err == nil {
-			return nil // data stored in dst.AeAccountPaymentSourceRemovedAms, return on the first match
-		} else {
+	match := 0
+	// try to unmarshal data into AeAccountPaymentSourceRemovedAms
+	err = newStrictDecoder(data).Decode(&dst.AeAccountPaymentSourceRemovedAms)
+	if err == nil {
+		jsonAeAccountPaymentSourceRemovedAms, _ := json.Marshal(dst.AeAccountPaymentSourceRemovedAms)
+		if string(jsonAeAccountPaymentSourceRemovedAms) == "{}" { // empty struct
 			dst.AeAccountPaymentSourceRemovedAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAccountPaymentSourceRemovedAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAccountPaymentSourceRemovedAms); err != nil {
+				dst.AeAccountPaymentSourceRemovedAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAccountPaymentSourceRemovedAms = nil
 	}
 
-	// check if the discriminator value is 'ae.account.payment-source.upsert.ams'
-	if jsonDict["detail-type"] == "ae.account.payment-source.upsert.ams" {
-		// try to unmarshal JSON data into AeAccountPaymentSourceUpsertAms
-		err = json.Unmarshal(data, &dst.AeAccountPaymentSourceUpsertAms)
-		if err == nil {
-			return nil // data stored in dst.AeAccountPaymentSourceUpsertAms, return on the first match
-		} else {
+	// try to unmarshal data into AeAccountPaymentSourceUpsertAms
+	err = newStrictDecoder(data).Decode(&dst.AeAccountPaymentSourceUpsertAms)
+	if err == nil {
+		jsonAeAccountPaymentSourceUpsertAms, _ := json.Marshal(dst.AeAccountPaymentSourceUpsertAms)
+		if string(jsonAeAccountPaymentSourceUpsertAms) == "{}" { // empty struct
 			dst.AeAccountPaymentSourceUpsertAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAccountPaymentSourceUpsertAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAccountPaymentSourceUpsertAms); err != nil {
+				dst.AeAccountPaymentSourceUpsertAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAccountPaymentSourceUpsertAms = nil
 	}
 
-	// check if the discriminator value is 'ae.account.removed.ams'
-	if jsonDict["detail-type"] == "ae.account.removed.ams" {
-		// try to unmarshal JSON data into AeAccountRemovedAms
-		err = json.Unmarshal(data, &dst.AeAccountRemovedAms)
-		if err == nil {
-			return nil // data stored in dst.AeAccountRemovedAms, return on the first match
-		} else {
+	// try to unmarshal data into AeAccountRemovedAms
+	err = newStrictDecoder(data).Decode(&dst.AeAccountRemovedAms)
+	if err == nil {
+		jsonAeAccountRemovedAms, _ := json.Marshal(dst.AeAccountRemovedAms)
+		if string(jsonAeAccountRemovedAms) == "{}" { // empty struct
 			dst.AeAccountRemovedAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAccountRemovedAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAccountRemovedAms); err != nil {
+				dst.AeAccountRemovedAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAccountRemovedAms = nil
 	}
 
-	// check if the discriminator value is 'ae.account.representative.payer-authorized'
-	if jsonDict["detail-type"] == "ae.account.representative.payer-authorized" {
-		// try to unmarshal JSON data into AeAccountRepresentativePayerAuthorized
-		err = json.Unmarshal(data, &dst.AeAccountRepresentativePayerAuthorized)
-		if err == nil {
-			return nil // data stored in dst.AeAccountRepresentativePayerAuthorized, return on the first match
-		} else {
+	// try to unmarshal data into AeAccountRepresentativePayerAuthorized
+	err = newStrictDecoder(data).Decode(&dst.AeAccountRepresentativePayerAuthorized)
+	if err == nil {
+		jsonAeAccountRepresentativePayerAuthorized, _ := json.Marshal(dst.AeAccountRepresentativePayerAuthorized)
+		if string(jsonAeAccountRepresentativePayerAuthorized) == "{}" { // empty struct
 			dst.AeAccountRepresentativePayerAuthorized = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAccountRepresentativePayerAuthorized: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAccountRepresentativePayerAuthorized); err != nil {
+				dst.AeAccountRepresentativePayerAuthorized = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAccountRepresentativePayerAuthorized = nil
 	}
 
-	// check if the discriminator value is 'ae.account.representative.payer-deauthorized'
-	if jsonDict["detail-type"] == "ae.account.representative.payer-deauthorized" {
-		// try to unmarshal JSON data into AeAccountRepresentativePayerDeauthorized
-		err = json.Unmarshal(data, &dst.AeAccountRepresentativePayerDeauthorized)
-		if err == nil {
-			return nil // data stored in dst.AeAccountRepresentativePayerDeauthorized, return on the first match
-		} else {
+	// try to unmarshal data into AeAccountRepresentativePayerDeauthorized
+	err = newStrictDecoder(data).Decode(&dst.AeAccountRepresentativePayerDeauthorized)
+	if err == nil {
+		jsonAeAccountRepresentativePayerDeauthorized, _ := json.Marshal(dst.AeAccountRepresentativePayerDeauthorized)
+		if string(jsonAeAccountRepresentativePayerDeauthorized) == "{}" { // empty struct
 			dst.AeAccountRepresentativePayerDeauthorized = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAccountRepresentativePayerDeauthorized: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAccountRepresentativePayerDeauthorized); err != nil {
+				dst.AeAccountRepresentativePayerDeauthorized = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAccountRepresentativePayerDeauthorized = nil
 	}
 
-	// check if the discriminator value is 'ae.account.representative.removed.ams'
-	if jsonDict["detail-type"] == "ae.account.representative.removed.ams" {
-		// try to unmarshal JSON data into AeAccountRepresentativeRemovedAms
-		err = json.Unmarshal(data, &dst.AeAccountRepresentativeRemovedAms)
-		if err == nil {
-			return nil // data stored in dst.AeAccountRepresentativeRemovedAms, return on the first match
-		} else {
+	// try to unmarshal data into AeAccountRepresentativeRemovedAms
+	err = newStrictDecoder(data).Decode(&dst.AeAccountRepresentativeRemovedAms)
+	if err == nil {
+		jsonAeAccountRepresentativeRemovedAms, _ := json.Marshal(dst.AeAccountRepresentativeRemovedAms)
+		if string(jsonAeAccountRepresentativeRemovedAms) == "{}" { // empty struct
 			dst.AeAccountRepresentativeRemovedAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAccountRepresentativeRemovedAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAccountRepresentativeRemovedAms); err != nil {
+				dst.AeAccountRepresentativeRemovedAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAccountRepresentativeRemovedAms = nil
 	}
 
-	// check if the discriminator value is 'ae.account.representative.upserted.ams'
-	if jsonDict["detail-type"] == "ae.account.representative.upserted.ams" {
-		// try to unmarshal JSON data into AeAccountRepresentativeUpsertedAms
-		err = json.Unmarshal(data, &dst.AeAccountRepresentativeUpsertedAms)
-		if err == nil {
-			return nil // data stored in dst.AeAccountRepresentativeUpsertedAms, return on the first match
-		} else {
+	// try to unmarshal data into AeAccountRepresentativeUpsertedAms
+	err = newStrictDecoder(data).Decode(&dst.AeAccountRepresentativeUpsertedAms)
+	if err == nil {
+		jsonAeAccountRepresentativeUpsertedAms, _ := json.Marshal(dst.AeAccountRepresentativeUpsertedAms)
+		if string(jsonAeAccountRepresentativeUpsertedAms) == "{}" { // empty struct
 			dst.AeAccountRepresentativeUpsertedAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAccountRepresentativeUpsertedAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAccountRepresentativeUpsertedAms); err != nil {
+				dst.AeAccountRepresentativeUpsertedAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAccountRepresentativeUpsertedAms = nil
 	}
 
-	// check if the discriminator value is 'ae.account.upserted.ams'
-	if jsonDict["detail-type"] == "ae.account.upserted.ams" {
-		// try to unmarshal JSON data into AeAccountUpsertedAms
-		err = json.Unmarshal(data, &dst.AeAccountUpsertedAms)
-		if err == nil {
-			return nil // data stored in dst.AeAccountUpsertedAms, return on the first match
-		} else {
+	// try to unmarshal data into AeAccountUpsertedAms
+	err = newStrictDecoder(data).Decode(&dst.AeAccountUpsertedAms)
+	if err == nil {
+		jsonAeAccountUpsertedAms, _ := json.Marshal(dst.AeAccountUpsertedAms)
+		if string(jsonAeAccountUpsertedAms) == "{}" { // empty struct
 			dst.AeAccountUpsertedAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAccountUpsertedAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAccountUpsertedAms); err != nil {
+				dst.AeAccountUpsertedAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAccountUpsertedAms = nil
 	}
 
-	// check if the discriminator value is 'ae.accounting.payment.source.updated'
-	if jsonDict["detail-type"] == "ae.accounting.payment.source.updated" {
-		// try to unmarshal JSON data into AeAccountingPaymentSourceUpdated
-		err = json.Unmarshal(data, &dst.AeAccountingPaymentSourceUpdated)
-		if err == nil {
-			return nil // data stored in dst.AeAccountingPaymentSourceUpdated, return on the first match
-		} else {
+	// try to unmarshal data into AeAccountingPaymentSourceUpdated
+	err = newStrictDecoder(data).Decode(&dst.AeAccountingPaymentSourceUpdated)
+	if err == nil {
+		jsonAeAccountingPaymentSourceUpdated, _ := json.Marshal(dst.AeAccountingPaymentSourceUpdated)
+		if string(jsonAeAccountingPaymentSourceUpdated) == "{}" { // empty struct
 			dst.AeAccountingPaymentSourceUpdated = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAccountingPaymentSourceUpdated: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAccountingPaymentSourceUpdated); err != nil {
+				dst.AeAccountingPaymentSourceUpdated = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAccountingPaymentSourceUpdated = nil
 	}
 
-	// check if the discriminator value is 'ae.advisory.account.ams'
-	if jsonDict["detail-type"] == "ae.advisory.account.ams" {
-		// try to unmarshal JSON data into AeAdvisoryAccountAms
-		err = json.Unmarshal(data, &dst.AeAdvisoryAccountAms)
-		if err == nil {
-			return nil // data stored in dst.AeAdvisoryAccountAms, return on the first match
-		} else {
+	// try to unmarshal data into AeAdvisoryAccountAms
+	err = newStrictDecoder(data).Decode(&dst.AeAdvisoryAccountAms)
+	if err == nil {
+		jsonAeAdvisoryAccountAms, _ := json.Marshal(dst.AeAdvisoryAccountAms)
+		if string(jsonAeAdvisoryAccountAms) == "{}" { // empty struct
 			dst.AeAdvisoryAccountAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAdvisoryAccountAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAdvisoryAccountAms); err != nil {
+				dst.AeAdvisoryAccountAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAdvisoryAccountAms = nil
 	}
 
-	// check if the discriminator value is 'ae.advisory.account.representatives.ams'
-	if jsonDict["detail-type"] == "ae.advisory.account.representatives.ams" {
-		// try to unmarshal JSON data into AeAdvisoryAccountRepresentativesAms
-		err = json.Unmarshal(data, &dst.AeAdvisoryAccountRepresentativesAms)
-		if err == nil {
-			return nil // data stored in dst.AeAdvisoryAccountRepresentativesAms, return on the first match
-		} else {
+	// try to unmarshal data into AeAdvisoryAccountRepresentativesAms
+	err = newStrictDecoder(data).Decode(&dst.AeAdvisoryAccountRepresentativesAms)
+	if err == nil {
+		jsonAeAdvisoryAccountRepresentativesAms, _ := json.Marshal(dst.AeAdvisoryAccountRepresentativesAms)
+		if string(jsonAeAdvisoryAccountRepresentativesAms) == "{}" { // empty struct
 			dst.AeAdvisoryAccountRepresentativesAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAdvisoryAccountRepresentativesAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAdvisoryAccountRepresentativesAms); err != nil {
+				dst.AeAdvisoryAccountRepresentativesAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAdvisoryAccountRepresentativesAms = nil
 	}
 
-	// check if the discriminator value is 'ae.advisory.asset.ams'
-	if jsonDict["detail-type"] == "ae.advisory.asset.ams" {
-		// try to unmarshal JSON data into AeAdvisoryAssetAms
-		err = json.Unmarshal(data, &dst.AeAdvisoryAssetAms)
-		if err == nil {
-			return nil // data stored in dst.AeAdvisoryAssetAms, return on the first match
-		} else {
+	// try to unmarshal data into AeAdvisoryAssetAms
+	err = newStrictDecoder(data).Decode(&dst.AeAdvisoryAssetAms)
+	if err == nil {
+		jsonAeAdvisoryAssetAms, _ := json.Marshal(dst.AeAdvisoryAssetAms)
+		if string(jsonAeAdvisoryAssetAms) == "{}" { // empty struct
 			dst.AeAdvisoryAssetAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAdvisoryAssetAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAdvisoryAssetAms); err != nil {
+				dst.AeAdvisoryAssetAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAdvisoryAssetAms = nil
 	}
 
-	// check if the discriminator value is 'ae.advisory.request.account.ams'
-	if jsonDict["detail-type"] == "ae.advisory.request.account.ams" {
-		// try to unmarshal JSON data into AeAdvisoryRequestAccountAms
-		err = json.Unmarshal(data, &dst.AeAdvisoryRequestAccountAms)
-		if err == nil {
-			return nil // data stored in dst.AeAdvisoryRequestAccountAms, return on the first match
-		} else {
+	// try to unmarshal data into AeAdvisoryRequestAccountAms
+	err = newStrictDecoder(data).Decode(&dst.AeAdvisoryRequestAccountAms)
+	if err == nil {
+		jsonAeAdvisoryRequestAccountAms, _ := json.Marshal(dst.AeAdvisoryRequestAccountAms)
+		if string(jsonAeAdvisoryRequestAccountAms) == "{}" { // empty struct
 			dst.AeAdvisoryRequestAccountAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAdvisoryRequestAccountAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAdvisoryRequestAccountAms); err != nil {
+				dst.AeAdvisoryRequestAccountAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAdvisoryRequestAccountAms = nil
 	}
 
-	// check if the discriminator value is 'ae.advisory.request.asset'
-	if jsonDict["detail-type"] == "ae.advisory.request.asset" {
-		// try to unmarshal JSON data into AeAdvisoryRequestAsset
-		err = json.Unmarshal(data, &dst.AeAdvisoryRequestAsset)
-		if err == nil {
-			return nil // data stored in dst.AeAdvisoryRequestAsset, return on the first match
-		} else {
+	// try to unmarshal data into AeAdvisoryRequestAsset
+	err = newStrictDecoder(data).Decode(&dst.AeAdvisoryRequestAsset)
+	if err == nil {
+		jsonAeAdvisoryRequestAsset, _ := json.Marshal(dst.AeAdvisoryRequestAsset)
+		if string(jsonAeAdvisoryRequestAsset) == "{}" { // empty struct
 			dst.AeAdvisoryRequestAsset = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAdvisoryRequestAsset: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAdvisoryRequestAsset); err != nil {
+				dst.AeAdvisoryRequestAsset = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAdvisoryRequestAsset = nil
 	}
 
-	// check if the discriminator value is 'ae.advisory.request.asset-sold'
-	if jsonDict["detail-type"] == "ae.advisory.request.asset-sold" {
-		// try to unmarshal JSON data into AeAdvisoryRequestAssetSold
-		err = json.Unmarshal(data, &dst.AeAdvisoryRequestAssetSold)
-		if err == nil {
-			return nil // data stored in dst.AeAdvisoryRequestAssetSold, return on the first match
-		} else {
+	// try to unmarshal data into AeAdvisoryRequestAssetSold
+	err = newStrictDecoder(data).Decode(&dst.AeAdvisoryRequestAssetSold)
+	if err == nil {
+		jsonAeAdvisoryRequestAssetSold, _ := json.Marshal(dst.AeAdvisoryRequestAssetSold)
+		if string(jsonAeAdvisoryRequestAssetSold) == "{}" { // empty struct
 			dst.AeAdvisoryRequestAssetSold = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAdvisoryRequestAssetSold: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAdvisoryRequestAssetSold); err != nil {
+				dst.AeAdvisoryRequestAssetSold = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAdvisoryRequestAssetSold = nil
 	}
 
-	// check if the discriminator value is 'ae.ams.payment-vendor.upsert'
-	if jsonDict["detail-type"] == "ae.ams.payment-vendor.upsert" {
-		// try to unmarshal JSON data into AeAmsPaymentVendorUpsert
-		err = json.Unmarshal(data, &dst.AeAmsPaymentVendorUpsert)
-		if err == nil {
-			return nil // data stored in dst.AeAmsPaymentVendorUpsert, return on the first match
-		} else {
+	// try to unmarshal data into AeAmsPaymentVendorUpsert
+	err = newStrictDecoder(data).Decode(&dst.AeAmsPaymentVendorUpsert)
+	if err == nil {
+		jsonAeAmsPaymentVendorUpsert, _ := json.Marshal(dst.AeAmsPaymentVendorUpsert)
+		if string(jsonAeAmsPaymentVendorUpsert) == "{}" { // empty struct
 			dst.AeAmsPaymentVendorUpsert = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAmsPaymentVendorUpsert: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAmsPaymentVendorUpsert); err != nil {
+				dst.AeAmsPaymentVendorUpsert = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAmsPaymentVendorUpsert = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.checked-in.ams'
-	if jsonDict["detail-type"] == "ae.asset.checked-in.ams" {
-		// try to unmarshal JSON data into AeAssetCheckedInAms
-		err = json.Unmarshal(data, &dst.AeAssetCheckedInAms)
-		if err == nil {
-			return nil // data stored in dst.AeAssetCheckedInAms, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetCheckedInAms
+	err = newStrictDecoder(data).Decode(&dst.AeAssetCheckedInAms)
+	if err == nil {
+		jsonAeAssetCheckedInAms, _ := json.Marshal(dst.AeAssetCheckedInAms)
+		if string(jsonAeAssetCheckedInAms) == "{}" { // empty struct
 			dst.AeAssetCheckedInAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetCheckedInAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetCheckedInAms); err != nil {
+				dst.AeAssetCheckedInAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetCheckedInAms = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.checked-out.ams'
-	if jsonDict["detail-type"] == "ae.asset.checked-out.ams" {
-		// try to unmarshal JSON data into AeAssetCheckedOutAms
-		err = json.Unmarshal(data, &dst.AeAssetCheckedOutAms)
-		if err == nil {
-			return nil // data stored in dst.AeAssetCheckedOutAms, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetCheckedOutAms
+	err = newStrictDecoder(data).Decode(&dst.AeAssetCheckedOutAms)
+	if err == nil {
+		jsonAeAssetCheckedOutAms, _ := json.Marshal(dst.AeAssetCheckedOutAms)
+		if string(jsonAeAssetCheckedOutAms) == "{}" { // empty struct
 			dst.AeAssetCheckedOutAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetCheckedOutAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetCheckedOutAms); err != nil {
+				dst.AeAssetCheckedOutAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetCheckedOutAms = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.deal.charge.removed'
-	if jsonDict["detail-type"] == "ae.asset.deal.charge.removed" {
-		// try to unmarshal JSON data into AeAssetDealChargeRemoved
-		err = json.Unmarshal(data, &dst.AeAssetDealChargeRemoved)
-		if err == nil {
-			return nil // data stored in dst.AeAssetDealChargeRemoved, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetDealChargeRemoved
+	err = newStrictDecoder(data).Decode(&dst.AeAssetDealChargeRemoved)
+	if err == nil {
+		jsonAeAssetDealChargeRemoved, _ := json.Marshal(dst.AeAssetDealChargeRemoved)
+		if string(jsonAeAssetDealChargeRemoved) == "{}" { // empty struct
 			dst.AeAssetDealChargeRemoved = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetDealChargeRemoved: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetDealChargeRemoved); err != nil {
+				dst.AeAssetDealChargeRemoved = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetDealChargeRemoved = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.deal.charge.upsert'
-	if jsonDict["detail-type"] == "ae.asset.deal.charge.upsert" {
-		// try to unmarshal JSON data into AeAssetDealChargeUpsert
-		err = json.Unmarshal(data, &dst.AeAssetDealChargeUpsert)
-		if err == nil {
-			return nil // data stored in dst.AeAssetDealChargeUpsert, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetDealChargeUpsert
+	err = newStrictDecoder(data).Decode(&dst.AeAssetDealChargeUpsert)
+	if err == nil {
+		jsonAeAssetDealChargeUpsert, _ := json.Marshal(dst.AeAssetDealChargeUpsert)
+		if string(jsonAeAssetDealChargeUpsert) == "{}" { // empty struct
 			dst.AeAssetDealChargeUpsert = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetDealChargeUpsert: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetDealChargeUpsert); err != nil {
+				dst.AeAssetDealChargeUpsert = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetDealChargeUpsert = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.deal.offer.accepted'
-	if jsonDict["detail-type"] == "ae.asset.deal.offer.accepted" {
-		// try to unmarshal JSON data into AeAssetDealOfferAccepted
-		err = json.Unmarshal(data, &dst.AeAssetDealOfferAccepted)
-		if err == nil {
-			return nil // data stored in dst.AeAssetDealOfferAccepted, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetDealOfferAccepted
+	err = newStrictDecoder(data).Decode(&dst.AeAssetDealOfferAccepted)
+	if err == nil {
+		jsonAeAssetDealOfferAccepted, _ := json.Marshal(dst.AeAssetDealOfferAccepted)
+		if string(jsonAeAssetDealOfferAccepted) == "{}" { // empty struct
 			dst.AeAssetDealOfferAccepted = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetDealOfferAccepted: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetDealOfferAccepted); err != nil {
+				dst.AeAssetDealOfferAccepted = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetDealOfferAccepted = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.deal.offer.made'
-	if jsonDict["detail-type"] == "ae.asset.deal.offer.made" {
-		// try to unmarshal JSON data into AeAssetDealOfferMade
-		err = json.Unmarshal(data, &dst.AeAssetDealOfferMade)
-		if err == nil {
-			return nil // data stored in dst.AeAssetDealOfferMade, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetDealOfferMade
+	err = newStrictDecoder(data).Decode(&dst.AeAssetDealOfferMade)
+	if err == nil {
+		jsonAeAssetDealOfferMade, _ := json.Marshal(dst.AeAssetDealOfferMade)
+		if string(jsonAeAssetDealOfferMade) == "{}" { // empty struct
 			dst.AeAssetDealOfferMade = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetDealOfferMade: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetDealOfferMade); err != nil {
+				dst.AeAssetDealOfferMade = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetDealOfferMade = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.deal.offer.rejected'
-	if jsonDict["detail-type"] == "ae.asset.deal.offer.rejected" {
-		// try to unmarshal JSON data into AeAssetDealOfferRejected
-		err = json.Unmarshal(data, &dst.AeAssetDealOfferRejected)
-		if err == nil {
-			return nil // data stored in dst.AeAssetDealOfferRejected, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetDealOfferRejected
+	err = newStrictDecoder(data).Decode(&dst.AeAssetDealOfferRejected)
+	if err == nil {
+		jsonAeAssetDealOfferRejected, _ := json.Marshal(dst.AeAssetDealOfferRejected)
+		if string(jsonAeAssetDealOfferRejected) == "{}" { // empty struct
 			dst.AeAssetDealOfferRejected = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetDealOfferRejected: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetDealOfferRejected); err != nil {
+				dst.AeAssetDealOfferRejected = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetDealOfferRejected = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.deal.payment.apply-source'
-	if jsonDict["detail-type"] == "ae.asset.deal.payment.apply-source" {
-		// try to unmarshal JSON data into AeAssetDealPaymentApplySource
-		err = json.Unmarshal(data, &dst.AeAssetDealPaymentApplySource)
-		if err == nil {
-			return nil // data stored in dst.AeAssetDealPaymentApplySource, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetDealPaymentApplySource
+	err = newStrictDecoder(data).Decode(&dst.AeAssetDealPaymentApplySource)
+	if err == nil {
+		jsonAeAssetDealPaymentApplySource, _ := json.Marshal(dst.AeAssetDealPaymentApplySource)
+		if string(jsonAeAssetDealPaymentApplySource) == "{}" { // empty struct
 			dst.AeAssetDealPaymentApplySource = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetDealPaymentApplySource: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetDealPaymentApplySource); err != nil {
+				dst.AeAssetDealPaymentApplySource = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetDealPaymentApplySource = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.deal.payment.status-changed'
-	if jsonDict["detail-type"] == "ae.asset.deal.payment.status-changed" {
-		// try to unmarshal JSON data into AeAssetDealPaymentStatusChanged
-		err = json.Unmarshal(data, &dst.AeAssetDealPaymentStatusChanged)
-		if err == nil {
-			return nil // data stored in dst.AeAssetDealPaymentStatusChanged, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetDealPaymentStatusChanged
+	err = newStrictDecoder(data).Decode(&dst.AeAssetDealPaymentStatusChanged)
+	if err == nil {
+		jsonAeAssetDealPaymentStatusChanged, _ := json.Marshal(dst.AeAssetDealPaymentStatusChanged)
+		if string(jsonAeAssetDealPaymentStatusChanged) == "{}" { // empty struct
 			dst.AeAssetDealPaymentStatusChanged = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetDealPaymentStatusChanged: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetDealPaymentStatusChanged); err != nil {
+				dst.AeAssetDealPaymentStatusChanged = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetDealPaymentStatusChanged = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.deal.sold'
-	if jsonDict["detail-type"] == "ae.asset.deal.sold" {
-		// try to unmarshal JSON data into AeAssetDealSold
-		err = json.Unmarshal(data, &dst.AeAssetDealSold)
-		if err == nil {
-			return nil // data stored in dst.AeAssetDealSold, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetDealSold
+	err = newStrictDecoder(data).Decode(&dst.AeAssetDealSold)
+	if err == nil {
+		jsonAeAssetDealSold, _ := json.Marshal(dst.AeAssetDealSold)
+		if string(jsonAeAssetDealSold) == "{}" { // empty struct
 			dst.AeAssetDealSold = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetDealSold: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetDealSold); err != nil {
+				dst.AeAssetDealSold = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetDealSold = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.deal.unsold'
-	if jsonDict["detail-type"] == "ae.asset.deal.unsold" {
-		// try to unmarshal JSON data into AeAssetDealUnsold
-		err = json.Unmarshal(data, &dst.AeAssetDealUnsold)
-		if err == nil {
-			return nil // data stored in dst.AeAssetDealUnsold, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetDealUnsold
+	err = newStrictDecoder(data).Decode(&dst.AeAssetDealUnsold)
+	if err == nil {
+		jsonAeAssetDealUnsold, _ := json.Marshal(dst.AeAssetDealUnsold)
+		if string(jsonAeAssetDealUnsold) == "{}" { // empty struct
 			dst.AeAssetDealUnsold = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetDealUnsold: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetDealUnsold); err != nil {
+				dst.AeAssetDealUnsold = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetDealUnsold = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.gatepass.buyer.releasable'
-	if jsonDict["detail-type"] == "ae.asset.gatepass.buyer.releasable" {
-		// try to unmarshal JSON data into AeAssetGatepassBuyerReleasable
-		err = json.Unmarshal(data, &dst.AeAssetGatepassBuyerReleasable)
-		if err == nil {
-			return nil // data stored in dst.AeAssetGatepassBuyerReleasable, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetGatepassBuyerReleasable
+	err = newStrictDecoder(data).Decode(&dst.AeAssetGatepassBuyerReleasable)
+	if err == nil {
+		jsonAeAssetGatepassBuyerReleasable, _ := json.Marshal(dst.AeAssetGatepassBuyerReleasable)
+		if string(jsonAeAssetGatepassBuyerReleasable) == "{}" { // empty struct
 			dst.AeAssetGatepassBuyerReleasable = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetGatepassBuyerReleasable: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetGatepassBuyerReleasable); err != nil {
+				dst.AeAssetGatepassBuyerReleasable = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetGatepassBuyerReleasable = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.gatepass.buyer.revoked'
-	if jsonDict["detail-type"] == "ae.asset.gatepass.buyer.revoked" {
-		// try to unmarshal JSON data into AeAssetGatepassBuyerRevoked
-		err = json.Unmarshal(data, &dst.AeAssetGatepassBuyerRevoked)
-		if err == nil {
-			return nil // data stored in dst.AeAssetGatepassBuyerRevoked, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetGatepassBuyerRevoked
+	err = newStrictDecoder(data).Decode(&dst.AeAssetGatepassBuyerRevoked)
+	if err == nil {
+		jsonAeAssetGatepassBuyerRevoked, _ := json.Marshal(dst.AeAssetGatepassBuyerRevoked)
+		if string(jsonAeAssetGatepassBuyerRevoked) == "{}" { // empty struct
 			dst.AeAssetGatepassBuyerRevoked = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetGatepassBuyerRevoked: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetGatepassBuyerRevoked); err != nil {
+				dst.AeAssetGatepassBuyerRevoked = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetGatepassBuyerRevoked = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.gatepass.created'
-	if jsonDict["detail-type"] == "ae.asset.gatepass.created" {
-		// try to unmarshal JSON data into AeAssetGatepassCreated
-		err = json.Unmarshal(data, &dst.AeAssetGatepassCreated)
-		if err == nil {
-			return nil // data stored in dst.AeAssetGatepassCreated, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetGatepassCreated
+	err = newStrictDecoder(data).Decode(&dst.AeAssetGatepassCreated)
+	if err == nil {
+		jsonAeAssetGatepassCreated, _ := json.Marshal(dst.AeAssetGatepassCreated)
+		if string(jsonAeAssetGatepassCreated) == "{}" { // empty struct
 			dst.AeAssetGatepassCreated = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetGatepassCreated: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetGatepassCreated); err != nil {
+				dst.AeAssetGatepassCreated = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetGatepassCreated = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.gatepass.delivered'
-	if jsonDict["detail-type"] == "ae.asset.gatepass.delivered" {
-		// try to unmarshal JSON data into AeAssetGatepassDelivered
-		err = json.Unmarshal(data, &dst.AeAssetGatepassDelivered)
-		if err == nil {
-			return nil // data stored in dst.AeAssetGatepassDelivered, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetGatepassDelivered
+	err = newStrictDecoder(data).Decode(&dst.AeAssetGatepassDelivered)
+	if err == nil {
+		jsonAeAssetGatepassDelivered, _ := json.Marshal(dst.AeAssetGatepassDelivered)
+		if string(jsonAeAssetGatepassDelivered) == "{}" { // empty struct
 			dst.AeAssetGatepassDelivered = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetGatepassDelivered: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetGatepassDelivered); err != nil {
+				dst.AeAssetGatepassDelivered = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetGatepassDelivered = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.gatepass.send-email'
-	if jsonDict["detail-type"] == "ae.asset.gatepass.send-email" {
-		// try to unmarshal JSON data into AeAssetGatepassSendEmail
-		err = json.Unmarshal(data, &dst.AeAssetGatepassSendEmail)
-		if err == nil {
-			return nil // data stored in dst.AeAssetGatepassSendEmail, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetGatepassSendEmail
+	err = newStrictDecoder(data).Decode(&dst.AeAssetGatepassSendEmail)
+	if err == nil {
+		jsonAeAssetGatepassSendEmail, _ := json.Marshal(dst.AeAssetGatepassSendEmail)
+		if string(jsonAeAssetGatepassSendEmail) == "{}" { // empty struct
 			dst.AeAssetGatepassSendEmail = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetGatepassSendEmail: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetGatepassSendEmail); err != nil {
+				dst.AeAssetGatepassSendEmail = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetGatepassSendEmail = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.gatepass.voided'
-	if jsonDict["detail-type"] == "ae.asset.gatepass.voided" {
-		// try to unmarshal JSON data into AeAssetGatepassVoided
-		err = json.Unmarshal(data, &dst.AeAssetGatepassVoided)
-		if err == nil {
-			return nil // data stored in dst.AeAssetGatepassVoided, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetGatepassVoided
+	err = newStrictDecoder(data).Decode(&dst.AeAssetGatepassVoided)
+	if err == nil {
+		jsonAeAssetGatepassVoided, _ := json.Marshal(dst.AeAssetGatepassVoided)
+		if string(jsonAeAssetGatepassVoided) == "{}" { // empty struct
 			dst.AeAssetGatepassVoided = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetGatepassVoided: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetGatepassVoided); err != nil {
+				dst.AeAssetGatepassVoided = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetGatepassVoided = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.label.failed'
-	if jsonDict["detail-type"] == "ae.asset.label.failed" {
-		// try to unmarshal JSON data into AeAssetLabelFailed
-		err = json.Unmarshal(data, &dst.AeAssetLabelFailed)
-		if err == nil {
-			return nil // data stored in dst.AeAssetLabelFailed, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetLabelFailed
+	err = newStrictDecoder(data).Decode(&dst.AeAssetLabelFailed)
+	if err == nil {
+		jsonAeAssetLabelFailed, _ := json.Marshal(dst.AeAssetLabelFailed)
+		if string(jsonAeAssetLabelFailed) == "{}" { // empty struct
 			dst.AeAssetLabelFailed = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetLabelFailed: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetLabelFailed); err != nil {
+				dst.AeAssetLabelFailed = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetLabelFailed = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.label.generated'
-	if jsonDict["detail-type"] == "ae.asset.label.generated" {
-		// try to unmarshal JSON data into AeAssetLabelGenerated
-		err = json.Unmarshal(data, &dst.AeAssetLabelGenerated)
-		if err == nil {
-			return nil // data stored in dst.AeAssetLabelGenerated, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetLabelGenerated
+	err = newStrictDecoder(data).Decode(&dst.AeAssetLabelGenerated)
+	if err == nil {
+		jsonAeAssetLabelGenerated, _ := json.Marshal(dst.AeAssetLabelGenerated)
+		if string(jsonAeAssetLabelGenerated) == "{}" { // empty struct
 			dst.AeAssetLabelGenerated = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetLabelGenerated: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetLabelGenerated); err != nil {
+				dst.AeAssetLabelGenerated = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetLabelGenerated = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.label.requested'
-	if jsonDict["detail-type"] == "ae.asset.label.requested" {
-		// try to unmarshal JSON data into AeAssetLabelRequested
-		err = json.Unmarshal(data, &dst.AeAssetLabelRequested)
-		if err == nil {
-			return nil // data stored in dst.AeAssetLabelRequested, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetLabelRequested
+	err = newStrictDecoder(data).Decode(&dst.AeAssetLabelRequested)
+	if err == nil {
+		jsonAeAssetLabelRequested, _ := json.Marshal(dst.AeAssetLabelRequested)
+		if string(jsonAeAssetLabelRequested) == "{}" { // empty struct
 			dst.AeAssetLabelRequested = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetLabelRequested: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetLabelRequested); err != nil {
+				dst.AeAssetLabelRequested = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetLabelRequested = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.negotiation.note-added'
-	if jsonDict["detail-type"] == "ae.asset.negotiation.note-added" {
-		// try to unmarshal JSON data into AeAssetNegotiationNoteAdded
-		err = json.Unmarshal(data, &dst.AeAssetNegotiationNoteAdded)
-		if err == nil {
-			return nil // data stored in dst.AeAssetNegotiationNoteAdded, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetNegotiationNoteAdded
+	err = newStrictDecoder(data).Decode(&dst.AeAssetNegotiationNoteAdded)
+	if err == nil {
+		jsonAeAssetNegotiationNoteAdded, _ := json.Marshal(dst.AeAssetNegotiationNoteAdded)
+		if string(jsonAeAssetNegotiationNoteAdded) == "{}" { // empty struct
 			dst.AeAssetNegotiationNoteAdded = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetNegotiationNoteAdded: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetNegotiationNoteAdded); err != nil {
+				dst.AeAssetNegotiationNoteAdded = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetNegotiationNoteAdded = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.negotiation.offer.accepted'
-	if jsonDict["detail-type"] == "ae.asset.negotiation.offer.accepted" {
-		// try to unmarshal JSON data into AeAssetNegotiationOfferAccepted
-		err = json.Unmarshal(data, &dst.AeAssetNegotiationOfferAccepted)
-		if err == nil {
-			return nil // data stored in dst.AeAssetNegotiationOfferAccepted, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetNegotiationOfferAccepted
+	err = newStrictDecoder(data).Decode(&dst.AeAssetNegotiationOfferAccepted)
+	if err == nil {
+		jsonAeAssetNegotiationOfferAccepted, _ := json.Marshal(dst.AeAssetNegotiationOfferAccepted)
+		if string(jsonAeAssetNegotiationOfferAccepted) == "{}" { // empty struct
 			dst.AeAssetNegotiationOfferAccepted = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetNegotiationOfferAccepted: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetNegotiationOfferAccepted); err != nil {
+				dst.AeAssetNegotiationOfferAccepted = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetNegotiationOfferAccepted = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.negotiation.offer.countered'
-	if jsonDict["detail-type"] == "ae.asset.negotiation.offer.countered" {
-		// try to unmarshal JSON data into AeAssetNegotiationOfferCountered
-		err = json.Unmarshal(data, &dst.AeAssetNegotiationOfferCountered)
-		if err == nil {
-			return nil // data stored in dst.AeAssetNegotiationOfferCountered, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetNegotiationOfferCountered
+	err = newStrictDecoder(data).Decode(&dst.AeAssetNegotiationOfferCountered)
+	if err == nil {
+		jsonAeAssetNegotiationOfferCountered, _ := json.Marshal(dst.AeAssetNegotiationOfferCountered)
+		if string(jsonAeAssetNegotiationOfferCountered) == "{}" { // empty struct
 			dst.AeAssetNegotiationOfferCountered = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetNegotiationOfferCountered: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetNegotiationOfferCountered); err != nil {
+				dst.AeAssetNegotiationOfferCountered = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetNegotiationOfferCountered = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.negotiation.offer.rejected'
-	if jsonDict["detail-type"] == "ae.asset.negotiation.offer.rejected" {
-		// try to unmarshal JSON data into AeAssetNegotiationOfferRejected
-		err = json.Unmarshal(data, &dst.AeAssetNegotiationOfferRejected)
-		if err == nil {
-			return nil // data stored in dst.AeAssetNegotiationOfferRejected, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetNegotiationOfferRejected
+	err = newStrictDecoder(data).Decode(&dst.AeAssetNegotiationOfferRejected)
+	if err == nil {
+		jsonAeAssetNegotiationOfferRejected, _ := json.Marshal(dst.AeAssetNegotiationOfferRejected)
+		if string(jsonAeAssetNegotiationOfferRejected) == "{}" { // empty struct
 			dst.AeAssetNegotiationOfferRejected = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetNegotiationOfferRejected: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetNegotiationOfferRejected); err != nil {
+				dst.AeAssetNegotiationOfferRejected = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetNegotiationOfferRejected = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.negotiation.upserted'
-	if jsonDict["detail-type"] == "ae.asset.negotiation.upserted" {
-		// try to unmarshal JSON data into AeAssetNegotiationUpserted
-		err = json.Unmarshal(data, &dst.AeAssetNegotiationUpserted)
-		if err == nil {
-			return nil // data stored in dst.AeAssetNegotiationUpserted, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetNegotiationUpserted
+	err = newStrictDecoder(data).Decode(&dst.AeAssetNegotiationUpserted)
+	if err == nil {
+		jsonAeAssetNegotiationUpserted, _ := json.Marshal(dst.AeAssetNegotiationUpserted)
+		if string(jsonAeAssetNegotiationUpserted) == "{}" { // empty struct
 			dst.AeAssetNegotiationUpserted = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetNegotiationUpserted: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetNegotiationUpserted); err != nil {
+				dst.AeAssetNegotiationUpserted = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetNegotiationUpserted = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.not-sold'
-	if jsonDict["detail-type"] == "ae.asset.not-sold" {
-		// try to unmarshal JSON data into AeAssetNotSold
-		err = json.Unmarshal(data, &dst.AeAssetNotSold)
-		if err == nil {
-			return nil // data stored in dst.AeAssetNotSold, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetNotSold
+	err = newStrictDecoder(data).Decode(&dst.AeAssetNotSold)
+	if err == nil {
+		jsonAeAssetNotSold, _ := json.Marshal(dst.AeAssetNotSold)
+		if string(jsonAeAssetNotSold) == "{}" { // empty struct
 			dst.AeAssetNotSold = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetNotSold: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetNotSold); err != nil {
+				dst.AeAssetNotSold = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetNotSold = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.paid-status-updated'
-	if jsonDict["detail-type"] == "ae.asset.paid-status-updated" {
-		// try to unmarshal JSON data into AeAssetPaidStatusUpdated
-		err = json.Unmarshal(data, &dst.AeAssetPaidStatusUpdated)
-		if err == nil {
-			return nil // data stored in dst.AeAssetPaidStatusUpdated, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetPaidStatusUpdated
+	err = newStrictDecoder(data).Decode(&dst.AeAssetPaidStatusUpdated)
+	if err == nil {
+		jsonAeAssetPaidStatusUpdated, _ := json.Marshal(dst.AeAssetPaidStatusUpdated)
+		if string(jsonAeAssetPaidStatusUpdated) == "{}" { // empty struct
 			dst.AeAssetPaidStatusUpdated = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetPaidStatusUpdated: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetPaidStatusUpdated); err != nil {
+				dst.AeAssetPaidStatusUpdated = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetPaidStatusUpdated = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.sale-listing.removed.ams'
-	if jsonDict["detail-type"] == "ae.asset.sale-listing.removed.ams" {
-		// try to unmarshal JSON data into AeAssetSaleListingRemovedAms
-		err = json.Unmarshal(data, &dst.AeAssetSaleListingRemovedAms)
-		if err == nil {
-			return nil // data stored in dst.AeAssetSaleListingRemovedAms, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetSaleListingRemovedAms
+	err = newStrictDecoder(data).Decode(&dst.AeAssetSaleListingRemovedAms)
+	if err == nil {
+		jsonAeAssetSaleListingRemovedAms, _ := json.Marshal(dst.AeAssetSaleListingRemovedAms)
+		if string(jsonAeAssetSaleListingRemovedAms) == "{}" { // empty struct
 			dst.AeAssetSaleListingRemovedAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetSaleListingRemovedAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetSaleListingRemovedAms); err != nil {
+				dst.AeAssetSaleListingRemovedAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetSaleListingRemovedAms = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.sale-listing.upserted.ams'
-	if jsonDict["detail-type"] == "ae.asset.sale-listing.upserted.ams" {
-		// try to unmarshal JSON data into AeAssetSaleListingUpsertedAms
-		err = json.Unmarshal(data, &dst.AeAssetSaleListingUpsertedAms)
-		if err == nil {
-			return nil // data stored in dst.AeAssetSaleListingUpsertedAms, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetSaleListingUpsertedAms
+	err = newStrictDecoder(data).Decode(&dst.AeAssetSaleListingUpsertedAms)
+	if err == nil {
+		jsonAeAssetSaleListingUpsertedAms, _ := json.Marshal(dst.AeAssetSaleListingUpsertedAms)
+		if string(jsonAeAssetSaleListingUpsertedAms) == "{}" { // empty struct
 			dst.AeAssetSaleListingUpsertedAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetSaleListingUpsertedAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetSaleListingUpsertedAms); err != nil {
+				dst.AeAssetSaleListingUpsertedAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetSaleListingUpsertedAms = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.seller-charge.add-request-failed'
-	if jsonDict["detail-type"] == "ae.asset.seller-charge.add-request-failed" {
-		// try to unmarshal JSON data into AeAssetSellerChargeAddRequestFailed
-		err = json.Unmarshal(data, &dst.AeAssetSellerChargeAddRequestFailed)
-		if err == nil {
-			return nil // data stored in dst.AeAssetSellerChargeAddRequestFailed, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetSellerChargeAddRequestFailed
+	err = newStrictDecoder(data).Decode(&dst.AeAssetSellerChargeAddRequestFailed)
+	if err == nil {
+		jsonAeAssetSellerChargeAddRequestFailed, _ := json.Marshal(dst.AeAssetSellerChargeAddRequestFailed)
+		if string(jsonAeAssetSellerChargeAddRequestFailed) == "{}" { // empty struct
 			dst.AeAssetSellerChargeAddRequestFailed = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetSellerChargeAddRequestFailed: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetSellerChargeAddRequestFailed); err != nil {
+				dst.AeAssetSellerChargeAddRequestFailed = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetSellerChargeAddRequestFailed = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.seller-charge.add-requested'
-	if jsonDict["detail-type"] == "ae.asset.seller-charge.add-requested" {
-		// try to unmarshal JSON data into AeAssetSellerChargeAddRequested
-		err = json.Unmarshal(data, &dst.AeAssetSellerChargeAddRequested)
-		if err == nil {
-			return nil // data stored in dst.AeAssetSellerChargeAddRequested, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetSellerChargeAddRequested
+	err = newStrictDecoder(data).Decode(&dst.AeAssetSellerChargeAddRequested)
+	if err == nil {
+		jsonAeAssetSellerChargeAddRequested, _ := json.Marshal(dst.AeAssetSellerChargeAddRequested)
+		if string(jsonAeAssetSellerChargeAddRequested) == "{}" { // empty struct
 			dst.AeAssetSellerChargeAddRequested = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetSellerChargeAddRequested: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetSellerChargeAddRequested); err != nil {
+				dst.AeAssetSellerChargeAddRequested = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetSellerChargeAddRequested = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.seller-charge.add-requested.v2'
-	if jsonDict["detail-type"] == "ae.asset.seller-charge.add-requested.v2" {
-		// try to unmarshal JSON data into AeAssetSellerChargeAddRequestedV2
-		err = json.Unmarshal(data, &dst.AeAssetSellerChargeAddRequestedV2)
-		if err == nil {
-			return nil // data stored in dst.AeAssetSellerChargeAddRequestedV2, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetSellerChargeAddRequestedV2
+	err = newStrictDecoder(data).Decode(&dst.AeAssetSellerChargeAddRequestedV2)
+	if err == nil {
+		jsonAeAssetSellerChargeAddRequestedV2, _ := json.Marshal(dst.AeAssetSellerChargeAddRequestedV2)
+		if string(jsonAeAssetSellerChargeAddRequestedV2) == "{}" { // empty struct
 			dst.AeAssetSellerChargeAddRequestedV2 = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetSellerChargeAddRequestedV2: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetSellerChargeAddRequestedV2); err != nil {
+				dst.AeAssetSellerChargeAddRequestedV2 = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetSellerChargeAddRequestedV2 = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.seller-charge.remove-failed'
-	if jsonDict["detail-type"] == "ae.asset.seller-charge.remove-failed" {
-		// try to unmarshal JSON data into AeAssetSellerChargeRemoveFailed
-		err = json.Unmarshal(data, &dst.AeAssetSellerChargeRemoveFailed)
-		if err == nil {
-			return nil // data stored in dst.AeAssetSellerChargeRemoveFailed, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetSellerChargeRemoveFailed
+	err = newStrictDecoder(data).Decode(&dst.AeAssetSellerChargeRemoveFailed)
+	if err == nil {
+		jsonAeAssetSellerChargeRemoveFailed, _ := json.Marshal(dst.AeAssetSellerChargeRemoveFailed)
+		if string(jsonAeAssetSellerChargeRemoveFailed) == "{}" { // empty struct
 			dst.AeAssetSellerChargeRemoveFailed = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetSellerChargeRemoveFailed: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetSellerChargeRemoveFailed); err != nil {
+				dst.AeAssetSellerChargeRemoveFailed = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetSellerChargeRemoveFailed = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.seller-charge.remove-requested'
-	if jsonDict["detail-type"] == "ae.asset.seller-charge.remove-requested" {
-		// try to unmarshal JSON data into AeAssetSellerChargeRemoveRequested
-		err = json.Unmarshal(data, &dst.AeAssetSellerChargeRemoveRequested)
-		if err == nil {
-			return nil // data stored in dst.AeAssetSellerChargeRemoveRequested, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetSellerChargeRemoveRequested
+	err = newStrictDecoder(data).Decode(&dst.AeAssetSellerChargeRemoveRequested)
+	if err == nil {
+		jsonAeAssetSellerChargeRemoveRequested, _ := json.Marshal(dst.AeAssetSellerChargeRemoveRequested)
+		if string(jsonAeAssetSellerChargeRemoveRequested) == "{}" { // empty struct
 			dst.AeAssetSellerChargeRemoveRequested = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetSellerChargeRemoveRequested: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetSellerChargeRemoveRequested); err != nil {
+				dst.AeAssetSellerChargeRemoveRequested = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetSellerChargeRemoveRequested = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.seller-charge.removed'
-	if jsonDict["detail-type"] == "ae.asset.seller-charge.removed" {
-		// try to unmarshal JSON data into AeAssetSellerChargeRemoved
-		err = json.Unmarshal(data, &dst.AeAssetSellerChargeRemoved)
-		if err == nil {
-			return nil // data stored in dst.AeAssetSellerChargeRemoved, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetSellerChargeRemoved
+	err = newStrictDecoder(data).Decode(&dst.AeAssetSellerChargeRemoved)
+	if err == nil {
+		jsonAeAssetSellerChargeRemoved, _ := json.Marshal(dst.AeAssetSellerChargeRemoved)
+		if string(jsonAeAssetSellerChargeRemoved) == "{}" { // empty struct
 			dst.AeAssetSellerChargeRemoved = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetSellerChargeRemoved: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetSellerChargeRemoved); err != nil {
+				dst.AeAssetSellerChargeRemoved = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetSellerChargeRemoved = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.seller-charge.upsert'
-	if jsonDict["detail-type"] == "ae.asset.seller-charge.upsert" {
-		// try to unmarshal JSON data into AeAssetSellerChargeUpsert
-		err = json.Unmarshal(data, &dst.AeAssetSellerChargeUpsert)
-		if err == nil {
-			return nil // data stored in dst.AeAssetSellerChargeUpsert, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetSellerChargeUpsert
+	err = newStrictDecoder(data).Decode(&dst.AeAssetSellerChargeUpsert)
+	if err == nil {
+		jsonAeAssetSellerChargeUpsert, _ := json.Marshal(dst.AeAssetSellerChargeUpsert)
+		if string(jsonAeAssetSellerChargeUpsert) == "{}" { // empty struct
 			dst.AeAssetSellerChargeUpsert = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetSellerChargeUpsert: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetSellerChargeUpsert); err != nil {
+				dst.AeAssetSellerChargeUpsert = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetSellerChargeUpsert = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.seller-charge.upsert.v2'
-	if jsonDict["detail-type"] == "ae.asset.seller-charge.upsert.v2" {
-		// try to unmarshal JSON data into AeAssetSellerChargeUpsertV2
-		err = json.Unmarshal(data, &dst.AeAssetSellerChargeUpsertV2)
-		if err == nil {
-			return nil // data stored in dst.AeAssetSellerChargeUpsertV2, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetSellerChargeUpsertV2
+	err = newStrictDecoder(data).Decode(&dst.AeAssetSellerChargeUpsertV2)
+	if err == nil {
+		jsonAeAssetSellerChargeUpsertV2, _ := json.Marshal(dst.AeAssetSellerChargeUpsertV2)
+		if string(jsonAeAssetSellerChargeUpsertV2) == "{}" { // empty struct
 			dst.AeAssetSellerChargeUpsertV2 = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetSellerChargeUpsertV2: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetSellerChargeUpsertV2); err != nil {
+				dst.AeAssetSellerChargeUpsertV2 = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetSellerChargeUpsertV2 = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.service.eligibility-updated'
-	if jsonDict["detail-type"] == "ae.asset.service.eligibility-updated" {
-		// try to unmarshal JSON data into AeAssetServiceEligibilityUpdated
-		err = json.Unmarshal(data, &dst.AeAssetServiceEligibilityUpdated)
-		if err == nil {
-			return nil // data stored in dst.AeAssetServiceEligibilityUpdated, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetServiceEligibilityUpdated
+	err = newStrictDecoder(data).Decode(&dst.AeAssetServiceEligibilityUpdated)
+	if err == nil {
+		jsonAeAssetServiceEligibilityUpdated, _ := json.Marshal(dst.AeAssetServiceEligibilityUpdated)
+		if string(jsonAeAssetServiceEligibilityUpdated) == "{}" { // empty struct
 			dst.AeAssetServiceEligibilityUpdated = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetServiceEligibilityUpdated: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetServiceEligibilityUpdated); err != nil {
+				dst.AeAssetServiceEligibilityUpdated = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetServiceEligibilityUpdated = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.sold-status-updated'
-	if jsonDict["detail-type"] == "ae.asset.sold-status-updated" {
-		// try to unmarshal JSON data into AeAssetSoldStatusUpdated
-		err = json.Unmarshal(data, &dst.AeAssetSoldStatusUpdated)
-		if err == nil {
-			return nil // data stored in dst.AeAssetSoldStatusUpdated, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetSoldStatusUpdated
+	err = newStrictDecoder(data).Decode(&dst.AeAssetSoldStatusUpdated)
+	if err == nil {
+		jsonAeAssetSoldStatusUpdated, _ := json.Marshal(dst.AeAssetSoldStatusUpdated)
+		if string(jsonAeAssetSoldStatusUpdated) == "{}" { // empty struct
 			dst.AeAssetSoldStatusUpdated = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetSoldStatusUpdated: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetSoldStatusUpdated); err != nil {
+				dst.AeAssetSoldStatusUpdated = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetSoldStatusUpdated = nil
 	}
 
-	// check if the discriminator value is 'ae.asset.updated.ams'
-	if jsonDict["detail-type"] == "ae.asset.updated.ams" {
-		// try to unmarshal JSON data into AeAssetUpdatedAms
-		err = json.Unmarshal(data, &dst.AeAssetUpdatedAms)
-		if err == nil {
-			return nil // data stored in dst.AeAssetUpdatedAms, return on the first match
-		} else {
+	// try to unmarshal data into AeAssetUpdatedAms
+	err = newStrictDecoder(data).Decode(&dst.AeAssetUpdatedAms)
+	if err == nil {
+		jsonAeAssetUpdatedAms, _ := json.Marshal(dst.AeAssetUpdatedAms)
+		if string(jsonAeAssetUpdatedAms) == "{}" { // empty struct
 			dst.AeAssetUpdatedAms = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeAssetUpdatedAms: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeAssetUpdatedAms); err != nil {
+				dst.AeAssetUpdatedAms = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeAssetUpdatedAms = nil
 	}
 
-	// check if the discriminator value is 'ae.deal.upserted'
-	if jsonDict["detail-type"] == "ae.deal.upserted" {
-		// try to unmarshal JSON data into AeDealUpserted
-		err = json.Unmarshal(data, &dst.AeDealUpserted)
-		if err == nil {
-			return nil // data stored in dst.AeDealUpserted, return on the first match
-		} else {
+	// try to unmarshal data into AeDealUpserted
+	err = newStrictDecoder(data).Decode(&dst.AeDealUpserted)
+	if err == nil {
+		jsonAeDealUpserted, _ := json.Marshal(dst.AeDealUpserted)
+		if string(jsonAeDealUpserted) == "{}" { // empty struct
 			dst.AeDealUpserted = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeDealUpserted: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeDealUpserted); err != nil {
+				dst.AeDealUpserted = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeDealUpserted = nil
 	}
 
-	// check if the discriminator value is 'ae.document.asset.added'
-	if jsonDict["detail-type"] == "ae.document.asset.added" {
-		// try to unmarshal JSON data into AeDocumentAssetAdded
-		err = json.Unmarshal(data, &dst.AeDocumentAssetAdded)
-		if err == nil {
-			return nil // data stored in dst.AeDocumentAssetAdded, return on the first match
-		} else {
+	// try to unmarshal data into AeDocumentAssetAdded
+	err = newStrictDecoder(data).Decode(&dst.AeDocumentAssetAdded)
+	if err == nil {
+		jsonAeDocumentAssetAdded, _ := json.Marshal(dst.AeDocumentAssetAdded)
+		if string(jsonAeDocumentAssetAdded) == "{}" { // empty struct
 			dst.AeDocumentAssetAdded = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeDocumentAssetAdded: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeDocumentAssetAdded); err != nil {
+				dst.AeDocumentAssetAdded = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeDocumentAssetAdded = nil
 	}
 
-	// check if the discriminator value is 'ae.document.asset.removed'
-	if jsonDict["detail-type"] == "ae.document.asset.removed" {
-		// try to unmarshal JSON data into AeDocumentAssetRemoved
-		err = json.Unmarshal(data, &dst.AeDocumentAssetRemoved)
-		if err == nil {
-			return nil // data stored in dst.AeDocumentAssetRemoved, return on the first match
-		} else {
+	// try to unmarshal data into AeDocumentAssetRemoved
+	err = newStrictDecoder(data).Decode(&dst.AeDocumentAssetRemoved)
+	if err == nil {
+		jsonAeDocumentAssetRemoved, _ := json.Marshal(dst.AeDocumentAssetRemoved)
+		if string(jsonAeDocumentAssetRemoved) == "{}" { // empty struct
 			dst.AeDocumentAssetRemoved = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeDocumentAssetRemoved: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeDocumentAssetRemoved); err != nil {
+				dst.AeDocumentAssetRemoved = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeDocumentAssetRemoved = nil
 	}
 
-	// check if the discriminator value is 'ae.notification.request-delivery'
-	if jsonDict["detail-type"] == "ae.notification.request-delivery" {
-		// try to unmarshal JSON data into AeNotificationRequestDelivery
-		err = json.Unmarshal(data, &dst.AeNotificationRequestDelivery)
-		if err == nil {
-			return nil // data stored in dst.AeNotificationRequestDelivery, return on the first match
-		} else {
+	// try to unmarshal data into AeNotificationRequestDelivery
+	err = newStrictDecoder(data).Decode(&dst.AeNotificationRequestDelivery)
+	if err == nil {
+		jsonAeNotificationRequestDelivery, _ := json.Marshal(dst.AeNotificationRequestDelivery)
+		if string(jsonAeNotificationRequestDelivery) == "{}" { // empty struct
 			dst.AeNotificationRequestDelivery = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeNotificationRequestDelivery: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeNotificationRequestDelivery); err != nil {
+				dst.AeNotificationRequestDelivery = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeNotificationRequestDelivery = nil
 	}
 
-	// check if the discriminator value is 'ae.service.cancelled'
-	if jsonDict["detail-type"] == "ae.service.cancelled" {
-		// try to unmarshal JSON data into AeServiceCancelled
-		err = json.Unmarshal(data, &dst.AeServiceCancelled)
-		if err == nil {
-			return nil // data stored in dst.AeServiceCancelled, return on the first match
-		} else {
+	// try to unmarshal data into AeServiceCancelled
+	err = newStrictDecoder(data).Decode(&dst.AeServiceCancelled)
+	if err == nil {
+		jsonAeServiceCancelled, _ := json.Marshal(dst.AeServiceCancelled)
+		if string(jsonAeServiceCancelled) == "{}" { // empty struct
 			dst.AeServiceCancelled = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeServiceCancelled: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeServiceCancelled); err != nil {
+				dst.AeServiceCancelled = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeServiceCancelled = nil
 	}
 
-	// check if the discriminator value is 'ae.service.completed'
-	if jsonDict["detail-type"] == "ae.service.completed" {
-		// try to unmarshal JSON data into AeServiceCompleted
-		err = json.Unmarshal(data, &dst.AeServiceCompleted)
-		if err == nil {
-			return nil // data stored in dst.AeServiceCompleted, return on the first match
-		} else {
+	// try to unmarshal data into AeServiceCompleted
+	err = newStrictDecoder(data).Decode(&dst.AeServiceCompleted)
+	if err == nil {
+		jsonAeServiceCompleted, _ := json.Marshal(dst.AeServiceCompleted)
+		if string(jsonAeServiceCompleted) == "{}" { // empty struct
 			dst.AeServiceCompleted = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeServiceCompleted: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeServiceCompleted); err != nil {
+				dst.AeServiceCompleted = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeServiceCompleted = nil
 	}
 
-	// check if the discriminator value is 'ae.service.order-placed'
-	if jsonDict["detail-type"] == "ae.service.order-placed" {
-		// try to unmarshal JSON data into AeServiceOrderPlaced
-		err = json.Unmarshal(data, &dst.AeServiceOrderPlaced)
-		if err == nil {
-			return nil // data stored in dst.AeServiceOrderPlaced, return on the first match
-		} else {
+	// try to unmarshal data into AeServiceOrderPlaced
+	err = newStrictDecoder(data).Decode(&dst.AeServiceOrderPlaced)
+	if err == nil {
+		jsonAeServiceOrderPlaced, _ := json.Marshal(dst.AeServiceOrderPlaced)
+		if string(jsonAeServiceOrderPlaced) == "{}" { // empty struct
 			dst.AeServiceOrderPlaced = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeServiceOrderPlaced: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeServiceOrderPlaced); err != nil {
+				dst.AeServiceOrderPlaced = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeServiceOrderPlaced = nil
 	}
 
-	// check if the discriminator value is 'ae.service.order-rejected'
-	if jsonDict["detail-type"] == "ae.service.order-rejected" {
-		// try to unmarshal JSON data into AeServiceOrderRejected
-		err = json.Unmarshal(data, &dst.AeServiceOrderRejected)
-		if err == nil {
-			return nil // data stored in dst.AeServiceOrderRejected, return on the first match
-		} else {
+	// try to unmarshal data into AeServiceOrderRejected
+	err = newStrictDecoder(data).Decode(&dst.AeServiceOrderRejected)
+	if err == nil {
+		jsonAeServiceOrderRejected, _ := json.Marshal(dst.AeServiceOrderRejected)
+		if string(jsonAeServiceOrderRejected) == "{}" { // empty struct
 			dst.AeServiceOrderRejected = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeServiceOrderRejected: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeServiceOrderRejected); err != nil {
+				dst.AeServiceOrderRejected = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeServiceOrderRejected = nil
 	}
 
-	// check if the discriminator value is 'ae.service.order-updated'
-	if jsonDict["detail-type"] == "ae.service.order-updated" {
-		// try to unmarshal JSON data into AeServiceOrderUpdated
-		err = json.Unmarshal(data, &dst.AeServiceOrderUpdated)
-		if err == nil {
-			return nil // data stored in dst.AeServiceOrderUpdated, return on the first match
-		} else {
+	// try to unmarshal data into AeServiceOrderUpdated
+	err = newStrictDecoder(data).Decode(&dst.AeServiceOrderUpdated)
+	if err == nil {
+		jsonAeServiceOrderUpdated, _ := json.Marshal(dst.AeServiceOrderUpdated)
+		if string(jsonAeServiceOrderUpdated) == "{}" { // empty struct
 			dst.AeServiceOrderUpdated = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeServiceOrderUpdated: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeServiceOrderUpdated); err != nil {
+				dst.AeServiceOrderUpdated = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeServiceOrderUpdated = nil
 	}
 
-	// check if the discriminator value is 'ae.service.ordered'
-	if jsonDict["detail-type"] == "ae.service.ordered" {
-		// try to unmarshal JSON data into AeServiceOrdered
-		err = json.Unmarshal(data, &dst.AeServiceOrdered)
-		if err == nil {
-			return nil // data stored in dst.AeServiceOrdered, return on the first match
-		} else {
+	// try to unmarshal data into AeServiceOrdered
+	err = newStrictDecoder(data).Decode(&dst.AeServiceOrdered)
+	if err == nil {
+		jsonAeServiceOrdered, _ := json.Marshal(dst.AeServiceOrdered)
+		if string(jsonAeServiceOrdered) == "{}" { // empty struct
 			dst.AeServiceOrdered = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeServiceOrdered: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeServiceOrdered); err != nil {
+				dst.AeServiceOrdered = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeServiceOrdered = nil
 	}
 
-	// check if the discriminator value is 'ae.service.request'
-	if jsonDict["detail-type"] == "ae.service.request" {
-		// try to unmarshal JSON data into AeServiceRequest
-		err = json.Unmarshal(data, &dst.AeServiceRequest)
-		if err == nil {
-			return nil // data stored in dst.AeServiceRequest, return on the first match
-		} else {
+	// try to unmarshal data into AeServiceRequest
+	err = newStrictDecoder(data).Decode(&dst.AeServiceRequest)
+	if err == nil {
+		jsonAeServiceRequest, _ := json.Marshal(dst.AeServiceRequest)
+		if string(jsonAeServiceRequest) == "{}" { // empty struct
 			dst.AeServiceRequest = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeServiceRequest: %s", err.Error())
+		} else {
+			if err = validator.Validate(dst.AeServiceRequest); err != nil {
+				dst.AeServiceRequest = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeServiceRequest = nil
 	}
 
-	// check if the discriminator value is 'ae.service.waived'
-	if jsonDict["detail-type"] == "ae.service.waived" {
-		// try to unmarshal JSON data into AeServiceWaived
-		err = json.Unmarshal(data, &dst.AeServiceWaived)
-		if err == nil {
-			return nil // data stored in dst.AeServiceWaived, return on the first match
-		} else {
+	// try to unmarshal data into AeServiceWaived
+	err = newStrictDecoder(data).Decode(&dst.AeServiceWaived)
+	if err == nil {
+		jsonAeServiceWaived, _ := json.Marshal(dst.AeServiceWaived)
+		if string(jsonAeServiceWaived) == "{}" { // empty struct
 			dst.AeServiceWaived = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeServiceWaived: %s", err.Error())
-		}
-	}
-
-	// check if the discriminator value is 'ae.user-info.advisory.data-source-updated'
-	if jsonDict["detail-type"] == "ae.user-info.advisory.data-source-updated" {
-		// try to unmarshal JSON data into AeUserInfoAdvisoryDataSourceUpdated
-		err = json.Unmarshal(data, &dst.AeUserInfoAdvisoryDataSourceUpdated)
-		if err == nil {
-			return nil // data stored in dst.AeUserInfoAdvisoryDataSourceUpdated, return on the first match
 		} else {
-			dst.AeUserInfoAdvisoryDataSourceUpdated = nil
-			return fmt.Errorf("failed to unmarshal EdgeEvent as AeUserInfoAdvisoryDataSourceUpdated: %s", err.Error())
+			if err = validator.Validate(dst.AeServiceWaived); err != nil {
+				dst.AeServiceWaived = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.AeServiceWaived = nil
 	}
 
-	return nil
+	// try to unmarshal data into AeUserInfoAdvisoryDataSourceUpdated
+	err = newStrictDecoder(data).Decode(&dst.AeUserInfoAdvisoryDataSourceUpdated)
+	if err == nil {
+		jsonAeUserInfoAdvisoryDataSourceUpdated, _ := json.Marshal(dst.AeUserInfoAdvisoryDataSourceUpdated)
+		if string(jsonAeUserInfoAdvisoryDataSourceUpdated) == "{}" { // empty struct
+			dst.AeUserInfoAdvisoryDataSourceUpdated = nil
+		} else {
+			if err = validator.Validate(dst.AeUserInfoAdvisoryDataSourceUpdated); err != nil {
+				dst.AeUserInfoAdvisoryDataSourceUpdated = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.AeUserInfoAdvisoryDataSourceUpdated = nil
+	}
+
+	if match > 1 { // more than 1 match
+		// reset to nil
+		dst.AeAccountPaymentSourceRemovedAms = nil
+		dst.AeAccountPaymentSourceUpsertAms = nil
+		dst.AeAccountRemovedAms = nil
+		dst.AeAccountRepresentativePayerAuthorized = nil
+		dst.AeAccountRepresentativePayerDeauthorized = nil
+		dst.AeAccountRepresentativeRemovedAms = nil
+		dst.AeAccountRepresentativeUpsertedAms = nil
+		dst.AeAccountUpsertedAms = nil
+		dst.AeAccountingPaymentSourceUpdated = nil
+		dst.AeAdvisoryAccountAms = nil
+		dst.AeAdvisoryAccountRepresentativesAms = nil
+		dst.AeAdvisoryAssetAms = nil
+		dst.AeAdvisoryRequestAccountAms = nil
+		dst.AeAdvisoryRequestAsset = nil
+		dst.AeAdvisoryRequestAssetSold = nil
+		dst.AeAmsPaymentVendorUpsert = nil
+		dst.AeAssetCheckedInAms = nil
+		dst.AeAssetCheckedOutAms = nil
+		dst.AeAssetDealChargeRemoved = nil
+		dst.AeAssetDealChargeUpsert = nil
+		dst.AeAssetDealOfferAccepted = nil
+		dst.AeAssetDealOfferMade = nil
+		dst.AeAssetDealOfferRejected = nil
+		dst.AeAssetDealPaymentApplySource = nil
+		dst.AeAssetDealPaymentStatusChanged = nil
+		dst.AeAssetDealSold = nil
+		dst.AeAssetDealUnsold = nil
+		dst.AeAssetGatepassBuyerReleasable = nil
+		dst.AeAssetGatepassBuyerRevoked = nil
+		dst.AeAssetGatepassCreated = nil
+		dst.AeAssetGatepassDelivered = nil
+		dst.AeAssetGatepassSendEmail = nil
+		dst.AeAssetGatepassVoided = nil
+		dst.AeAssetLabelFailed = nil
+		dst.AeAssetLabelGenerated = nil
+		dst.AeAssetLabelRequested = nil
+		dst.AeAssetNegotiationNoteAdded = nil
+		dst.AeAssetNegotiationOfferAccepted = nil
+		dst.AeAssetNegotiationOfferCountered = nil
+		dst.AeAssetNegotiationOfferRejected = nil
+		dst.AeAssetNegotiationUpserted = nil
+		dst.AeAssetNotSold = nil
+		dst.AeAssetPaidStatusUpdated = nil
+		dst.AeAssetSaleListingRemovedAms = nil
+		dst.AeAssetSaleListingUpsertedAms = nil
+		dst.AeAssetSellerChargeAddRequestFailed = nil
+		dst.AeAssetSellerChargeAddRequested = nil
+		dst.AeAssetSellerChargeAddRequestedV2 = nil
+		dst.AeAssetSellerChargeRemoveFailed = nil
+		dst.AeAssetSellerChargeRemoveRequested = nil
+		dst.AeAssetSellerChargeRemoved = nil
+		dst.AeAssetSellerChargeUpsert = nil
+		dst.AeAssetSellerChargeUpsertV2 = nil
+		dst.AeAssetServiceEligibilityUpdated = nil
+		dst.AeAssetSoldStatusUpdated = nil
+		dst.AeAssetUpdatedAms = nil
+		dst.AeDealUpserted = nil
+		dst.AeDocumentAssetAdded = nil
+		dst.AeDocumentAssetRemoved = nil
+		dst.AeNotificationRequestDelivery = nil
+		dst.AeServiceCancelled = nil
+		dst.AeServiceCompleted = nil
+		dst.AeServiceOrderPlaced = nil
+		dst.AeServiceOrderRejected = nil
+		dst.AeServiceOrderUpdated = nil
+		dst.AeServiceOrdered = nil
+		dst.AeServiceRequest = nil
+		dst.AeServiceWaived = nil
+		dst.AeUserInfoAdvisoryDataSourceUpdated = nil
+
+		return fmt.Errorf("data matches more than one schema in oneOf(EdgeEvent)")
+	} else if match == 1 {
+		return nil // exactly one match
+	} else { // no match
+		return fmt.Errorf("data failed to match schemas in oneOf(EdgeEvent)")
+	}
 }
 
 // Marshal data from the first non-nil pointers in the struct to JSON
