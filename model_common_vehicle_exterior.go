@@ -25,7 +25,10 @@ type CommonVehicleExterior struct {
 	TopColor *string `json:"top-color,omitempty"`
 	// A description of the type of roof the asset has
 	RoofType *string `json:"roof-type,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CommonVehicleExterior CommonVehicleExterior
 
 // NewCommonVehicleExterior instantiates a new CommonVehicleExterior object
 // This constructor will assign default values to properties that have it defined,
@@ -159,7 +162,35 @@ func (o CommonVehicleExterior) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.RoofType) {
 		toSerialize["roof-type"] = o.RoofType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CommonVehicleExterior) UnmarshalJSON(data []byte) (err error) {
+	varCommonVehicleExterior := _CommonVehicleExterior{}
+
+	err = json.Unmarshal(data, &varCommonVehicleExterior)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CommonVehicleExterior(varCommonVehicleExterior)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "bottom-color")
+		delete(additionalProperties, "top-color")
+		delete(additionalProperties, "roof-type")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCommonVehicleExterior struct {

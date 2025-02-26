@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &AeAmsPaymentVendorUpsertDetailTransactionFee{}
 type AeAmsPaymentVendorUpsertDetailTransactionFee struct {
 	FlatRate float32 `json:"flat-rate"`
 	PercentageOfTotal float32 `json:"percentage-of-total"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAmsPaymentVendorUpsertDetailTransactionFee AeAmsPaymentVendorUpsertDetailTransactionFee
@@ -106,6 +106,11 @@ func (o AeAmsPaymentVendorUpsertDetailTransactionFee) ToMap() (map[string]interf
 	toSerialize := map[string]interface{}{}
 	toSerialize["flat-rate"] = o.FlatRate
 	toSerialize["percentage-of-total"] = o.PercentageOfTotal
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -134,15 +139,21 @@ func (o *AeAmsPaymentVendorUpsertDetailTransactionFee) UnmarshalJSON(data []byte
 
 	varAeAmsPaymentVendorUpsertDetailTransactionFee := _AeAmsPaymentVendorUpsertDetailTransactionFee{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAmsPaymentVendorUpsertDetailTransactionFee)
+	err = json.Unmarshal(data, &varAeAmsPaymentVendorUpsertDetailTransactionFee)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAmsPaymentVendorUpsertDetailTransactionFee(varAeAmsPaymentVendorUpsertDetailTransactionFee)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "flat-rate")
+		delete(additionalProperties, "percentage-of-total")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

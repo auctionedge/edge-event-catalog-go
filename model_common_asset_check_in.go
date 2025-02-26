@@ -13,7 +13,6 @@ package events
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type CommonAssetCheckIn struct {
 	RecordedAt time.Time `json:"recorded-at"`
 	// The user responsible for checking in the asset.
 	RecordedBy *string `json:"recorded-by,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonAssetCheckIn CommonAssetCheckIn
@@ -118,6 +118,11 @@ func (o CommonAssetCheckIn) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.RecordedBy) {
 		toSerialize["recorded-by"] = o.RecordedBy
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -145,15 +150,21 @@ func (o *CommonAssetCheckIn) UnmarshalJSON(data []byte) (err error) {
 
 	varCommonAssetCheckIn := _CommonAssetCheckIn{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonAssetCheckIn)
+	err = json.Unmarshal(data, &varCommonAssetCheckIn)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonAssetCheckIn(varCommonAssetCheckIn)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "recorded-at")
+		delete(additionalProperties, "recorded-by")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

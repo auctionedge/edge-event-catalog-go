@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type AeAssetNegotiationUpsertedDetailConditions struct {
 	// Light that was on the vehicle when negotiations started
 	Lights string `json:"lights"`
 	Announcements []string `json:"announcements"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAssetNegotiationUpsertedDetailConditions AeAssetNegotiationUpsertedDetailConditions
@@ -161,6 +161,11 @@ func (o AeAssetNegotiationUpsertedDetailConditions) ToMap() (map[string]interfac
 	toSerialize["buyer"] = o.Buyer
 	toSerialize["lights"] = o.Lights
 	toSerialize["announcements"] = o.Announcements
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -191,15 +196,23 @@ func (o *AeAssetNegotiationUpsertedDetailConditions) UnmarshalJSON(data []byte) 
 
 	varAeAssetNegotiationUpsertedDetailConditions := _AeAssetNegotiationUpsertedDetailConditions{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAssetNegotiationUpsertedDetailConditions)
+	err = json.Unmarshal(data, &varAeAssetNegotiationUpsertedDetailConditions)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAssetNegotiationUpsertedDetailConditions(varAeAssetNegotiationUpsertedDetailConditions)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "seller")
+		delete(additionalProperties, "buyer")
+		delete(additionalProperties, "lights")
+		delete(additionalProperties, "announcements")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

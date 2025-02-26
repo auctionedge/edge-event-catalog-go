@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CommonAmsRepresentativePointer struct {
 	AaId NullableString `json:"aa-id"`
 	// Rep number as denoted in ASI, AOS to use same value as representative-id
 	RepNumber *float32 `json:"rep-number,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonAmsRepresentativePointer CommonAmsRepresentativePointer
@@ -147,6 +147,11 @@ func (o CommonAmsRepresentativePointer) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.RepNumber) {
 		toSerialize["rep-number"] = o.RepNumber
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -175,15 +180,22 @@ func (o *CommonAmsRepresentativePointer) UnmarshalJSON(data []byte) (err error) 
 
 	varCommonAmsRepresentativePointer := _CommonAmsRepresentativePointer{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonAmsRepresentativePointer)
+	err = json.Unmarshal(data, &varCommonAmsRepresentativePointer)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonAmsRepresentativePointer(varCommonAmsRepresentativePointer)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "aa-id")
+		delete(additionalProperties, "rep-number")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

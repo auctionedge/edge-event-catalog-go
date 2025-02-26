@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type DealAmsSaleListing struct {
 	Lane string `json:"lane"`
 	// The lot that the asset was attached to.
 	Lot string `json:"lot"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DealAmsSaleListing DealAmsSaleListing
@@ -136,6 +136,11 @@ func (o DealAmsSaleListing) ToMap() (map[string]interface{}, error) {
 	toSerialize["sale-date"] = o.SaleDate
 	toSerialize["lane"] = o.Lane
 	toSerialize["lot"] = o.Lot
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *DealAmsSaleListing) UnmarshalJSON(data []byte) (err error) {
 
 	varDealAmsSaleListing := _DealAmsSaleListing{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDealAmsSaleListing)
+	err = json.Unmarshal(data, &varDealAmsSaleListing)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DealAmsSaleListing(varDealAmsSaleListing)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "sale-date")
+		delete(additionalProperties, "lane")
+		delete(additionalProperties, "lot")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

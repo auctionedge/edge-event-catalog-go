@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type AeServiceOrderUpdatedDetailService struct {
 	Status string `json:"status"`
 	// Notes, summaries, or details about service that may be shared with end user
 	Note *string `json:"note,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeServiceOrderUpdatedDetailService AeServiceOrderUpdatedDetailService
@@ -172,6 +172,11 @@ func (o AeServiceOrderUpdatedDetailService) ToMap() (map[string]interface{}, err
 	if !IsNil(o.Note) {
 		toSerialize["note"] = o.Note
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -201,15 +206,23 @@ func (o *AeServiceOrderUpdatedDetailService) UnmarshalJSON(data []byte) (err err
 
 	varAeServiceOrderUpdatedDetailService := _AeServiceOrderUpdatedDetailService{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeServiceOrderUpdatedDetailService)
+	err = json.Unmarshal(data, &varAeServiceOrderUpdatedDetailService)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeServiceOrderUpdatedDetailService(varAeServiceOrderUpdatedDetailService)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "class")
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "note")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

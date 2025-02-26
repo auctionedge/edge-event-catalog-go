@@ -35,7 +35,10 @@ type CommonAmsPersonInfo struct {
 	FaxNumber *string `json:"fax-number,omitempty"`
 	// Email of representative
 	Email *string `json:"email,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CommonAmsPersonInfo CommonAmsPersonInfo
 
 // NewCommonAmsPersonInfo instantiates a new CommonAmsPersonInfo object
 // This constructor will assign default values to properties that have it defined,
@@ -344,7 +347,40 @@ func (o CommonAmsPersonInfo) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Email) {
 		toSerialize["email"] = o.Email
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CommonAmsPersonInfo) UnmarshalJSON(data []byte) (err error) {
+	varCommonAmsPersonInfo := _CommonAmsPersonInfo{}
+
+	err = json.Unmarshal(data, &varCommonAmsPersonInfo)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CommonAmsPersonInfo(varCommonAmsPersonInfo)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "first-name")
+		delete(additionalProperties, "last-name")
+		delete(additionalProperties, "nickname")
+		delete(additionalProperties, "title")
+		delete(additionalProperties, "home-phone-number")
+		delete(additionalProperties, "cell-phone-number")
+		delete(additionalProperties, "fax-number")
+		delete(additionalProperties, "email")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCommonAmsPersonInfo struct {

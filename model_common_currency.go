@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type CommonCurrency struct {
 	// Amount of money in cents so $175.00 would be 17500 cents.
 	Cents int32 `json:"cents"`
 	CurrencyCode string `json:"currency-code"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonCurrency CommonCurrency
@@ -107,6 +107,11 @@ func (o CommonCurrency) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["cents"] = o.Cents
 	toSerialize["currency-code"] = o.CurrencyCode
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *CommonCurrency) UnmarshalJSON(data []byte) (err error) {
 
 	varCommonCurrency := _CommonCurrency{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonCurrency)
+	err = json.Unmarshal(data, &varCommonCurrency)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonCurrency(varCommonCurrency)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "cents")
+		delete(additionalProperties, "currency-code")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

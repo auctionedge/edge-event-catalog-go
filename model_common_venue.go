@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type CommonVenue struct {
 	Location CommonPhysicalLocation `json:"location"`
 	// The type of the venue
 	VenueType string `json:"venue-type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonVenue CommonVenue
@@ -163,6 +163,11 @@ func (o CommonVenue) ToMap() (map[string]interface{}, error) {
 	toSerialize["organization"] = o.Organization
 	toSerialize["location"] = o.Location
 	toSerialize["venue-type"] = o.VenueType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -193,15 +198,23 @@ func (o *CommonVenue) UnmarshalJSON(data []byte) (err error) {
 
 	varCommonVenue := _CommonVenue{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonVenue)
+	err = json.Unmarshal(data, &varCommonVenue)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonVenue(varCommonVenue)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "display-name")
+		delete(additionalProperties, "organization")
+		delete(additionalProperties, "location")
+		delete(additionalProperties, "venue-type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

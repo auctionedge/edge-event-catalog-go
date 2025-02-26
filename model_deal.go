@@ -13,7 +13,6 @@ package events
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -32,6 +31,7 @@ type Deal struct {
 	OnOffer *bool `json:"on-offer,omitempty"`
 	// Whether or not the current deal is being arbitrated.
 	InArbitration *bool `json:"in-arbitration,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Deal Deal
@@ -264,6 +264,11 @@ func (o Deal) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.InArbitration) {
 		toSerialize["in-arbitration"] = o.InArbitration
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -293,15 +298,25 @@ func (o *Deal) UnmarshalJSON(data []byte) (err error) {
 
 	varDeal := _Deal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDeal)
+	err = json.Unmarshal(data, &varDeal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Deal(varDeal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "ams-sale-listing")
+		delete(additionalProperties, "buyer")
+		delete(additionalProperties, "sold-at")
+		delete(additionalProperties, "sold-amount-usd")
+		delete(additionalProperties, "on-offer")
+		delete(additionalProperties, "in-arbitration")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

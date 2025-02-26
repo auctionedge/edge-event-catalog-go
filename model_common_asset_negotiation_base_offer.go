@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type CommonAssetNegotiationBaseOffer struct {
 	// a noted added at the time of the offfer
 	Note string `json:"note"`
 	Notification CommonAssetNegotiationBaseOfferNotification `json:"notification"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonAssetNegotiationBaseOffer CommonAssetNegotiationBaseOffer
@@ -249,6 +249,11 @@ func (o CommonAssetNegotiationBaseOffer) ToMap() (map[string]interface{}, error)
 	toSerialize["amount"] = o.Amount
 	toSerialize["note"] = o.Note
 	toSerialize["notification"] = o.Notification
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -282,15 +287,26 @@ func (o *CommonAssetNegotiationBaseOffer) UnmarshalJSON(data []byte) (err error)
 
 	varCommonAssetNegotiationBaseOffer := _CommonAssetNegotiationBaseOffer{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonAssetNegotiationBaseOffer)
+	err = json.Unmarshal(data, &varCommonAssetNegotiationBaseOffer)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonAssetNegotiationBaseOffer(varCommonAssetNegotiationBaseOffer)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "source")
+		delete(additionalProperties, "authorized-by")
+		delete(additionalProperties, "rep")
+		delete(additionalProperties, "amount")
+		delete(additionalProperties, "note")
+		delete(additionalProperties, "notification")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,7 +13,6 @@ package events
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CommonAssetBuyNow struct {
 	BuyNowValidAt time.Time `json:"buy-now-valid-at"`
 	// The time that this buy-now price for the asset expires.
 	BuyNowValidUntil time.Time `json:"buy-now-valid-until"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonAssetBuyNow CommonAssetBuyNow
@@ -136,6 +136,11 @@ func (o CommonAssetBuyNow) ToMap() (map[string]interface{}, error) {
 	toSerialize["buy-now-price"] = o.BuyNowPrice
 	toSerialize["buy-now-valid-at"] = o.BuyNowValidAt
 	toSerialize["buy-now-valid-until"] = o.BuyNowValidUntil
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *CommonAssetBuyNow) UnmarshalJSON(data []byte) (err error) {
 
 	varCommonAssetBuyNow := _CommonAssetBuyNow{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonAssetBuyNow)
+	err = json.Unmarshal(data, &varCommonAssetBuyNow)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonAssetBuyNow(varCommonAssetBuyNow)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "buy-now-price")
+		delete(additionalProperties, "buy-now-valid-at")
+		delete(additionalProperties, "buy-now-valid-until")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

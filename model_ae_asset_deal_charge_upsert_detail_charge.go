@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,7 @@ type AeAssetDealChargeUpsertDetailCharge struct {
 	// Type of charge.
 	ChargeType string `json:"charge-type"`
 	Amount CommonCurrency `json:"amount"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAssetDealChargeUpsertDetailCharge AeAssetDealChargeUpsertDetailCharge
@@ -163,6 +163,11 @@ func (o AeAssetDealChargeUpsertDetailCharge) ToMap() (map[string]interface{}, er
 	toSerialize["display-name"] = o.DisplayName
 	toSerialize["charge-type"] = o.ChargeType
 	toSerialize["amount"] = o.Amount
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -193,15 +198,23 @@ func (o *AeAssetDealChargeUpsertDetailCharge) UnmarshalJSON(data []byte) (err er
 
 	varAeAssetDealChargeUpsertDetailCharge := _AeAssetDealChargeUpsertDetailCharge{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAssetDealChargeUpsertDetailCharge)
+	err = json.Unmarshal(data, &varAeAssetDealChargeUpsertDetailCharge)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAssetDealChargeUpsertDetailCharge(varAeAssetDealChargeUpsertDetailCharge)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "display-name")
+		delete(additionalProperties, "charge-type")
+		delete(additionalProperties, "amount")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

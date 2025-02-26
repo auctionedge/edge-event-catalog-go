@@ -21,9 +21,9 @@ components:
       - $ref: '#/components/schemas/ae.service.order-rejected'
       - $ref: '#/components/schemas/ae.service.order-updated'
       - $ref: '#/components/schemas/ae.asset.service.eligibility-updated'
-      - $ref: '#/components/schemas/ae.notification.request-delivery'
       - $ref: '#/components/schemas/ae.document.asset.added'
       - $ref: '#/components/schemas/ae.document.asset.removed'
+      - $ref: '#/components/schemas/ae.notification.request-delivery'
       - $ref: '#/components/schemas/ae.deal.upserted'
       - $ref: '#/components/schemas/ae.asset.updated.ams'
       - $ref: '#/components/schemas/ae.asset.sold-status-updated'
@@ -1459,52 +1459,6 @@ components:
       - initiator
       - updated-at
       type: object
-    ae.notification.request-delivery:
-      additionalProperties: false
-      allOf:
-      - $ref: '#/components/schemas/BaseEdgeEvent'
-      description: Notification that a service order has been placed
-      properties:
-        detail:
-          $ref: '#/components/schemas/ae.notification.request-delivery-detail'
-      required:
-      - detail
-      type: object
-    ae.notification.request-delivery-detail:
-      description: Notification to be delivered
-      properties:
-        message:
-          description: The message to be delivered
-          example: Your vehicle is ready for pickup
-          type: string
-        target-list:
-          items:
-            $ref: '#/components/schemas/notification-target'
-          minItems: 1
-          type: array
-        initiator:
-          $ref: '#/components/schemas/common.initiator'
-      required:
-      - message
-      - target-list
-      type: object
-    notification-target:
-      description: The target to deliver the notification to
-      properties:
-        delivery-method:
-          description: The method to deliver the notification
-          enum:
-          - email
-          - sms
-          example: email
-          type: string
-        delivery-address:
-          description: The address to deliver the notification to
-          type: string
-      required:
-      - delivery-address
-      - delivery-method
-      type: object
     ae.document.asset.added:
       additionalProperties: false
       allOf:
@@ -1659,6 +1613,52 @@ components:
       - window_sticker
       - work_order
       type: string
+    ae.notification.request-delivery:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.notification.request-delivery-detail'
+      required:
+      - detail
+      type: object
+    ae.notification.request-delivery-detail:
+      description: Notification to be delivered
+      properties:
+        message:
+          description: The message to be delivered
+          example: Your vehicle is ready for pickup
+          type: string
+        target-list:
+          items:
+            $ref: '#/components/schemas/notification-target'
+          minItems: 1
+          type: array
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - message
+      - target-list
+      type: object
+    notification-target:
+      description: The target to deliver the notification to
+      properties:
+        delivery-method:
+          description: The method to deliver the notification
+          enum:
+          - email
+          - sms
+          example: email
+          type: string
+        delivery-address:
+          description: The address to deliver the notification to
+          type: string
+      required:
+      - delivery-address
+      - delivery-method
+      type: object
     ae.deal.upserted:
       additionalProperties: false
       allOf:

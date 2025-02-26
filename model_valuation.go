@@ -22,7 +22,10 @@ type Valuation struct {
 	Amount *CommonCurrency `json:"amount,omitempty"`
 	// The source of the valuation
 	Source *string `json:"source,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _Valuation Valuation
 
 // NewValuation instantiates a new Valuation object
 // This constructor will assign default values to properties that have it defined,
@@ -121,7 +124,34 @@ func (o Valuation) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Source) {
 		toSerialize["source"] = o.Source
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *Valuation) UnmarshalJSON(data []byte) (err error) {
+	varValuation := _Valuation{}
+
+	err = json.Unmarshal(data, &varValuation)
+
+	if err != nil {
+		return err
+	}
+
+	*o = Valuation(varValuation)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount")
+		delete(additionalProperties, "source")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableValuation struct {

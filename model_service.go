@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -32,6 +31,7 @@ type Service struct {
 	// Reason why this service option is not eligible
 	RejectReason *string `json:"reject-reason,omitempty"`
 	Parameters []CommonServiceParameter `json:"parameters,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _Service Service
@@ -272,6 +272,11 @@ func (o Service) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Parameters) {
 		toSerialize["parameters"] = o.Parameters
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -302,15 +307,26 @@ func (o *Service) UnmarshalJSON(data []byte) (err error) {
 
 	varService := _Service{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varService)
+	err = json.Unmarshal(data, &varService)
 
 	if err != nil {
 		return err
 	}
 
 	*o = Service(varService)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "service-class")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "specific-details")
+		delete(additionalProperties, "reject-reason")
+		delete(additionalProperties, "parameters")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

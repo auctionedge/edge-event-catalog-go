@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -32,6 +31,7 @@ type AeAdvisoryAccountRepresentativesAmsDetailRepresentativesInner struct {
 	InternalNotes *string `json:"internal-notes,omitempty"`
 	// True if representative is allowed to buy a vehicle, false if not
 	CanBuy *bool `json:"can-buy,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAdvisoryAccountRepresentativesAmsDetailRepresentativesInner AeAdvisoryAccountRepresentativesAmsDetailRepresentativesInner
@@ -257,6 +257,11 @@ func (o AeAdvisoryAccountRepresentativesAmsDetailRepresentativesInner) ToMap() (
 	if !IsNil(o.CanBuy) {
 		toSerialize["can-buy"] = o.CanBuy
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -285,15 +290,25 @@ func (o *AeAdvisoryAccountRepresentativesAmsDetailRepresentativesInner) Unmarsha
 
 	varAeAdvisoryAccountRepresentativesAmsDetailRepresentativesInner := _AeAdvisoryAccountRepresentativesAmsDetailRepresentativesInner{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAdvisoryAccountRepresentativesAmsDetailRepresentativesInner)
+	err = json.Unmarshal(data, &varAeAdvisoryAccountRepresentativesAmsDetailRepresentativesInner)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAdvisoryAccountRepresentativesAmsDetailRepresentativesInner(varAeAdvisoryAccountRepresentativesAmsDetailRepresentativesInner)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "aa-id")
+		delete(additionalProperties, "rep-number")
+		delete(additionalProperties, "person-info")
+		delete(additionalProperties, "internal-notes")
+		delete(additionalProperties, "can-buy")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

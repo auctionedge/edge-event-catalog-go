@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -35,6 +34,7 @@ type AeAssetGatepassBuyerReleasableDetailAuction struct {
 	PostalCode string `json:"postal-code"`
 	// The phone number of the account
 	PhoneNumber string `json:"phone-number"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAssetGatepassBuyerReleasableDetailAuction AeAssetGatepassBuyerReleasableDetailAuction
@@ -248,6 +248,11 @@ func (o AeAssetGatepassBuyerReleasableDetailAuction) ToMap() (map[string]interfa
 	toSerialize["state"] = o.State
 	toSerialize["postal-code"] = o.PostalCode
 	toSerialize["phone-number"] = o.PhoneNumber
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -281,15 +286,26 @@ func (o *AeAssetGatepassBuyerReleasableDetailAuction) UnmarshalJSON(data []byte)
 
 	varAeAssetGatepassBuyerReleasableDetailAuction := _AeAssetGatepassBuyerReleasableDetailAuction{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAssetGatepassBuyerReleasableDetailAuction)
+	err = json.Unmarshal(data, &varAeAssetGatepassBuyerReleasableDetailAuction)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAssetGatepassBuyerReleasableDetailAuction(varAeAssetGatepassBuyerReleasableDetailAuction)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "organization-name")
+		delete(additionalProperties, "address")
+		delete(additionalProperties, "city")
+		delete(additionalProperties, "state")
+		delete(additionalProperties, "postal-code")
+		delete(additionalProperties, "phone-number")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

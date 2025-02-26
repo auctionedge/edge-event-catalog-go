@@ -13,7 +13,6 @@ package events
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -54,6 +53,7 @@ type CommonAssetSaleListing struct {
 	BuyNow *CommonAssetBuyNow `json:"buy-now,omitempty"`
 	// The time in ISO-8601 formatted at which the record was generated
 	UpdatedAt time.Time `json:"updated-at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonAssetSaleListing CommonAssetSaleListing
@@ -678,6 +678,11 @@ func (o CommonAssetSaleListing) ToMap() (map[string]interface{}, error) {
 		toSerialize["buy-now"] = o.BuyNow
 	}
 	toSerialize["updated-at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -712,15 +717,38 @@ func (o *CommonAssetSaleListing) UnmarshalJSON(data []byte) (err error) {
 
 	varCommonAssetSaleListing := _CommonAssetSaleListing{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonAssetSaleListing)
+	err = json.Unmarshal(data, &varCommonAssetSaleListing)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonAssetSaleListing(varCommonAssetSaleListing)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "venue")
+		delete(additionalProperties, "sale-start-at")
+		delete(additionalProperties, "sale-end-at")
+		delete(additionalProperties, "seller-rep")
+		delete(additionalProperties, "lane")
+		delete(additionalProperties, "lot")
+		delete(additionalProperties, "announcements-text")
+		delete(additionalProperties, "announcement-lights")
+		delete(additionalProperties, "floor-amount")
+		delete(additionalProperties, "start-bid")
+		delete(additionalProperties, "high-bid")
+		delete(additionalProperties, "bid-increment")
+		delete(additionalProperties, "main-image-url")
+		delete(additionalProperties, "photo-count")
+		delete(additionalProperties, "photo-count-updated-at")
+		delete(additionalProperties, "buy-now")
+		delete(additionalProperties, "updated-at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

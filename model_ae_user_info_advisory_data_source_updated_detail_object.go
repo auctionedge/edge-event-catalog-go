@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type AeUserInfoAdvisoryDataSourceUpdatedDetailObject struct {
 	Size int32 `json:"size"`
 	Etag string `json:"etag"`
 	Sequencer string `json:"sequencer"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeUserInfoAdvisoryDataSourceUpdatedDetailObject AeUserInfoAdvisoryDataSourceUpdatedDetailObject
@@ -160,6 +160,11 @@ func (o AeUserInfoAdvisoryDataSourceUpdatedDetailObject) ToMap() (map[string]int
 	toSerialize["size"] = o.Size
 	toSerialize["etag"] = o.Etag
 	toSerialize["sequencer"] = o.Sequencer
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -190,15 +195,23 @@ func (o *AeUserInfoAdvisoryDataSourceUpdatedDetailObject) UnmarshalJSON(data []b
 
 	varAeUserInfoAdvisoryDataSourceUpdatedDetailObject := _AeUserInfoAdvisoryDataSourceUpdatedDetailObject{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeUserInfoAdvisoryDataSourceUpdatedDetailObject)
+	err = json.Unmarshal(data, &varAeUserInfoAdvisoryDataSourceUpdatedDetailObject)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeUserInfoAdvisoryDataSourceUpdatedDetailObject(varAeUserInfoAdvisoryDataSourceUpdatedDetailObject)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "key")
+		delete(additionalProperties, "size")
+		delete(additionalProperties, "etag")
+		delete(additionalProperties, "sequencer")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

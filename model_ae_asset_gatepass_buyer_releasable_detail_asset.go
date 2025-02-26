@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -40,6 +39,7 @@ type AeAssetGatepassBuyerReleasableDetailAsset struct {
 	Stock string `json:"stock"`
 	// The Vehicle Identification Number(VIN) of the asset.
 	Vin string `json:"vin"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAssetGatepassBuyerReleasableDetailAsset AeAssetGatepassBuyerReleasableDetailAsset
@@ -434,6 +434,11 @@ func (o AeAssetGatepassBuyerReleasableDetailAsset) ToMap() (map[string]interface
 	toSerialize["id"] = o.Id
 	toSerialize["stock"] = o.Stock
 	toSerialize["vin"] = o.Vin
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -464,15 +469,29 @@ func (o *AeAssetGatepassBuyerReleasableDetailAsset) UnmarshalJSON(data []byte) (
 
 	varAeAssetGatepassBuyerReleasableDetailAsset := _AeAssetGatepassBuyerReleasableDetailAsset{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAssetGatepassBuyerReleasableDetailAsset)
+	err = json.Unmarshal(data, &varAeAssetGatepassBuyerReleasableDetailAsset)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAssetGatepassBuyerReleasableDetailAsset(varAeAssetGatepassBuyerReleasableDetailAsset)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "year")
+		delete(additionalProperties, "make")
+		delete(additionalProperties, "model")
+		delete(additionalProperties, "trimline")
+		delete(additionalProperties, "exterior")
+		delete(additionalProperties, "current-odometer-reading")
+		delete(additionalProperties, "lot-location")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "stock")
+		delete(additionalProperties, "vin")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

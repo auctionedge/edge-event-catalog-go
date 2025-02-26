@@ -23,7 +23,10 @@ type ServiceSpecificDetails struct {
 	ReturnableWithinDays *int32 `json:"returnable-within-days,omitempty"`
 	PricePass *CommonCurrency `json:"price-pass,omitempty"`
 	PriceFail *CommonCurrency `json:"price-fail,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ServiceSpecificDetails ServiceSpecificDetails
 
 // NewServiceSpecificDetails instantiates a new ServiceSpecificDetails object
 // This constructor will assign default values to properties that have it defined,
@@ -157,7 +160,35 @@ func (o ServiceSpecificDetails) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PriceFail) {
 		toSerialize["price-fail"] = o.PriceFail
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ServiceSpecificDetails) UnmarshalJSON(data []byte) (err error) {
+	varServiceSpecificDetails := _ServiceSpecificDetails{}
+
+	err = json.Unmarshal(data, &varServiceSpecificDetails)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ServiceSpecificDetails(varServiceSpecificDetails)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "returnable-within-days")
+		delete(additionalProperties, "price-pass")
+		delete(additionalProperties, "price-fail")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableServiceSpecificDetails struct {

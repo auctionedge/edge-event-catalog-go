@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type AeServiceOrderPlacedDetailService struct {
 	Class ServiceClassEnum `json:"class"`
 	// Service code
 	Code string `json:"code"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeServiceOrderPlacedDetailService AeServiceOrderPlacedDetailService
@@ -107,6 +107,11 @@ func (o AeServiceOrderPlacedDetailService) ToMap() (map[string]interface{}, erro
 	toSerialize := map[string]interface{}{}
 	toSerialize["class"] = o.Class
 	toSerialize["code"] = o.Code
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -135,15 +140,21 @@ func (o *AeServiceOrderPlacedDetailService) UnmarshalJSON(data []byte) (err erro
 
 	varAeServiceOrderPlacedDetailService := _AeServiceOrderPlacedDetailService{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeServiceOrderPlacedDetailService)
+	err = json.Unmarshal(data, &varAeServiceOrderPlacedDetailService)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeServiceOrderPlacedDetailService(varAeServiceOrderPlacedDetailService)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "class")
+		delete(additionalProperties, "code")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

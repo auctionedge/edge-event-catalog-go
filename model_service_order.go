@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -36,6 +35,7 @@ type ServiceOrder struct {
 	FeeAmount NullableFloat32 `json:"feeAmount,omitempty"`
 	// Note on desired service (not currently used)
 	ServiceNote *string `json:"serviceNote,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ServiceOrder ServiceOrder
@@ -339,6 +339,11 @@ func (o ServiceOrder) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ServiceNote) {
 		toSerialize["serviceNote"] = o.ServiceNote
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -367,15 +372,27 @@ func (o *ServiceOrder) UnmarshalJSON(data []byte) (err error) {
 
 	varServiceOrder := _ServiceOrder{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varServiceOrder)
+	err = json.Unmarshal(data, &varServiceOrder)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ServiceOrder(varServiceOrder)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "class")
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "printer")
+		delete(additionalProperties, "canPrint")
+		delete(additionalProperties, "isOverridden")
+		delete(additionalProperties, "feeAmount")
+		delete(additionalProperties, "serviceNote")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

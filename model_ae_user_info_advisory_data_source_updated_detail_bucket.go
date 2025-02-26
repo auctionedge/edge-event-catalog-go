@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -22,6 +21,7 @@ var _ MappedNullable = &AeUserInfoAdvisoryDataSourceUpdatedDetailBucket{}
 // AeUserInfoAdvisoryDataSourceUpdatedDetailBucket struct for AeUserInfoAdvisoryDataSourceUpdatedDetailBucket
 type AeUserInfoAdvisoryDataSourceUpdatedDetailBucket struct {
 	Name string `json:"name"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeUserInfoAdvisoryDataSourceUpdatedDetailBucket AeUserInfoAdvisoryDataSourceUpdatedDetailBucket
@@ -79,6 +79,11 @@ func (o AeUserInfoAdvisoryDataSourceUpdatedDetailBucket) MarshalJSON() ([]byte, 
 func (o AeUserInfoAdvisoryDataSourceUpdatedDetailBucket) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["name"] = o.Name
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -106,15 +111,20 @@ func (o *AeUserInfoAdvisoryDataSourceUpdatedDetailBucket) UnmarshalJSON(data []b
 
 	varAeUserInfoAdvisoryDataSourceUpdatedDetailBucket := _AeUserInfoAdvisoryDataSourceUpdatedDetailBucket{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeUserInfoAdvisoryDataSourceUpdatedDetailBucket)
+	err = json.Unmarshal(data, &varAeUserInfoAdvisoryDataSourceUpdatedDetailBucket)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeUserInfoAdvisoryDataSourceUpdatedDetailBucket(varAeUserInfoAdvisoryDataSourceUpdatedDetailBucket)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -28,7 +28,10 @@ type CommonTitle struct {
 	State *string `json:"state,omitempty"`
 	// The date and time at which the title document was received by the auction.
 	ReceivedAt NullableTime `json:"received-at,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CommonTitle CommonTitle
 
 // NewCommonTitle instantiates a new CommonTitle object
 // This constructor will assign default values to properties that have it defined,
@@ -211,7 +214,36 @@ func (o CommonTitle) ToMap() (map[string]interface{}, error) {
 	if o.ReceivedAt.IsSet() {
 		toSerialize["received-at"] = o.ReceivedAt.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CommonTitle) UnmarshalJSON(data []byte) (err error) {
+	varCommonTitle := _CommonTitle{}
+
+	err = json.Unmarshal(data, &varCommonTitle)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CommonTitle(varCommonTitle)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "exempt")
+		delete(additionalProperties, "number")
+		delete(additionalProperties, "state")
+		delete(additionalProperties, "received-at")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCommonTitle struct {

@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type AeAssetSellerChargeAddRequestedDetailCharge struct {
 	Cost *float32 `json:"cost,omitempty"`
 	// Notes for the auction relating to the charge
 	Note *string `json:"note,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAssetSellerChargeAddRequestedDetailCharge AeAssetSellerChargeAddRequestedDetailCharge
@@ -210,6 +210,11 @@ func (o AeAssetSellerChargeAddRequestedDetailCharge) ToMap() (map[string]interfa
 	if !IsNil(o.Note) {
 		toSerialize["note"] = o.Note
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -239,15 +244,24 @@ func (o *AeAssetSellerChargeAddRequestedDetailCharge) UnmarshalJSON(data []byte)
 
 	varAeAssetSellerChargeAddRequestedDetailCharge := _AeAssetSellerChargeAddRequestedDetailCharge{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAssetSellerChargeAddRequestedDetailCharge)
+	err = json.Unmarshal(data, &varAeAssetSellerChargeAddRequestedDetailCharge)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAssetSellerChargeAddRequestedDetailCharge(varAeAssetSellerChargeAddRequestedDetailCharge)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "display-name")
+		delete(additionalProperties, "charge-type")
+		delete(additionalProperties, "amount")
+		delete(additionalProperties, "cost")
+		delete(additionalProperties, "note")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

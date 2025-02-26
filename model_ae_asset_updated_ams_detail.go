@@ -13,7 +13,6 @@ package events
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -67,6 +66,7 @@ type AeAssetUpdatedAmsDetail struct {
 	Location *string `json:"location,omitempty"`
 	// A value rating the over all condition of the vehicle typically a number between 0-5 (5 being the best).
 	AutoGrade *float32 `json:"auto-grade,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAssetUpdatedAmsDetail AeAssetUpdatedAmsDetail
@@ -999,6 +999,11 @@ func (o AeAssetUpdatedAmsDetail) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AutoGrade) {
 		toSerialize["auto-grade"] = o.AutoGrade
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -1031,15 +1036,46 @@ func (o *AeAssetUpdatedAmsDetail) UnmarshalJSON(data []byte) (err error) {
 
 	varAeAssetUpdatedAmsDetail := _AeAssetUpdatedAmsDetail{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAssetUpdatedAmsDetail)
+	err = json.Unmarshal(data, &varAeAssetUpdatedAmsDetail)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAssetUpdatedAmsDetail(varAeAssetUpdatedAmsDetail)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "stock")
+		delete(additionalProperties, "vin")
+		delete(additionalProperties, "auction-id")
+		delete(additionalProperties, "seller")
+		delete(additionalProperties, "check-in")
+		delete(additionalProperties, "year")
+		delete(additionalProperties, "make")
+		delete(additionalProperties, "model")
+		delete(additionalProperties, "trimline")
+		delete(additionalProperties, "body-style")
+		delete(additionalProperties, "floor-amount")
+		delete(additionalProperties, "floor-amount-usd")
+		delete(additionalProperties, "interior")
+		delete(additionalProperties, "exterior")
+		delete(additionalProperties, "current-odometer-reading")
+		delete(additionalProperties, "engine")
+		delete(additionalProperties, "transmission-type")
+		delete(additionalProperties, "drivetrain")
+		delete(additionalProperties, "auction-grade")
+		delete(additionalProperties, "updated-at")
+		delete(additionalProperties, "initiator")
+		delete(additionalProperties, "valuations")
+		delete(additionalProperties, "title")
+		delete(additionalProperties, "presale-announcements")
+		delete(additionalProperties, "location")
+		delete(additionalProperties, "auto-grade")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

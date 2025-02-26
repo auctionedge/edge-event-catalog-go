@@ -13,7 +13,6 @@ package events
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -76,6 +75,7 @@ type AeAdvisoryAccountAmsDetail struct {
 	// The time in ISO-8601 formatted at which the record was generated
 	UpdatedAt time.Time `json:"updated-at"`
 	Initiator *CommonInitiator `json:"initiator,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAdvisoryAccountAmsDetail AeAdvisoryAccountAmsDetail
@@ -1047,6 +1047,11 @@ func (o AeAdvisoryAccountAmsDetail) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Initiator) {
 		toSerialize["initiator"] = o.Initiator
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -1078,15 +1083,47 @@ func (o *AeAdvisoryAccountAmsDetail) UnmarshalJSON(data []byte) (err error) {
 
 	varAeAdvisoryAccountAmsDetail := _AeAdvisoryAccountAmsDetail{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAdvisoryAccountAmsDetail)
+	err = json.Unmarshal(data, &varAeAdvisoryAccountAmsDetail)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAdvisoryAccountAmsDetail(varAeAdvisoryAccountAmsDetail)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account-key")
+		delete(additionalProperties, "aa-id")
+		delete(additionalProperties, "account-id")
+		delete(additionalProperties, "auction-id")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "established-at")
+		delete(additionalProperties, "display-name")
+		delete(additionalProperties, "legal-name")
+		delete(additionalProperties, "dba-name")
+		delete(additionalProperties, "primary-email")
+		delete(additionalProperties, "website-uri")
+		delete(additionalProperties, "primary-phone-number")
+		delete(additionalProperties, "cell-phone-number")
+		delete(additionalProperties, "primary-fax-number")
+		delete(additionalProperties, "physical-location")
+		delete(additionalProperties, "mailing-location")
+		delete(additionalProperties, "can-buy")
+		delete(additionalProperties, "can-sell")
+		delete(additionalProperties, "is-active")
+		delete(additionalProperties, "is-in-violation")
+		delete(additionalProperties, "is-tax-exempt")
+		delete(additionalProperties, "auction-seller-rep")
+		delete(additionalProperties, "auction-buyer-rep")
+		delete(additionalProperties, "autoims-id")
+		delete(additionalProperties, "autoims-id-str")
+		delete(additionalProperties, "payment-sources")
+		delete(additionalProperties, "updated-at")
+		delete(additionalProperties, "initiator")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

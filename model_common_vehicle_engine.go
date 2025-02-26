@@ -27,7 +27,10 @@ type CommonVehicleEngine struct {
 	Displacement *string `json:"displacement,omitempty"`
 	// The type of fuel the engine consumes to operate.
 	FuelType *string `json:"fuel-type,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CommonVehicleEngine CommonVehicleEngine
 
 // NewCommonVehicleEngine instantiates a new CommonVehicleEngine object
 // This constructor will assign default values to properties that have it defined,
@@ -196,7 +199,36 @@ func (o CommonVehicleEngine) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FuelType) {
 		toSerialize["fuel-type"] = o.FuelType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CommonVehicleEngine) UnmarshalJSON(data []byte) (err error) {
+	varCommonVehicleEngine := _CommonVehicleEngine{}
+
+	err = json.Unmarshal(data, &varCommonVehicleEngine)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CommonVehicleEngine(varCommonVehicleEngine)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "cylinders")
+		delete(additionalProperties, "cylinder-configuration")
+		delete(additionalProperties, "displacement")
+		delete(additionalProperties, "fuel-type")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCommonVehicleEngine struct {

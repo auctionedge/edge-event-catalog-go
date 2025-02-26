@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -34,6 +33,7 @@ type AeAssetNegotiationOfferRejectedDetailOffer struct {
 	Note string `json:"note"`
 	Notification CommonAssetNegotiationBaseOfferNotification `json:"notification"`
 	RejectedBy CommonAssetNegotiationOfferBy `json:"rejected-by"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAssetNegotiationOfferRejectedDetailOffer AeAssetNegotiationOfferRejectedDetailOffer
@@ -276,6 +276,11 @@ func (o AeAssetNegotiationOfferRejectedDetailOffer) ToMap() (map[string]interfac
 	toSerialize["note"] = o.Note
 	toSerialize["notification"] = o.Notification
 	toSerialize["rejected-by"] = o.RejectedBy
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -310,15 +315,27 @@ func (o *AeAssetNegotiationOfferRejectedDetailOffer) UnmarshalJSON(data []byte) 
 
 	varAeAssetNegotiationOfferRejectedDetailOffer := _AeAssetNegotiationOfferRejectedDetailOffer{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAssetNegotiationOfferRejectedDetailOffer)
+	err = json.Unmarshal(data, &varAeAssetNegotiationOfferRejectedDetailOffer)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAssetNegotiationOfferRejectedDetailOffer(varAeAssetNegotiationOfferRejectedDetailOffer)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "source")
+		delete(additionalProperties, "authorized-by")
+		delete(additionalProperties, "rep")
+		delete(additionalProperties, "amount")
+		delete(additionalProperties, "note")
+		delete(additionalProperties, "notification")
+		delete(additionalProperties, "rejected-by")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

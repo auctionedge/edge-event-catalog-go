@@ -13,7 +13,6 @@ package events
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type AeAssetDealPaymentStatusChangedDetailDealPayment struct {
 	Status string `json:"status"`
 	// The time at which the status changed
 	UpdatedAt time.Time `json:"updated-at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAssetDealPaymentStatusChangedDetailDealPayment AeAssetDealPaymentStatusChangedDetailDealPayment
@@ -108,6 +108,11 @@ func (o AeAssetDealPaymentStatusChangedDetailDealPayment) ToMap() (map[string]in
 	toSerialize := map[string]interface{}{}
 	toSerialize["status"] = o.Status
 	toSerialize["updated-at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *AeAssetDealPaymentStatusChangedDetailDealPayment) UnmarshalJSON(data []
 
 	varAeAssetDealPaymentStatusChangedDetailDealPayment := _AeAssetDealPaymentStatusChangedDetailDealPayment{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAssetDealPaymentStatusChangedDetailDealPayment)
+	err = json.Unmarshal(data, &varAeAssetDealPaymentStatusChangedDetailDealPayment)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAssetDealPaymentStatusChangedDetailDealPayment(varAeAssetDealPaymentStatusChangedDetailDealPayment)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "updated-at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CommonAmsAssetPointer struct {
 	Stock string `json:"stock"`
 	// The Vehicle Identification Number(VIN) of the asset.
 	Vin string `json:"vin"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonAmsAssetPointer CommonAmsAssetPointer
@@ -136,6 +136,11 @@ func (o CommonAmsAssetPointer) ToMap() (map[string]interface{}, error) {
 	toSerialize["id"] = o.Id
 	toSerialize["stock"] = o.Stock
 	toSerialize["vin"] = o.Vin
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *CommonAmsAssetPointer) UnmarshalJSON(data []byte) (err error) {
 
 	varCommonAmsAssetPointer := _CommonAmsAssetPointer{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonAmsAssetPointer)
+	err = json.Unmarshal(data, &varCommonAmsAssetPointer)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonAmsAssetPointer(varCommonAmsAssetPointer)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "stock")
+		delete(additionalProperties, "vin")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

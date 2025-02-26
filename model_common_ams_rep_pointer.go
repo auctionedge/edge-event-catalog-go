@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type CommonAmsRepPointer struct {
 	RepId NullableString `json:"rep-id"`
 	// The Auction Access ID of the AMS Representative account.
 	AaId NullableString `json:"aa-id"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonAmsRepPointer CommonAmsRepPointer
@@ -116,6 +116,11 @@ func (o CommonAmsRepPointer) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["rep-id"] = o.RepId.Get()
 	toSerialize["aa-id"] = o.AaId.Get()
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *CommonAmsRepPointer) UnmarshalJSON(data []byte) (err error) {
 
 	varCommonAmsRepPointer := _CommonAmsRepPointer{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonAmsRepPointer)
+	err = json.Unmarshal(data, &varCommonAmsRepPointer)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonAmsRepPointer(varCommonAmsRepPointer)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "rep-id")
+		delete(additionalProperties, "aa-id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

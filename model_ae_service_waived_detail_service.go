@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type AeServiceWaivedDetailService struct {
 	Class ServiceClassEnum `json:"class"`
 	// Service code
 	Code *string `json:"code,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeServiceWaivedDetailService AeServiceWaivedDetailService
@@ -116,6 +116,11 @@ func (o AeServiceWaivedDetailService) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Code) {
 		toSerialize["code"] = o.Code
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -143,15 +148,21 @@ func (o *AeServiceWaivedDetailService) UnmarshalJSON(data []byte) (err error) {
 
 	varAeServiceWaivedDetailService := _AeServiceWaivedDetailService{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeServiceWaivedDetailService)
+	err = json.Unmarshal(data, &varAeServiceWaivedDetailService)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeServiceWaivedDetailService(varAeServiceWaivedDetailService)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "class")
+		delete(additionalProperties, "code")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

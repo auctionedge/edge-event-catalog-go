@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type CommonAssetNegotiationBaseOfferNotification struct {
 	// whether or not a notification of the offer was requested to be sent
 	Requested bool `json:"requested"`
 	Methods []string `json:"methods,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonAssetNegotiationBaseOfferNotification CommonAssetNegotiationBaseOfferNotification
@@ -116,6 +116,11 @@ func (o CommonAssetNegotiationBaseOfferNotification) ToMap() (map[string]interfa
 	if !IsNil(o.Methods) {
 		toSerialize["methods"] = o.Methods
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -143,15 +148,21 @@ func (o *CommonAssetNegotiationBaseOfferNotification) UnmarshalJSON(data []byte)
 
 	varCommonAssetNegotiationBaseOfferNotification := _CommonAssetNegotiationBaseOfferNotification{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonAssetNegotiationBaseOfferNotification)
+	err = json.Unmarshal(data, &varCommonAssetNegotiationBaseOfferNotification)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonAssetNegotiationBaseOfferNotification(varCommonAssetNegotiationBaseOfferNotification)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "requested")
+		delete(additionalProperties, "methods")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

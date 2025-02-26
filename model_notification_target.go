@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type NotificationTarget struct {
 	DeliveryMethod string `json:"delivery-method"`
 	// The address to deliver the notification to
 	DeliveryAddress string `json:"delivery-address"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _NotificationTarget NotificationTarget
@@ -108,6 +108,11 @@ func (o NotificationTarget) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["delivery-method"] = o.DeliveryMethod
 	toSerialize["delivery-address"] = o.DeliveryAddress
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *NotificationTarget) UnmarshalJSON(data []byte) (err error) {
 
 	varNotificationTarget := _NotificationTarget{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varNotificationTarget)
+	err = json.Unmarshal(data, &varNotificationTarget)
 
 	if err != nil {
 		return err
 	}
 
 	*o = NotificationTarget(varNotificationTarget)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "delivery-method")
+		delete(additionalProperties, "delivery-address")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

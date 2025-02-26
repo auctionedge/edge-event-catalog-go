@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type AeAssetGatepassBuyerReleasableDetailAmsSaleListing struct {
 	Lot string `json:"lot"`
 	// Auction announcements about the asset
 	Announcements string `json:"announcements"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAssetGatepassBuyerReleasableDetailAmsSaleListing AeAssetGatepassBuyerReleasableDetailAmsSaleListing
@@ -164,6 +164,11 @@ func (o AeAssetGatepassBuyerReleasableDetailAmsSaleListing) ToMap() (map[string]
 	toSerialize["lane"] = o.Lane
 	toSerialize["lot"] = o.Lot
 	toSerialize["announcements"] = o.Announcements
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -194,15 +199,23 @@ func (o *AeAssetGatepassBuyerReleasableDetailAmsSaleListing) UnmarshalJSON(data 
 
 	varAeAssetGatepassBuyerReleasableDetailAmsSaleListing := _AeAssetGatepassBuyerReleasableDetailAmsSaleListing{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAssetGatepassBuyerReleasableDetailAmsSaleListing)
+	err = json.Unmarshal(data, &varAeAssetGatepassBuyerReleasableDetailAmsSaleListing)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAssetGatepassBuyerReleasableDetailAmsSaleListing(varAeAssetGatepassBuyerReleasableDetailAmsSaleListing)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "sale-date")
+		delete(additionalProperties, "lane")
+		delete(additionalProperties, "lot")
+		delete(additionalProperties, "announcements")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

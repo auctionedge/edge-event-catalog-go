@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type CommonCharge struct {
 	Cost *CommonCurrency `json:"cost,omitempty"`
 	// Notes for the auction relating to the charge
 	Note *string `json:"note,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonCharge CommonCharge
@@ -236,6 +236,11 @@ func (o CommonCharge) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Note) {
 		toSerialize["note"] = o.Note
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -266,15 +271,25 @@ func (o *CommonCharge) UnmarshalJSON(data []byte) (err error) {
 
 	varCommonCharge := _CommonCharge{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonCharge)
+	err = json.Unmarshal(data, &varCommonCharge)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonCharge(varCommonCharge)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "display-name")
+		delete(additionalProperties, "charge-type")
+		delete(additionalProperties, "amount")
+		delete(additionalProperties, "cost")
+		delete(additionalProperties, "note")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

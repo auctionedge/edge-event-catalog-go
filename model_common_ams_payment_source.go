@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CommonAmsPaymentSource struct {
 	PaymentVendorId string `json:"payment-vendor-id"`
 	// The display name of the payment source.
 	DisplayName string `json:"display-name"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonAmsPaymentSource CommonAmsPaymentSource
@@ -136,6 +136,11 @@ func (o CommonAmsPaymentSource) ToMap() (map[string]interface{}, error) {
 	toSerialize["payment-source-id"] = o.PaymentSourceId
 	toSerialize["payment-vendor-id"] = o.PaymentVendorId
 	toSerialize["display-name"] = o.DisplayName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *CommonAmsPaymentSource) UnmarshalJSON(data []byte) (err error) {
 
 	varCommonAmsPaymentSource := _CommonAmsPaymentSource{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonAmsPaymentSource)
+	err = json.Unmarshal(data, &varCommonAmsPaymentSource)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonAmsPaymentSource(varCommonAmsPaymentSource)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "payment-source-id")
+		delete(additionalProperties, "payment-vendor-id")
+		delete(additionalProperties, "display-name")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

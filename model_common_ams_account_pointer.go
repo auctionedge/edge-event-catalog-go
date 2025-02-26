@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CommonAmsAccountPointer struct {
 	AaId NullableString `json:"aa-id"`
 	// Source's unique identifier for account
 	AccountId *string `json:"account-id,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonAmsAccountPointer CommonAmsAccountPointer
@@ -147,6 +147,11 @@ func (o CommonAmsAccountPointer) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AccountId) {
 		toSerialize["account-id"] = o.AccountId
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -175,15 +180,22 @@ func (o *CommonAmsAccountPointer) UnmarshalJSON(data []byte) (err error) {
 
 	varCommonAmsAccountPointer := _CommonAmsAccountPointer{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonAmsAccountPointer)
+	err = json.Unmarshal(data, &varCommonAmsAccountPointer)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonAmsAccountPointer(varCommonAmsAccountPointer)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account-key")
+		delete(additionalProperties, "aa-id")
+		delete(additionalProperties, "account-id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

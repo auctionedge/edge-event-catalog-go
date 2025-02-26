@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type AeServiceCompletedDetailService struct {
 	Code string `json:"code"`
 	// Fee amount
 	FeeAmount NullableFloat32 `json:"feeAmount,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeServiceCompletedDetailService AeServiceCompletedDetailService
@@ -154,6 +154,11 @@ func (o AeServiceCompletedDetailService) ToMap() (map[string]interface{}, error)
 	if o.FeeAmount.IsSet() {
 		toSerialize["feeAmount"] = o.FeeAmount.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -182,15 +187,22 @@ func (o *AeServiceCompletedDetailService) UnmarshalJSON(data []byte) (err error)
 
 	varAeServiceCompletedDetailService := _AeServiceCompletedDetailService{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeServiceCompletedDetailService)
+	err = json.Unmarshal(data, &varAeServiceCompletedDetailService)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeServiceCompletedDetailService(varAeServiceCompletedDetailService)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "class")
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "feeAmount")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &AeAssetDealPaymentApplySourceDetailDealPayment{}
 type AeAssetDealPaymentApplySourceDetailDealPayment struct {
 	// Payment Source ID.
 	SourceId string `json:"source-id"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAssetDealPaymentApplySourceDetailDealPayment AeAssetDealPaymentApplySourceDetailDealPayment
@@ -80,6 +80,11 @@ func (o AeAssetDealPaymentApplySourceDetailDealPayment) MarshalJSON() ([]byte, e
 func (o AeAssetDealPaymentApplySourceDetailDealPayment) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["source-id"] = o.SourceId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *AeAssetDealPaymentApplySourceDetailDealPayment) UnmarshalJSON(data []by
 
 	varAeAssetDealPaymentApplySourceDetailDealPayment := _AeAssetDealPaymentApplySourceDetailDealPayment{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAssetDealPaymentApplySourceDetailDealPayment)
+	err = json.Unmarshal(data, &varAeAssetDealPaymentApplySourceDetailDealPayment)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAssetDealPaymentApplySourceDetailDealPayment(varAeAssetDealPaymentApplySourceDetailDealPayment)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "source-id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

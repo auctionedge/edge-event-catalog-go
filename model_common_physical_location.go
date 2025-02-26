@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -41,6 +40,7 @@ type CommonPhysicalLocation struct {
 	RegionCode *string `json:"region-code,omitempty"`
 	// The time zone that the location is in
 	TimeZone *string `json:"time-zone,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonPhysicalLocation CommonPhysicalLocation
@@ -377,6 +377,11 @@ func (o CommonPhysicalLocation) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.TimeZone) {
 		toSerialize["time-zone"] = o.TimeZone
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -408,15 +413,29 @@ func (o *CommonPhysicalLocation) UnmarshalJSON(data []byte) (err error) {
 
 	varCommonPhysicalLocation := _CommonPhysicalLocation{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonPhysicalLocation)
+	err = json.Unmarshal(data, &varCommonPhysicalLocation)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonPhysicalLocation(varCommonPhysicalLocation)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "display-name")
+		delete(additionalProperties, "address1")
+		delete(additionalProperties, "address2")
+		delete(additionalProperties, "city")
+		delete(additionalProperties, "state")
+		delete(additionalProperties, "postal-code")
+		delete(additionalProperties, "zip4")
+		delete(additionalProperties, "country-iso-code")
+		delete(additionalProperties, "region-code")
+		delete(additionalProperties, "time-zone")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

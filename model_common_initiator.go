@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type CommonInitiator struct {
 	InitiatorType string `json:"initiator-type"`
 	// Identifier (or URI) of a system/service component (e.g., code module) or user (username)
 	InitiatorKey string `json:"initiator-key"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonInitiator CommonInitiator
@@ -108,6 +108,11 @@ func (o CommonInitiator) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["initiator-type"] = o.InitiatorType
 	toSerialize["initiator-key"] = o.InitiatorKey
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *CommonInitiator) UnmarshalJSON(data []byte) (err error) {
 
 	varCommonInitiator := _CommonInitiator{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonInitiator)
+	err = json.Unmarshal(data, &varCommonInitiator)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonInitiator(varCommonInitiator)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "initiator-type")
+		delete(additionalProperties, "initiator-key")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,7 +13,6 @@ package events
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type AeAssetNegotiationNoteAddedDetailNote struct {
 	Subject string `json:"subject"`
 	// The body of the note
 	Body string `json:"body"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAssetNegotiationNoteAddedDetailNote AeAssetNegotiationNoteAddedDetailNote
@@ -220,6 +220,11 @@ func (o AeAssetNegotiationNoteAddedDetailNote) ToMap() (map[string]interface{}, 
 	toSerialize["source"] = o.Source
 	toSerialize["subject"] = o.Subject
 	toSerialize["body"] = o.Body
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -252,15 +257,25 @@ func (o *AeAssetNegotiationNoteAddedDetailNote) UnmarshalJSON(data []byte) (err 
 
 	varAeAssetNegotiationNoteAddedDetailNote := _AeAssetNegotiationNoteAddedDetailNote{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAssetNegotiationNoteAddedDetailNote)
+	err = json.Unmarshal(data, &varAeAssetNegotiationNoteAddedDetailNote)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAssetNegotiationNoteAddedDetailNote(varAeAssetNegotiationNoteAddedDetailNote)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "noted-by")
+		delete(additionalProperties, "noted-at")
+		delete(additionalProperties, "source")
+		delete(additionalProperties, "subject")
+		delete(additionalProperties, "body")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

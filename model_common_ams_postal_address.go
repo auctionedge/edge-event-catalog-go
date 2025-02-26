@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type CommonAmsPostalAddress struct {
 	State string `json:"state"`
 	// Postal code of location
 	PostalCode string `json:"postal-code"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CommonAmsPostalAddress CommonAmsPostalAddress
@@ -238,6 +238,11 @@ func (o CommonAmsPostalAddress) ToMap() (map[string]interface{}, error) {
 	toSerialize["city"] = o.City
 	toSerialize["state"] = o.State
 	toSerialize["postal-code"] = o.PostalCode
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -268,15 +273,25 @@ func (o *CommonAmsPostalAddress) UnmarshalJSON(data []byte) (err error) {
 
 	varCommonAmsPostalAddress := _CommonAmsPostalAddress{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCommonAmsPostalAddress)
+	err = json.Unmarshal(data, &varCommonAmsPostalAddress)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CommonAmsPostalAddress(varCommonAmsPostalAddress)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "address1")
+		delete(additionalProperties, "address2")
+		delete(additionalProperties, "address3")
+		delete(additionalProperties, "city")
+		delete(additionalProperties, "state")
+		delete(additionalProperties, "postal-code")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

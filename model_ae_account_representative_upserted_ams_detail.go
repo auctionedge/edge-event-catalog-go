@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -37,6 +36,7 @@ type AeAccountRepresentativeUpsertedAmsDetail struct {
 	// True if representative is allowed to buy a vehicle, false if not
 	CanBuy *bool `json:"can-buy,omitempty"`
 	Initiator *CommonInitiator `json:"initiator,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAccountRepresentativeUpsertedAmsDetail AeAccountRepresentativeUpsertedAmsDetail
@@ -358,6 +358,11 @@ func (o AeAccountRepresentativeUpsertedAmsDetail) ToMap() (map[string]interface{
 	if !IsNil(o.Initiator) {
 		toSerialize["initiator"] = o.Initiator
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -387,15 +392,28 @@ func (o *AeAccountRepresentativeUpsertedAmsDetail) UnmarshalJSON(data []byte) (e
 
 	varAeAccountRepresentativeUpsertedAmsDetail := _AeAccountRepresentativeUpsertedAmsDetail{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAccountRepresentativeUpsertedAmsDetail)
+	err = json.Unmarshal(data, &varAeAccountRepresentativeUpsertedAmsDetail)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAccountRepresentativeUpsertedAmsDetail(varAeAccountRepresentativeUpsertedAmsDetail)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "aa-id")
+		delete(additionalProperties, "rep-number")
+		delete(additionalProperties, "auction-id")
+		delete(additionalProperties, "account-id")
+		delete(additionalProperties, "person-info")
+		delete(additionalProperties, "internal-notes")
+		delete(additionalProperties, "can-buy")
+		delete(additionalProperties, "initiator")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

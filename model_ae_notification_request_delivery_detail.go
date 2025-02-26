@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type AeNotificationRequestDeliveryDetail struct {
 	Message string `json:"message"`
 	TargetList []NotificationTarget `json:"target-list"`
 	Initiator *CommonInitiator `json:"initiator,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeNotificationRequestDeliveryDetail AeNotificationRequestDeliveryDetail
@@ -143,6 +143,11 @@ func (o AeNotificationRequestDeliveryDetail) ToMap() (map[string]interface{}, er
 	if !IsNil(o.Initiator) {
 		toSerialize["initiator"] = o.Initiator
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -171,15 +176,22 @@ func (o *AeNotificationRequestDeliveryDetail) UnmarshalJSON(data []byte) (err er
 
 	varAeNotificationRequestDeliveryDetail := _AeNotificationRequestDeliveryDetail{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeNotificationRequestDeliveryDetail)
+	err = json.Unmarshal(data, &varAeNotificationRequestDeliveryDetail)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeNotificationRequestDeliveryDetail(varAeNotificationRequestDeliveryDetail)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "message")
+		delete(additionalProperties, "target-list")
+		delete(additionalProperties, "initiator")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,7 +13,6 @@ package events
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type DateRange struct {
 	StartAt time.Time `json:"start-at"`
 	// ISO Date
 	EndAt *time.Time `json:"end-at,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DateRange DateRange
@@ -118,6 +118,11 @@ func (o DateRange) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.EndAt) {
 		toSerialize["end-at"] = o.EndAt
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -145,15 +150,21 @@ func (o *DateRange) UnmarshalJSON(data []byte) (err error) {
 
 	varDateRange := _DateRange{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDateRange)
+	err = json.Unmarshal(data, &varDateRange)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DateRange(varDateRange)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "start-at")
+		delete(additionalProperties, "end-at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

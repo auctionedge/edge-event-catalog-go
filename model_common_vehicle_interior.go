@@ -23,7 +23,10 @@ type CommonVehicleInterior struct {
 	Color *string `json:"color,omitempty"`
 	// The type of material used inside of the asset.
 	SeatTrim *string `json:"seat-trim,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CommonVehicleInterior CommonVehicleInterior
 
 // NewCommonVehicleInterior instantiates a new CommonVehicleInterior object
 // This constructor will assign default values to properties that have it defined,
@@ -122,7 +125,34 @@ func (o CommonVehicleInterior) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.SeatTrim) {
 		toSerialize["seat-trim"] = o.SeatTrim
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CommonVehicleInterior) UnmarshalJSON(data []byte) (err error) {
+	varCommonVehicleInterior := _CommonVehicleInterior{}
+
+	err = json.Unmarshal(data, &varCommonVehicleInterior)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CommonVehicleInterior(varCommonVehicleInterior)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "color")
+		delete(additionalProperties, "seat-trim")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCommonVehicleInterior struct {

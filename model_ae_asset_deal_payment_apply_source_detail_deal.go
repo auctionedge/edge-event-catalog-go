@@ -12,7 +12,6 @@ package events
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type AeAssetDealPaymentApplySourceDetailDeal struct {
 	Id *string `json:"id,omitempty"`
 	Buyer CommonAmsAccountPointer `json:"buyer"`
 	Payment AeAssetDealPaymentApplySourceDetailDealPayment `json:"payment"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AeAssetDealPaymentApplySourceDetailDeal AeAssetDealPaymentApplySourceDetailDeal
@@ -143,6 +143,11 @@ func (o AeAssetDealPaymentApplySourceDetailDeal) ToMap() (map[string]interface{}
 	}
 	toSerialize["buyer"] = o.Buyer
 	toSerialize["payment"] = o.Payment
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -171,15 +176,22 @@ func (o *AeAssetDealPaymentApplySourceDetailDeal) UnmarshalJSON(data []byte) (er
 
 	varAeAssetDealPaymentApplySourceDetailDeal := _AeAssetDealPaymentApplySourceDetailDeal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAeAssetDealPaymentApplySourceDetailDeal)
+	err = json.Unmarshal(data, &varAeAssetDealPaymentApplySourceDetailDeal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AeAssetDealPaymentApplySourceDetailDeal(varAeAssetDealPaymentApplySourceDetailDeal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "buyer")
+		delete(additionalProperties, "payment")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }
