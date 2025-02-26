@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **AssetId** | **string** | Source&#39;s unique identifier for asset | 
 **AssetStock** | **string** | The stock number of the asset. | 
 **BuyerAccountKey** | **string** | The account key of an AMS account (i.e. the account or dealer number) | 
-**UpdatedAt** | Pointer to **time.Time** | The updated date time of the gatepass status | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | The updated date time of the deal. | [optional] 
 **Initiator** | Pointer to [**CommonInitiator**](CommonInitiator.md) |  | [optional] 
 
 ## Methods

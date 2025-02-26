@@ -26,7 +26,7 @@ type AeAssetSaleListingUpsertedAmsDetail struct {
 	AuctionId string `json:"auction-id"`
 	Asset CommonAmsAssetPointer `json:"asset"`
 	SaleListing CommonAssetSaleListing `json:"sale-listing"`
-	// The updated date time of the gatepass status
+	// The updated date time of the deal.
 	UpdatedAt time.Time `json:"updated-at"`
 	Initiator CommonInitiator `json:"initiator"`
 }

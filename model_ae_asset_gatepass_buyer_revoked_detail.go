@@ -31,7 +31,7 @@ type AeAssetGatepassBuyerRevokedDetail struct {
 	AssetStock string `json:"asset-stock"`
 	// The account key of an AMS account (i.e. the account or dealer number)
 	BuyerAccountKey string `json:"buyer-account-key"`
-	// The updated date time of the gatepass status
+	// The updated date time of the deal.
 	UpdatedAt *time.Time `json:"updated-at,omitempty"`
 	Initiator *CommonInitiator `json:"initiator,omitempty"`
 }

@@ -27,7 +27,7 @@ type AeAssetServiceEligibilityUpdatedDetail struct {
 	Asset CommonAmsAssetPointer `json:"asset"`
 	EligibleServices []Service `json:"eligible-services,omitempty"`
 	IneligibleServices []Service `json:"ineligible-services,omitempty"`
-	// The updated date time of the gatepass status
+	// The updated date time of the deal.
 	UpdatedAt time.Time `json:"updated-at"`
 	Initiator CommonInitiator `json:"initiator"`
 }

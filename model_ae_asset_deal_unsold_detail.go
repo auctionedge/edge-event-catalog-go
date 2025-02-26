@@ -37,7 +37,7 @@ type AeAssetDealUnsoldDetail struct {
 	Lane string `json:"lane"`
 	// The lot the asset was in when deal made.
 	Lot string `json:"lot"`
-	// The updated date time of the gatepass status
+	// The updated date time of the deal.
 	UpdatedAt *time.Time `json:"updated-at,omitempty"`
 	Initiator *CommonInitiator `json:"initiator,omitempty"`
 }

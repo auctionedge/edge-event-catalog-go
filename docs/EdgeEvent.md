@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Detail** | [**AeAssetGatepassBuyerRevokedDetail**](AeAssetGatepassBuyerRevokedDetail.md) |  | 
+**Detail** | [**AeAssetDealChargeRemovedDetail**](AeAssetDealChargeRemovedDetail.md) |  | 
 **Account** | Pointer to **string** | The publisher AWS account number | [optional] 
 **DetailType** | **string** | Identifies, in combination with the source field, the fields and values that appear in the detail field. | 
 **Id** | **string** | A Version 4 UUID that&#39;s generated for every event. You can use id to trace events as they move through rules to targets. | 
@@ -21,7 +21,7 @@ Name | Type | Description | Notes
 
 ### NewEdgeEvent
 
-`func NewEdgeEvent(detail AeAssetGatepassBuyerRevokedDetail, detailType string, id string, source string, ) *EdgeEvent`
+`func NewEdgeEvent(detail AeAssetDealChargeRemovedDetail, detailType string, id string, source string, ) *EdgeEvent`
 
 NewEdgeEvent instantiates a new EdgeEvent object
 This constructor will assign default values to properties that have it defined,
@@ -38,20 +38,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetDetail
 
-`func (o *EdgeEvent) GetDetail() AeAssetGatepassBuyerRevokedDetail`
+`func (o *EdgeEvent) GetDetail() AeAssetDealChargeRemovedDetail`
 
 GetDetail returns the Detail field if non-nil, zero value otherwise.
 
 ### GetDetailOk
 
-`func (o *EdgeEvent) GetDetailOk() (*AeAssetGatepassBuyerRevokedDetail, bool)`
+`func (o *EdgeEvent) GetDetailOk() (*AeAssetDealChargeRemovedDetail, bool)`
 
 GetDetailOk returns a tuple with the Detail field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetDetail
 
-`func (o *EdgeEvent) SetDetail(v AeAssetGatepassBuyerRevokedDetail)`
+`func (o *EdgeEvent) SetDetail(v AeAssetDealChargeRemovedDetail)`
 
 SetDetail sets Detail field to given value.
 

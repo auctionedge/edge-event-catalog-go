@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **Asset** | [**CommonAmsAssetPointer**](CommonAmsAssetPointer.md) |  | 
 **EligibleServices** | Pointer to [**[]Service**](Service.md) |  | [optional] 
 **IneligibleServices** | Pointer to [**[]Service**](Service.md) |  | [optional] 
-**UpdatedAt** | **time.Time** | The updated date time of the gatepass status | 
+**UpdatedAt** | **time.Time** | The updated date time of the deal. | 
 **Initiator** | [**CommonInitiator**](CommonInitiator.md) |  | 
 
 ## Methods
