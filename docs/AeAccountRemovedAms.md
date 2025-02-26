@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Detail** | [**AeAccountRemovedAmsDetail**](AeAccountRemovedAmsDetail.md) |  | 
+**Version** | Pointer to **string** | Optional version | [optional] 
 **Account** | Pointer to **string** | The publisher AWS account number | [optional] 
 **DetailType** | **string** | Identifies, in combination with the source field, the fields and values that appear in the detail field. | 
 **Id** | **string** | A Version 4 UUID that&#39;s generated for every event. You can use id to trace events as they move through rules to targets. | 
@@ -55,6 +56,31 @@ and a boolean to check if the value has been set.
 
 SetDetail sets Detail field to given value.
 
+
+### GetVersion
+
+`func (o *AeAccountRemovedAms) GetVersion() string`
+
+GetVersion returns the Version field if non-nil, zero value otherwise.
+
+### GetVersionOk
+
+`func (o *AeAccountRemovedAms) GetVersionOk() (*string, bool)`
+
+GetVersionOk returns a tuple with the Version field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetVersion
+
+`func (o *AeAccountRemovedAms) SetVersion(v string)`
+
+SetVersion sets Version field to given value.
+
+### HasVersion
+
+`func (o *AeAccountRemovedAms) HasVersion() bool`
+
+HasVersion returns a boolean if a field has been set.
 
 ### GetAccount
 

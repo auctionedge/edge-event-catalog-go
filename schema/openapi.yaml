@@ -22,9 +22,9 @@ components:
       - $ref: '#/components/schemas/ae.service.order-updated'
       - $ref: '#/components/schemas/ae.asset.service.eligibility-updated'
       - $ref: '#/components/schemas/ae.notification.request-delivery'
-      - $ref: '#/components/schemas/ae.deal.upserted'
       - $ref: '#/components/schemas/ae.document.asset.added'
       - $ref: '#/components/schemas/ae.document.asset.removed'
+      - $ref: '#/components/schemas/ae.deal.upserted'
       - $ref: '#/components/schemas/ae.asset.updated.ams'
       - $ref: '#/components/schemas/ae.asset.sold-status-updated'
       - $ref: '#/components/schemas/ae.asset.paid-status-updated'
@@ -85,6 +85,9 @@ components:
     BaseEdgeEvent:
       additionalProperties: false
       properties:
+        version:
+          description: Optional version
+          type: string
         account:
           description: The publisher AWS account number
           example: "123456789012"
@@ -1505,88 +1508,6 @@ components:
       - delivery-address
       - delivery-method
       type: object
-    ae.deal.upserted:
-      additionalProperties: false
-      allOf:
-      - $ref: '#/components/schemas/BaseEdgeEvent'
-      description: Notification that a service order has been placed
-      properties:
-        detail:
-          $ref: '#/components/schemas/ae.deal.upserted-detail'
-      required:
-      - detail
-      type: object
-    ae.deal.upserted-detail:
-      additionalProperties: false
-      description: Deal entity
-      properties:
-        id:
-          description: Unique id for a deal
-          example: 250127-81941
-          type: string
-        auction-id:
-          description: Auction Edge unique identifier for an auction.
-          example: daanw
-          type: string
-        asset:
-          $ref: '#/components/schemas/common.ams.asset-pointer'
-        seller:
-          description: Source's unique identifier for account
-          example: 503519-20210827T144732
-          type: string
-        seller-agent:
-          description: The representative id an AMS account
-          example: "1"
-          nullable: false
-          type: string
-          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
-        sale-listing:
-          description: Uniquie identifier for a sale listing.
-          type: string
-        sold-at:
-          description: The time in ISO-8601 formatted at which the asset was sold
-          example: 2024-05-24T13:19:23.238Z
-          format: date-time
-          type: string
-        buyer:
-          description: Source's unique identifier for account
-          example: 503519-20210827T144732
-          type: string
-        buyer-agent:
-          description: The representative id an AMS account
-          example: "1"
-          nullable: false
-          type: string
-          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
-        amount:
-          $ref: '#/components/schemas/common.currency'
-        sold-method:
-          description: The type of sale the deal was made in.
-          enum:
-          - inlane
-          - online
-          example: inlane
-          type: string
-        updated-at:
-          description: The time in ISO-8601 format in UTC timezone at which the record
-            was generated
-          example: 2024-05-24T13:19:23.238Z
-          format: date-time
-          type: string
-        initiator:
-          $ref: '#/components/schemas/common.initiator'
-      required:
-      - amount
-      - asset
-      - auction-id
-      - buyer
-      - id
-      - initiator
-      - sale-listing
-      - seller
-      - sold-at
-      - updated-at
-      type: object
     ae.document.asset.added:
       additionalProperties: false
       allOf:
@@ -1741,6 +1662,88 @@ components:
       - window_sticker
       - work_order
       type: string
+    ae.deal.upserted:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.deal.upserted-detail'
+      required:
+      - detail
+      type: object
+    ae.deal.upserted-detail:
+      additionalProperties: false
+      description: Deal entity
+      properties:
+        id:
+          description: Unique id for a deal
+          example: 250127-81941
+          type: string
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        seller:
+          description: Source's unique identifier for account
+          example: 503519-20210827T144732
+          type: string
+        seller-agent:
+          description: The representative id an AMS account
+          example: "1"
+          nullable: false
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        sale-listing:
+          description: Uniquie identifier for a sale listing.
+          type: string
+        sold-at:
+          description: The time in ISO-8601 formatted at which the asset was sold
+          example: 2024-05-24T13:19:23.238Z
+          format: date-time
+          type: string
+        buyer:
+          description: Source's unique identifier for account
+          example: 503519-20210827T144732
+          type: string
+        buyer-agent:
+          description: The representative id an AMS account
+          example: "1"
+          nullable: false
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        amount:
+          $ref: '#/components/schemas/common.currency'
+        sold-method:
+          description: The type of sale the deal was made in.
+          enum:
+          - inlane
+          - online
+          example: inlane
+          type: string
+        updated-at:
+          description: The time in ISO-8601 format in UTC timezone at which the record
+            was generated
+          example: 2024-05-24T13:19:23.238Z
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - amount
+      - asset
+      - auction-id
+      - buyer
+      - id
+      - initiator
+      - sale-listing
+      - seller
+      - sold-at
+      - updated-at
+      type: object
     ae.asset.updated.ams:
       additionalProperties: false
       allOf:

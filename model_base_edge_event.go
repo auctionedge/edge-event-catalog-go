@@ -22,6 +22,8 @@ var _ MappedNullable = &BaseEdgeEvent{}
 
 // BaseEdgeEvent struct for BaseEdgeEvent
 type BaseEdgeEvent struct {
+	// Optional version
+	Version *string `json:"version,omitempty"`
 	// The publisher AWS account number
 	Account *string `json:"account,omitempty"`
 	// Identifies, in combination with the source field, the fields and values that appear in the detail field.
@@ -70,6 +72,38 @@ func NewBaseEdgeEventWithDefaults() *BaseEdgeEvent {
 	var deprecated bool = false
 	this.Deprecated = &deprecated
 	return &this
+}
+
+// GetVersion returns the Version field value if set, zero value otherwise.
+func (o *BaseEdgeEvent) GetVersion() string {
+	if o == nil || IsNil(o.Version) {
+		var ret string
+		return ret
+	}
+	return *o.Version
+}
+
+// GetVersionOk returns a tuple with the Version field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *BaseEdgeEvent) GetVersionOk() (*string, bool) {
+	if o == nil || IsNil(o.Version) {
+		return nil, false
+	}
+	return o.Version, true
+}
+
+// HasVersion returns a boolean if a field has been set.
+func (o *BaseEdgeEvent) HasVersion() bool {
+	if o != nil && !IsNil(o.Version) {
+		return true
+	}
+
+	return false
+}
+
+// SetVersion gets a reference to the given string and assigns it to the Version field.
+func (o *BaseEdgeEvent) SetVersion(v string) {
+	o.Version = &v
 }
 
 // GetAccount returns the Account field value if set, zero value otherwise.
@@ -410,6 +444,9 @@ func (o BaseEdgeEvent) MarshalJSON() ([]byte, error) {
 
 func (o BaseEdgeEvent) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Version) {
+		toSerialize["version"] = o.Version
+	}
 	if !IsNil(o.Account) {
 		toSerialize["account"] = o.Account
 	}

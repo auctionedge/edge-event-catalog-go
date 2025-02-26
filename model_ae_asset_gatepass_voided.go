@@ -23,6 +23,8 @@ var _ MappedNullable = &AeAssetGatepassVoided{}
 // AeAssetGatepassVoided Notification that a service order has been placed
 type AeAssetGatepassVoided struct {
 	Detail AeAssetGatepassVoidedDetail `json:"detail"`
+	// Optional version
+	Version *string `json:"version,omitempty"`
 	// The publisher AWS account number
 	Account *string `json:"account,omitempty"`
 	// Identifies, in combination with the source field, the fields and values that appear in the detail field.
@@ -95,6 +97,38 @@ func (o *AeAssetGatepassVoided) GetDetailOk() (*AeAssetGatepassVoidedDetail, boo
 // SetDetail sets field value
 func (o *AeAssetGatepassVoided) SetDetail(v AeAssetGatepassVoidedDetail) {
 	o.Detail = v
+}
+
+// GetVersion returns the Version field value if set, zero value otherwise.
+func (o *AeAssetGatepassVoided) GetVersion() string {
+	if o == nil || IsNil(o.Version) {
+		var ret string
+		return ret
+	}
+	return *o.Version
+}
+
+// GetVersionOk returns a tuple with the Version field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AeAssetGatepassVoided) GetVersionOk() (*string, bool) {
+	if o == nil || IsNil(o.Version) {
+		return nil, false
+	}
+	return o.Version, true
+}
+
+// HasVersion returns a boolean if a field has been set.
+func (o *AeAssetGatepassVoided) HasVersion() bool {
+	if o != nil && !IsNil(o.Version) {
+		return true
+	}
+
+	return false
+}
+
+// SetVersion gets a reference to the given string and assigns it to the Version field.
+func (o *AeAssetGatepassVoided) SetVersion(v string) {
+	o.Version = &v
 }
 
 // GetAccount returns the Account field value if set, zero value otherwise.
@@ -436,6 +470,9 @@ func (o AeAssetGatepassVoided) MarshalJSON() ([]byte, error) {
 func (o AeAssetGatepassVoided) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["detail"] = o.Detail
+	if !IsNil(o.Version) {
+		toSerialize["version"] = o.Version
+	}
 	if !IsNil(o.Account) {
 		toSerialize["account"] = o.Account
 	}

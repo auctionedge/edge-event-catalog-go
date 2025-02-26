@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Version** | Pointer to **string** | Optional version | [optional] 
 **Account** | Pointer to **string** | The publisher AWS account number | [optional] 
 **DetailType** | **string** | Identifies, in combination with the source field, the fields and values that appear in the detail field. | 
 **Id** | **string** | A Version 4 UUID that&#39;s generated for every event. You can use id to trace events as they move through rules to targets. | 
@@ -34,6 +35,31 @@ will change when the set of required properties is changed
 NewBaseEdgeEventWithDefaults instantiates a new BaseEdgeEvent object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetVersion
+
+`func (o *BaseEdgeEvent) GetVersion() string`
+
+GetVersion returns the Version field if non-nil, zero value otherwise.
+
+### GetVersionOk
+
+`func (o *BaseEdgeEvent) GetVersionOk() (*string, bool)`
+
+GetVersionOk returns a tuple with the Version field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetVersion
+
+`func (o *BaseEdgeEvent) SetVersion(v string)`
+
+SetVersion sets Version field to given value.
+
+### HasVersion
+
+`func (o *BaseEdgeEvent) HasVersion() bool`
+
+HasVersion returns a boolean if a field has been set.
 
 ### GetAccount
 
