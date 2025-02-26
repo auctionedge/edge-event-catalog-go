@@ -22,8 +22,8 @@ Name | Type | Description | Notes
 **CurrentOdometerReading** | Pointer to **float32** | The vehicle&#39;s odometer reading | [optional] 
 **Engine** | Pointer to [**CommonVehicleEngine**](CommonVehicleEngine.md) |  | [optional] 
 **TransmissionType** | Pointer to **string** | The type of transmission the asset has. | [optional] 
-**Drivetrain** | Pointer to [**Drivetrain**](Drivetrain.md) |  | [optional] 
-**Title** | Pointer to [**Title**](Title.md) |  | [optional] 
+**Drivetrain** | Pointer to [**CommonVehicleDrivetrain**](CommonVehicleDrivetrain.md) |  | [optional] 
+**Title** | Pointer to [**CommonTitle**](CommonTitle.md) |  | [optional] 
 **AuctionGrade** | Pointer to **float32** | A value rating the over all condition of the vehicle typically a number between 0-5 (5 being the best). | [optional] 
 **UpdatedAt** | Pointer to **NullableTime** | The date and time at which the asset was last updated at. | [optional] 
 **Initiator** | Pointer to [**CommonInitiator**](CommonInitiator.md) |  | [optional] 
@@ -469,20 +469,20 @@ HasTransmissionType returns a boolean if a field has been set.
 
 ### GetDrivetrain
 
-`func (o *AeAdvisoryAssetAmsDetail) GetDrivetrain() Drivetrain`
+`func (o *AeAdvisoryAssetAmsDetail) GetDrivetrain() CommonVehicleDrivetrain`
 
 GetDrivetrain returns the Drivetrain field if non-nil, zero value otherwise.
 
 ### GetDrivetrainOk
 
-`func (o *AeAdvisoryAssetAmsDetail) GetDrivetrainOk() (*Drivetrain, bool)`
+`func (o *AeAdvisoryAssetAmsDetail) GetDrivetrainOk() (*CommonVehicleDrivetrain, bool)`
 
 GetDrivetrainOk returns a tuple with the Drivetrain field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetDrivetrain
 
-`func (o *AeAdvisoryAssetAmsDetail) SetDrivetrain(v Drivetrain)`
+`func (o *AeAdvisoryAssetAmsDetail) SetDrivetrain(v CommonVehicleDrivetrain)`
 
 SetDrivetrain sets Drivetrain field to given value.
 
@@ -494,20 +494,20 @@ HasDrivetrain returns a boolean if a field has been set.
 
 ### GetTitle
 
-`func (o *AeAdvisoryAssetAmsDetail) GetTitle() Title`
+`func (o *AeAdvisoryAssetAmsDetail) GetTitle() CommonTitle`
 
 GetTitle returns the Title field if non-nil, zero value otherwise.
 
 ### GetTitleOk
 
-`func (o *AeAdvisoryAssetAmsDetail) GetTitleOk() (*Title, bool)`
+`func (o *AeAdvisoryAssetAmsDetail) GetTitleOk() (*CommonTitle, bool)`
 
 GetTitleOk returns a tuple with the Title field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTitle
 
-`func (o *AeAdvisoryAssetAmsDetail) SetTitle(v Title)`
+`func (o *AeAdvisoryAssetAmsDetail) SetTitle(v CommonTitle)`
 
 SetTitle sets Title field to given value.
 

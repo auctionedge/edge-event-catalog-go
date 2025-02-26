@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **Notes** | Pointer to **string** | Text customized by auction to print on gate pass | [optional] 
 **PrintSignatureLine** | Pointer to **bool** | Flag to print a line of signature on gate pass | [optional] [default to false]
 **PrintDriverLicenseLine** | Pointer to **bool** | Flag to print line on gate pass so write driver license number | [optional] [default to false]
-**UpdatedAt** | Pointer to **time.Time** | The updated date time of the deal. | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | The updated date time of the gatepass status | [optional] 
 **Initiator** | Pointer to [**CommonInitiator**](CommonInitiator.md) |  | [optional] 
 
 ## Methods

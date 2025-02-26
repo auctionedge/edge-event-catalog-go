@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **Lane** | **string** | The lane the asset was in when deal made. | 
 **Lot** | **string** | The lot the asset was in when deal made. | 
 **Amount** | Pointer to **float32** | The amount the asset sold for. | [optional] 
-**UpdatedAt** | Pointer to **time.Time** | The updated date time of the deal. | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | The updated date time of the gatepass status | [optional] 
 **RejectedReason** | **string** | The reason the offer was rejected | 
 **Initiator** | Pointer to [**CommonInitiator**](CommonInitiator.md) |  | [optional] 
 

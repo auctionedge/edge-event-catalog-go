@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AuctionId** | **string** | Auction Edge unique identifier for an auction. | 
 **Id** | **string** | Source&#39;s unique identifier for asset | 
-**Vin** | **string** | The Vehicle Identification Number(VIN) of the asset. | 
 **Stock** | **string** | The stock number of the asset. | 
+**Vin** | **string** | The Vehicle Identification Number(VIN) of the asset. | 
+**AuctionId** | **string** | Auction Edge unique identifier for an auction. | 
 **Seller** | [**CommonAmsAccountPointer**](CommonAmsAccountPointer.md) |  | 
 **CheckIn** | [**CommonAssetCheckIn**](CommonAssetCheckIn.md) |  | 
 **Year** | Pointer to **int32** | The year the vehicle was manufactured. | [optional] 
@@ -15,22 +15,28 @@ Name | Type | Description | Notes
 **Model** | Pointer to **string** | The model of the vehicle. | [optional] 
 **Trimline** | Pointer to **string** | The trim of the vehicle. | [optional] 
 **BodyStyle** | Pointer to **string** | The body style of the vehicle | [optional] 
+**FloorAmount** | Pointer to [**CommonCurrency**](CommonCurrency.md) |  | [optional] 
 **FloorAmountUsd** | Pointer to **float32** | The lowest amount the seller is willing to take for this asset. | [optional] 
 **Interior** | Pointer to [**CommonVehicleInterior**](CommonVehicleInterior.md) |  | [optional] 
 **Exterior** | Pointer to [**CommonVehicleExterior**](CommonVehicleExterior.md) |  | [optional] 
 **CurrentOdometerReading** | Pointer to **float32** | The vehicle&#39;s odometer reading | [optional] 
 **Engine** | Pointer to [**CommonVehicleEngine**](CommonVehicleEngine.md) |  | [optional] 
 **TransmissionType** | Pointer to **string** | The type of transmission the asset has. | [optional] 
-**Drivetrain** | Pointer to [**Drivetrain**](Drivetrain.md) |  | [optional] 
+**Drivetrain** | Pointer to [**CommonVehicleDrivetrain**](CommonVehicleDrivetrain.md) |  | [optional] 
 **AuctionGrade** | Pointer to **float32** | A value rating the over all condition of the vehicle typically a number between 0-5 (5 being the best). | [optional] 
 **UpdatedAt** | Pointer to **NullableTime** | The date and time at which the asset was last updated at. | [optional] 
 **Initiator** | Pointer to [**CommonInitiator**](CommonInitiator.md) |  | [optional] 
+**Valuations** | Pointer to [**[]Valuation**](Valuation.md) | The valuations of the asset. | [optional] 
+**Title** | Pointer to [**CommonTitle**](CommonTitle.md) |  | [optional] 
+**PresaleAnnouncements** | Pointer to **string** | The announcements on the asset. | [optional] 
+**Location** | Pointer to **string** | The location of the asset. | [optional] 
+**AutoGrade** | Pointer to **float32** | A value rating the over all condition of the vehicle typically a number between 0-5 (5 being the best). | [optional] 
 
 ## Methods
 
 ### NewAeAssetUpdatedAmsDetail
 
-`func NewAeAssetUpdatedAmsDetail(auctionId string, id string, vin string, stock string, seller CommonAmsAccountPointer, checkIn CommonAssetCheckIn, ) *AeAssetUpdatedAmsDetail`
+`func NewAeAssetUpdatedAmsDetail(id string, stock string, vin string, auctionId string, seller CommonAmsAccountPointer, checkIn CommonAssetCheckIn, ) *AeAssetUpdatedAmsDetail`
 
 NewAeAssetUpdatedAmsDetail instantiates a new AeAssetUpdatedAmsDetail object
 This constructor will assign default values to properties that have it defined,
@@ -44,26 +50,6 @@ will change when the set of required properties is changed
 NewAeAssetUpdatedAmsDetailWithDefaults instantiates a new AeAssetUpdatedAmsDetail object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetAuctionId
-
-`func (o *AeAssetUpdatedAmsDetail) GetAuctionId() string`
-
-GetAuctionId returns the AuctionId field if non-nil, zero value otherwise.
-
-### GetAuctionIdOk
-
-`func (o *AeAssetUpdatedAmsDetail) GetAuctionIdOk() (*string, bool)`
-
-GetAuctionIdOk returns a tuple with the AuctionId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetAuctionId
-
-`func (o *AeAssetUpdatedAmsDetail) SetAuctionId(v string)`
-
-SetAuctionId sets AuctionId field to given value.
-
 
 ### GetId
 
@@ -83,6 +69,26 @@ and a boolean to check if the value has been set.
 `func (o *AeAssetUpdatedAmsDetail) SetId(v string)`
 
 SetId sets Id field to given value.
+
+
+### GetStock
+
+`func (o *AeAssetUpdatedAmsDetail) GetStock() string`
+
+GetStock returns the Stock field if non-nil, zero value otherwise.
+
+### GetStockOk
+
+`func (o *AeAssetUpdatedAmsDetail) GetStockOk() (*string, bool)`
+
+GetStockOk returns a tuple with the Stock field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetStock
+
+`func (o *AeAssetUpdatedAmsDetail) SetStock(v string)`
+
+SetStock sets Stock field to given value.
 
 
 ### GetVin
@@ -105,24 +111,24 @@ and a boolean to check if the value has been set.
 SetVin sets Vin field to given value.
 
 
-### GetStock
+### GetAuctionId
 
-`func (o *AeAssetUpdatedAmsDetail) GetStock() string`
+`func (o *AeAssetUpdatedAmsDetail) GetAuctionId() string`
 
-GetStock returns the Stock field if non-nil, zero value otherwise.
+GetAuctionId returns the AuctionId field if non-nil, zero value otherwise.
 
-### GetStockOk
+### GetAuctionIdOk
 
-`func (o *AeAssetUpdatedAmsDetail) GetStockOk() (*string, bool)`
+`func (o *AeAssetUpdatedAmsDetail) GetAuctionIdOk() (*string, bool)`
 
-GetStockOk returns a tuple with the Stock field if it's non-nil, zero value otherwise
+GetAuctionIdOk returns a tuple with the AuctionId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetStock
+### SetAuctionId
 
-`func (o *AeAssetUpdatedAmsDetail) SetStock(v string)`
+`func (o *AeAssetUpdatedAmsDetail) SetAuctionId(v string)`
 
-SetStock sets Stock field to given value.
+SetAuctionId sets AuctionId field to given value.
 
 
 ### GetSeller
@@ -290,6 +296,31 @@ SetBodyStyle sets BodyStyle field to given value.
 
 HasBodyStyle returns a boolean if a field has been set.
 
+### GetFloorAmount
+
+`func (o *AeAssetUpdatedAmsDetail) GetFloorAmount() CommonCurrency`
+
+GetFloorAmount returns the FloorAmount field if non-nil, zero value otherwise.
+
+### GetFloorAmountOk
+
+`func (o *AeAssetUpdatedAmsDetail) GetFloorAmountOk() (*CommonCurrency, bool)`
+
+GetFloorAmountOk returns a tuple with the FloorAmount field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFloorAmount
+
+`func (o *AeAssetUpdatedAmsDetail) SetFloorAmount(v CommonCurrency)`
+
+SetFloorAmount sets FloorAmount field to given value.
+
+### HasFloorAmount
+
+`func (o *AeAssetUpdatedAmsDetail) HasFloorAmount() bool`
+
+HasFloorAmount returns a boolean if a field has been set.
+
 ### GetFloorAmountUsd
 
 `func (o *AeAssetUpdatedAmsDetail) GetFloorAmountUsd() float32`
@@ -442,20 +473,20 @@ HasTransmissionType returns a boolean if a field has been set.
 
 ### GetDrivetrain
 
-`func (o *AeAssetUpdatedAmsDetail) GetDrivetrain() Drivetrain`
+`func (o *AeAssetUpdatedAmsDetail) GetDrivetrain() CommonVehicleDrivetrain`
 
 GetDrivetrain returns the Drivetrain field if non-nil, zero value otherwise.
 
 ### GetDrivetrainOk
 
-`func (o *AeAssetUpdatedAmsDetail) GetDrivetrainOk() (*Drivetrain, bool)`
+`func (o *AeAssetUpdatedAmsDetail) GetDrivetrainOk() (*CommonVehicleDrivetrain, bool)`
 
 GetDrivetrainOk returns a tuple with the Drivetrain field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetDrivetrain
 
-`func (o *AeAssetUpdatedAmsDetail) SetDrivetrain(v Drivetrain)`
+`func (o *AeAssetUpdatedAmsDetail) SetDrivetrain(v CommonVehicleDrivetrain)`
 
 SetDrivetrain sets Drivetrain field to given value.
 
@@ -549,6 +580,131 @@ SetInitiator sets Initiator field to given value.
 `func (o *AeAssetUpdatedAmsDetail) HasInitiator() bool`
 
 HasInitiator returns a boolean if a field has been set.
+
+### GetValuations
+
+`func (o *AeAssetUpdatedAmsDetail) GetValuations() []Valuation`
+
+GetValuations returns the Valuations field if non-nil, zero value otherwise.
+
+### GetValuationsOk
+
+`func (o *AeAssetUpdatedAmsDetail) GetValuationsOk() (*[]Valuation, bool)`
+
+GetValuationsOk returns a tuple with the Valuations field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetValuations
+
+`func (o *AeAssetUpdatedAmsDetail) SetValuations(v []Valuation)`
+
+SetValuations sets Valuations field to given value.
+
+### HasValuations
+
+`func (o *AeAssetUpdatedAmsDetail) HasValuations() bool`
+
+HasValuations returns a boolean if a field has been set.
+
+### GetTitle
+
+`func (o *AeAssetUpdatedAmsDetail) GetTitle() CommonTitle`
+
+GetTitle returns the Title field if non-nil, zero value otherwise.
+
+### GetTitleOk
+
+`func (o *AeAssetUpdatedAmsDetail) GetTitleOk() (*CommonTitle, bool)`
+
+GetTitleOk returns a tuple with the Title field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTitle
+
+`func (o *AeAssetUpdatedAmsDetail) SetTitle(v CommonTitle)`
+
+SetTitle sets Title field to given value.
+
+### HasTitle
+
+`func (o *AeAssetUpdatedAmsDetail) HasTitle() bool`
+
+HasTitle returns a boolean if a field has been set.
+
+### GetPresaleAnnouncements
+
+`func (o *AeAssetUpdatedAmsDetail) GetPresaleAnnouncements() string`
+
+GetPresaleAnnouncements returns the PresaleAnnouncements field if non-nil, zero value otherwise.
+
+### GetPresaleAnnouncementsOk
+
+`func (o *AeAssetUpdatedAmsDetail) GetPresaleAnnouncementsOk() (*string, bool)`
+
+GetPresaleAnnouncementsOk returns a tuple with the PresaleAnnouncements field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPresaleAnnouncements
+
+`func (o *AeAssetUpdatedAmsDetail) SetPresaleAnnouncements(v string)`
+
+SetPresaleAnnouncements sets PresaleAnnouncements field to given value.
+
+### HasPresaleAnnouncements
+
+`func (o *AeAssetUpdatedAmsDetail) HasPresaleAnnouncements() bool`
+
+HasPresaleAnnouncements returns a boolean if a field has been set.
+
+### GetLocation
+
+`func (o *AeAssetUpdatedAmsDetail) GetLocation() string`
+
+GetLocation returns the Location field if non-nil, zero value otherwise.
+
+### GetLocationOk
+
+`func (o *AeAssetUpdatedAmsDetail) GetLocationOk() (*string, bool)`
+
+GetLocationOk returns a tuple with the Location field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLocation
+
+`func (o *AeAssetUpdatedAmsDetail) SetLocation(v string)`
+
+SetLocation sets Location field to given value.
+
+### HasLocation
+
+`func (o *AeAssetUpdatedAmsDetail) HasLocation() bool`
+
+HasLocation returns a boolean if a field has been set.
+
+### GetAutoGrade
+
+`func (o *AeAssetUpdatedAmsDetail) GetAutoGrade() float32`
+
+GetAutoGrade returns the AutoGrade field if non-nil, zero value otherwise.
+
+### GetAutoGradeOk
+
+`func (o *AeAssetUpdatedAmsDetail) GetAutoGradeOk() (*float32, bool)`
+
+GetAutoGradeOk returns a tuple with the AutoGrade field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAutoGrade
+
+`func (o *AeAssetUpdatedAmsDetail) SetAutoGrade(v float32)`
+
+SetAutoGrade sets AutoGrade field to given value.
+
+### HasAutoGrade
+
+`func (o *AeAssetUpdatedAmsDetail) HasAutoGrade() bool`
+
+HasAutoGrade returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

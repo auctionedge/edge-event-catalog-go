@@ -27,7 +27,7 @@ type AeAssetSaleListingRemovedAmsDetail struct {
 	Asset CommonAmsAssetPointer `json:"asset"`
 	// Uniquie identifier for a sale listing.
 	SaleListingId string `json:"sale-listing-id"`
-	// The updated date time of the deal.
+	// The updated date time of the gatepass status
 	UpdatedAt time.Time `json:"updated-at"`
 	Initiator CommonInitiator `json:"initiator"`
 }

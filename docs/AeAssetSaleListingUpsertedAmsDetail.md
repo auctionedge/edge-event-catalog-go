@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **AuctionId** | **string** | Auction Edge unique identifier for an auction. | 
 **Asset** | [**CommonAmsAssetPointer**](CommonAmsAssetPointer.md) |  | 
 **SaleListing** | [**CommonAssetSaleListing**](CommonAssetSaleListing.md) |  | 
-**UpdatedAt** | **time.Time** | The updated date time of the deal. | 
+**UpdatedAt** | **time.Time** | The updated date time of the gatepass status | 
 **Initiator** | [**CommonInitiator**](CommonInitiator.md) |  | 
 
 ## Methods

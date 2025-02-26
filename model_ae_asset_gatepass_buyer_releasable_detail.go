@@ -36,7 +36,7 @@ type AeAssetGatepassBuyerReleasableDetail struct {
 	PrintSignatureLine *bool `json:"print-signature-line,omitempty"`
 	// Flag to print line on gate pass so write driver license number
 	PrintDriverLicenseLine *bool `json:"print-driver-license-line,omitempty"`
-	// The updated date time of the deal.
+	// The updated date time of the gatepass status
 	UpdatedAt *time.Time `json:"updated-at,omitempty"`
 	Initiator *CommonInitiator `json:"initiator,omitempty"`
 }

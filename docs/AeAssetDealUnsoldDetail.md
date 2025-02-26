@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **SaleDate** | **string** | The sale date of the deal. | 
 **Lane** | **string** | The lane the asset was in when deal made. | 
 **Lot** | **string** | The lot the asset was in when deal made. | 
-**UpdatedAt** | Pointer to **time.Time** | The updated date time of the deal. | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | The updated date time of the gatepass status | [optional] 
 **Initiator** | Pointer to [**CommonInitiator**](CommonInitiator.md) |  | [optional] 
 
 ## Methods

@@ -37,7 +37,7 @@ type AeAssetDealOfferRejectedDetail struct {
 	Lot string `json:"lot"`
 	// The amount the asset sold for.
 	Amount *float32 `json:"amount,omitempty"`
-	// The updated date time of the deal.
+	// The updated date time of the gatepass status
 	UpdatedAt *time.Time `json:"updated-at,omitempty"`
 	// The reason the offer was rejected
 	RejectedReason string `json:"rejected-reason"`

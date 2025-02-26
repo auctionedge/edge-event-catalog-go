@@ -22,14 +22,14 @@ var _ MappedNullable = &AeAssetUpdatedAmsDetail{}
 
 // AeAssetUpdatedAmsDetail Asset updated event for AMS assets
 type AeAssetUpdatedAmsDetail struct {
-	// Auction Edge unique identifier for an auction.
-	AuctionId string `json:"auction-id"`
 	// Source's unique identifier for asset
 	Id string `json:"id"`
-	// The Vehicle Identification Number(VIN) of the asset.
-	Vin string `json:"vin"`
 	// The stock number of the asset.
 	Stock string `json:"stock"`
+	// The Vehicle Identification Number(VIN) of the asset.
+	Vin string `json:"vin"`
+	// Auction Edge unique identifier for an auction.
+	AuctionId string `json:"auction-id"`
 	Seller CommonAmsAccountPointer `json:"seller"`
 	CheckIn CommonAssetCheckIn `json:"check-in"`
 	// The year the vehicle was manufactured.
@@ -42,6 +42,7 @@ type AeAssetUpdatedAmsDetail struct {
 	Trimline *string `json:"trimline,omitempty"`
 	// The body style of the vehicle
 	BodyStyle *string `json:"body-style,omitempty"`
+	FloorAmount *CommonCurrency `json:"floor-amount,omitempty"`
 	// The lowest amount the seller is willing to take for this asset.
 	FloorAmountUsd *float32 `json:"floor-amount-usd,omitempty"`
 	Interior *CommonVehicleInterior `json:"interior,omitempty"`
@@ -51,12 +52,21 @@ type AeAssetUpdatedAmsDetail struct {
 	Engine *CommonVehicleEngine `json:"engine,omitempty"`
 	// The type of transmission the asset has.
 	TransmissionType *string `json:"transmission-type,omitempty"`
-	Drivetrain *Drivetrain `json:"drivetrain,omitempty"`
+	Drivetrain *CommonVehicleDrivetrain `json:"drivetrain,omitempty"`
 	// A value rating the over all condition of the vehicle typically a number between 0-5 (5 being the best).
 	AuctionGrade *float32 `json:"auction-grade,omitempty"`
 	// The date and time at which the asset was last updated at.
 	UpdatedAt NullableTime `json:"updated-at,omitempty"`
 	Initiator *CommonInitiator `json:"initiator,omitempty"`
+	// The valuations of the asset.
+	Valuations []Valuation `json:"valuations,omitempty"`
+	Title *CommonTitle `json:"title,omitempty"`
+	// The announcements on the asset.
+	PresaleAnnouncements *string `json:"presale-announcements,omitempty"`
+	// The location of the asset.
+	Location *string `json:"location,omitempty"`
+	// A value rating the over all condition of the vehicle typically a number between 0-5 (5 being the best).
+	AutoGrade *float32 `json:"auto-grade,omitempty"`
 }
 
 type _AeAssetUpdatedAmsDetail AeAssetUpdatedAmsDetail
@@ -65,12 +75,12 @@ type _AeAssetUpdatedAmsDetail AeAssetUpdatedAmsDetail
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAeAssetUpdatedAmsDetail(auctionId string, id string, vin string, stock string, seller CommonAmsAccountPointer, checkIn CommonAssetCheckIn) *AeAssetUpdatedAmsDetail {
+func NewAeAssetUpdatedAmsDetail(id string, stock string, vin string, auctionId string, seller CommonAmsAccountPointer, checkIn CommonAssetCheckIn) *AeAssetUpdatedAmsDetail {
 	this := AeAssetUpdatedAmsDetail{}
-	this.AuctionId = auctionId
 	this.Id = id
-	this.Vin = vin
 	this.Stock = stock
+	this.Vin = vin
+	this.AuctionId = auctionId
 	this.Seller = seller
 	this.CheckIn = checkIn
 	return &this
@@ -82,30 +92,6 @@ func NewAeAssetUpdatedAmsDetail(auctionId string, id string, vin string, stock s
 func NewAeAssetUpdatedAmsDetailWithDefaults() *AeAssetUpdatedAmsDetail {
 	this := AeAssetUpdatedAmsDetail{}
 	return &this
-}
-
-// GetAuctionId returns the AuctionId field value
-func (o *AeAssetUpdatedAmsDetail) GetAuctionId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.AuctionId
-}
-
-// GetAuctionIdOk returns a tuple with the AuctionId field value
-// and a boolean to check if the value has been set.
-func (o *AeAssetUpdatedAmsDetail) GetAuctionIdOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.AuctionId, true
-}
-
-// SetAuctionId sets field value
-func (o *AeAssetUpdatedAmsDetail) SetAuctionId(v string) {
-	o.AuctionId = v
 }
 
 // GetId returns the Id field value
@@ -132,6 +118,30 @@ func (o *AeAssetUpdatedAmsDetail) SetId(v string) {
 	o.Id = v
 }
 
+// GetStock returns the Stock field value
+func (o *AeAssetUpdatedAmsDetail) GetStock() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Stock
+}
+
+// GetStockOk returns a tuple with the Stock field value
+// and a boolean to check if the value has been set.
+func (o *AeAssetUpdatedAmsDetail) GetStockOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Stock, true
+}
+
+// SetStock sets field value
+func (o *AeAssetUpdatedAmsDetail) SetStock(v string) {
+	o.Stock = v
+}
+
 // GetVin returns the Vin field value
 func (o *AeAssetUpdatedAmsDetail) GetVin() string {
 	if o == nil {
@@ -156,28 +166,28 @@ func (o *AeAssetUpdatedAmsDetail) SetVin(v string) {
 	o.Vin = v
 }
 
-// GetStock returns the Stock field value
-func (o *AeAssetUpdatedAmsDetail) GetStock() string {
+// GetAuctionId returns the AuctionId field value
+func (o *AeAssetUpdatedAmsDetail) GetAuctionId() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Stock
+	return o.AuctionId
 }
 
-// GetStockOk returns a tuple with the Stock field value
+// GetAuctionIdOk returns a tuple with the AuctionId field value
 // and a boolean to check if the value has been set.
-func (o *AeAssetUpdatedAmsDetail) GetStockOk() (*string, bool) {
+func (o *AeAssetUpdatedAmsDetail) GetAuctionIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Stock, true
+	return &o.AuctionId, true
 }
 
-// SetStock sets field value
-func (o *AeAssetUpdatedAmsDetail) SetStock(v string) {
-	o.Stock = v
+// SetAuctionId sets field value
+func (o *AeAssetUpdatedAmsDetail) SetAuctionId(v string) {
+	o.AuctionId = v
 }
 
 // GetSeller returns the Seller field value
@@ -388,6 +398,38 @@ func (o *AeAssetUpdatedAmsDetail) SetBodyStyle(v string) {
 	o.BodyStyle = &v
 }
 
+// GetFloorAmount returns the FloorAmount field value if set, zero value otherwise.
+func (o *AeAssetUpdatedAmsDetail) GetFloorAmount() CommonCurrency {
+	if o == nil || IsNil(o.FloorAmount) {
+		var ret CommonCurrency
+		return ret
+	}
+	return *o.FloorAmount
+}
+
+// GetFloorAmountOk returns a tuple with the FloorAmount field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AeAssetUpdatedAmsDetail) GetFloorAmountOk() (*CommonCurrency, bool) {
+	if o == nil || IsNil(o.FloorAmount) {
+		return nil, false
+	}
+	return o.FloorAmount, true
+}
+
+// HasFloorAmount returns a boolean if a field has been set.
+func (o *AeAssetUpdatedAmsDetail) HasFloorAmount() bool {
+	if o != nil && !IsNil(o.FloorAmount) {
+		return true
+	}
+
+	return false
+}
+
+// SetFloorAmount gets a reference to the given CommonCurrency and assigns it to the FloorAmount field.
+func (o *AeAssetUpdatedAmsDetail) SetFloorAmount(v CommonCurrency) {
+	o.FloorAmount = &v
+}
+
 // GetFloorAmountUsd returns the FloorAmountUsd field value if set, zero value otherwise.
 func (o *AeAssetUpdatedAmsDetail) GetFloorAmountUsd() float32 {
 	if o == nil || IsNil(o.FloorAmountUsd) {
@@ -581,9 +623,9 @@ func (o *AeAssetUpdatedAmsDetail) SetTransmissionType(v string) {
 }
 
 // GetDrivetrain returns the Drivetrain field value if set, zero value otherwise.
-func (o *AeAssetUpdatedAmsDetail) GetDrivetrain() Drivetrain {
+func (o *AeAssetUpdatedAmsDetail) GetDrivetrain() CommonVehicleDrivetrain {
 	if o == nil || IsNil(o.Drivetrain) {
-		var ret Drivetrain
+		var ret CommonVehicleDrivetrain
 		return ret
 	}
 	return *o.Drivetrain
@@ -591,7 +633,7 @@ func (o *AeAssetUpdatedAmsDetail) GetDrivetrain() Drivetrain {
 
 // GetDrivetrainOk returns a tuple with the Drivetrain field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AeAssetUpdatedAmsDetail) GetDrivetrainOk() (*Drivetrain, bool) {
+func (o *AeAssetUpdatedAmsDetail) GetDrivetrainOk() (*CommonVehicleDrivetrain, bool) {
 	if o == nil || IsNil(o.Drivetrain) {
 		return nil, false
 	}
@@ -607,8 +649,8 @@ func (o *AeAssetUpdatedAmsDetail) HasDrivetrain() bool {
 	return false
 }
 
-// SetDrivetrain gets a reference to the given Drivetrain and assigns it to the Drivetrain field.
-func (o *AeAssetUpdatedAmsDetail) SetDrivetrain(v Drivetrain) {
+// SetDrivetrain gets a reference to the given CommonVehicleDrivetrain and assigns it to the Drivetrain field.
+func (o *AeAssetUpdatedAmsDetail) SetDrivetrain(v CommonVehicleDrivetrain) {
 	o.Drivetrain = &v
 }
 
@@ -718,6 +760,166 @@ func (o *AeAssetUpdatedAmsDetail) SetInitiator(v CommonInitiator) {
 	o.Initiator = &v
 }
 
+// GetValuations returns the Valuations field value if set, zero value otherwise.
+func (o *AeAssetUpdatedAmsDetail) GetValuations() []Valuation {
+	if o == nil || IsNil(o.Valuations) {
+		var ret []Valuation
+		return ret
+	}
+	return o.Valuations
+}
+
+// GetValuationsOk returns a tuple with the Valuations field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AeAssetUpdatedAmsDetail) GetValuationsOk() ([]Valuation, bool) {
+	if o == nil || IsNil(o.Valuations) {
+		return nil, false
+	}
+	return o.Valuations, true
+}
+
+// HasValuations returns a boolean if a field has been set.
+func (o *AeAssetUpdatedAmsDetail) HasValuations() bool {
+	if o != nil && !IsNil(o.Valuations) {
+		return true
+	}
+
+	return false
+}
+
+// SetValuations gets a reference to the given []Valuation and assigns it to the Valuations field.
+func (o *AeAssetUpdatedAmsDetail) SetValuations(v []Valuation) {
+	o.Valuations = v
+}
+
+// GetTitle returns the Title field value if set, zero value otherwise.
+func (o *AeAssetUpdatedAmsDetail) GetTitle() CommonTitle {
+	if o == nil || IsNil(o.Title) {
+		var ret CommonTitle
+		return ret
+	}
+	return *o.Title
+}
+
+// GetTitleOk returns a tuple with the Title field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AeAssetUpdatedAmsDetail) GetTitleOk() (*CommonTitle, bool) {
+	if o == nil || IsNil(o.Title) {
+		return nil, false
+	}
+	return o.Title, true
+}
+
+// HasTitle returns a boolean if a field has been set.
+func (o *AeAssetUpdatedAmsDetail) HasTitle() bool {
+	if o != nil && !IsNil(o.Title) {
+		return true
+	}
+
+	return false
+}
+
+// SetTitle gets a reference to the given CommonTitle and assigns it to the Title field.
+func (o *AeAssetUpdatedAmsDetail) SetTitle(v CommonTitle) {
+	o.Title = &v
+}
+
+// GetPresaleAnnouncements returns the PresaleAnnouncements field value if set, zero value otherwise.
+func (o *AeAssetUpdatedAmsDetail) GetPresaleAnnouncements() string {
+	if o == nil || IsNil(o.PresaleAnnouncements) {
+		var ret string
+		return ret
+	}
+	return *o.PresaleAnnouncements
+}
+
+// GetPresaleAnnouncementsOk returns a tuple with the PresaleAnnouncements field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AeAssetUpdatedAmsDetail) GetPresaleAnnouncementsOk() (*string, bool) {
+	if o == nil || IsNil(o.PresaleAnnouncements) {
+		return nil, false
+	}
+	return o.PresaleAnnouncements, true
+}
+
+// HasPresaleAnnouncements returns a boolean if a field has been set.
+func (o *AeAssetUpdatedAmsDetail) HasPresaleAnnouncements() bool {
+	if o != nil && !IsNil(o.PresaleAnnouncements) {
+		return true
+	}
+
+	return false
+}
+
+// SetPresaleAnnouncements gets a reference to the given string and assigns it to the PresaleAnnouncements field.
+func (o *AeAssetUpdatedAmsDetail) SetPresaleAnnouncements(v string) {
+	o.PresaleAnnouncements = &v
+}
+
+// GetLocation returns the Location field value if set, zero value otherwise.
+func (o *AeAssetUpdatedAmsDetail) GetLocation() string {
+	if o == nil || IsNil(o.Location) {
+		var ret string
+		return ret
+	}
+	return *o.Location
+}
+
+// GetLocationOk returns a tuple with the Location field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AeAssetUpdatedAmsDetail) GetLocationOk() (*string, bool) {
+	if o == nil || IsNil(o.Location) {
+		return nil, false
+	}
+	return o.Location, true
+}
+
+// HasLocation returns a boolean if a field has been set.
+func (o *AeAssetUpdatedAmsDetail) HasLocation() bool {
+	if o != nil && !IsNil(o.Location) {
+		return true
+	}
+
+	return false
+}
+
+// SetLocation gets a reference to the given string and assigns it to the Location field.
+func (o *AeAssetUpdatedAmsDetail) SetLocation(v string) {
+	o.Location = &v
+}
+
+// GetAutoGrade returns the AutoGrade field value if set, zero value otherwise.
+func (o *AeAssetUpdatedAmsDetail) GetAutoGrade() float32 {
+	if o == nil || IsNil(o.AutoGrade) {
+		var ret float32
+		return ret
+	}
+	return *o.AutoGrade
+}
+
+// GetAutoGradeOk returns a tuple with the AutoGrade field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AeAssetUpdatedAmsDetail) GetAutoGradeOk() (*float32, bool) {
+	if o == nil || IsNil(o.AutoGrade) {
+		return nil, false
+	}
+	return o.AutoGrade, true
+}
+
+// HasAutoGrade returns a boolean if a field has been set.
+func (o *AeAssetUpdatedAmsDetail) HasAutoGrade() bool {
+	if o != nil && !IsNil(o.AutoGrade) {
+		return true
+	}
+
+	return false
+}
+
+// SetAutoGrade gets a reference to the given float32 and assigns it to the AutoGrade field.
+func (o *AeAssetUpdatedAmsDetail) SetAutoGrade(v float32) {
+	o.AutoGrade = &v
+}
+
 func (o AeAssetUpdatedAmsDetail) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -728,10 +930,10 @@ func (o AeAssetUpdatedAmsDetail) MarshalJSON() ([]byte, error) {
 
 func (o AeAssetUpdatedAmsDetail) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["auction-id"] = o.AuctionId
 	toSerialize["id"] = o.Id
-	toSerialize["vin"] = o.Vin
 	toSerialize["stock"] = o.Stock
+	toSerialize["vin"] = o.Vin
+	toSerialize["auction-id"] = o.AuctionId
 	toSerialize["seller"] = o.Seller
 	toSerialize["check-in"] = o.CheckIn
 	if !IsNil(o.Year) {
@@ -748,6 +950,9 @@ func (o AeAssetUpdatedAmsDetail) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.BodyStyle) {
 		toSerialize["body-style"] = o.BodyStyle
+	}
+	if !IsNil(o.FloorAmount) {
+		toSerialize["floor-amount"] = o.FloorAmount
 	}
 	if !IsNil(o.FloorAmountUsd) {
 		toSerialize["floor-amount-usd"] = o.FloorAmountUsd
@@ -779,6 +984,21 @@ func (o AeAssetUpdatedAmsDetail) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Initiator) {
 		toSerialize["initiator"] = o.Initiator
 	}
+	if !IsNil(o.Valuations) {
+		toSerialize["valuations"] = o.Valuations
+	}
+	if !IsNil(o.Title) {
+		toSerialize["title"] = o.Title
+	}
+	if !IsNil(o.PresaleAnnouncements) {
+		toSerialize["presale-announcements"] = o.PresaleAnnouncements
+	}
+	if !IsNil(o.Location) {
+		toSerialize["location"] = o.Location
+	}
+	if !IsNil(o.AutoGrade) {
+		toSerialize["auto-grade"] = o.AutoGrade
+	}
 	return toSerialize, nil
 }
 
@@ -787,10 +1007,10 @@ func (o *AeAssetUpdatedAmsDetail) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"auction-id",
 		"id",
-		"vin",
 		"stock",
+		"vin",
+		"auction-id",
 		"seller",
 		"check-in",
 	}

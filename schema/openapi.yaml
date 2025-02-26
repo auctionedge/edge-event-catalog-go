@@ -1,0 +1,5255 @@
+openapi: 3.0.0
+info:
+  title: Edge Event Schemas
+  version: 1.0.0
+servers:
+- url: /
+paths: {}
+components:
+  schemas:
+    EdgeEvent:
+      discriminator:
+        propertyName: detail-type
+      oneOf:
+      - $ref: '#/components/schemas/ae.user-info.advisory.data-source-updated'
+      - $ref: '#/components/schemas/ae.service.request'
+      - $ref: '#/components/schemas/ae.service.order-placed'
+      - $ref: '#/components/schemas/ae.service.waived'
+      - $ref: '#/components/schemas/ae.service.completed'
+      - $ref: '#/components/schemas/ae.service.cancelled'
+      - $ref: '#/components/schemas/ae.service.ordered'
+      - $ref: '#/components/schemas/ae.service.order-rejected'
+      - $ref: '#/components/schemas/ae.service.order-updated'
+      - $ref: '#/components/schemas/ae.asset.service.eligibility-updated'
+      - $ref: '#/components/schemas/ae.notification.request-delivery'
+      - $ref: '#/components/schemas/ae.document.asset.added'
+      - $ref: '#/components/schemas/ae.document.asset.removed'
+      - $ref: '#/components/schemas/ae.deal.upserted'
+      - $ref: '#/components/schemas/ae.asset.updated.ams'
+      - $ref: '#/components/schemas/ae.asset.sold-status-updated'
+      - $ref: '#/components/schemas/ae.asset.paid-status-updated'
+      - $ref: '#/components/schemas/ae.asset.seller-charge.add-requested'
+      - $ref: '#/components/schemas/ae.asset.seller-charge.add-request-failed'
+      - $ref: '#/components/schemas/ae.asset.seller-charge.upsert'
+      - $ref: '#/components/schemas/ae.asset.seller-charge.add-requested.v2'
+      - $ref: '#/components/schemas/ae.asset.seller-charge.remove-requested'
+      - $ref: '#/components/schemas/ae.asset.seller-charge.remove-failed'
+      - $ref: '#/components/schemas/ae.asset.seller-charge.removed'
+      - $ref: '#/components/schemas/ae.asset.seller-charge.upsert.v2'
+      - $ref: '#/components/schemas/ae.asset.sale-listing.upserted.ams'
+      - $ref: '#/components/schemas/ae.asset.sale-listing.removed.ams'
+      - $ref: '#/components/schemas/ae.asset.not-sold'
+      - $ref: '#/components/schemas/ae.asset.negotiation.upserted'
+      - $ref: '#/components/schemas/ae.asset.negotiation.offer.accepted'
+      - $ref: '#/components/schemas/ae.asset.negotiation.offer.rejected'
+      - $ref: '#/components/schemas/ae.asset.negotiation.offer.countered'
+      - $ref: '#/components/schemas/ae.asset.negotiation.note-added'
+      - $ref: '#/components/schemas/ae.asset.label.requested'
+      - $ref: '#/components/schemas/ae.asset.label.generated'
+      - $ref: '#/components/schemas/ae.asset.label.failed'
+      - $ref: '#/components/schemas/ae.asset.deal.sold'
+      - $ref: '#/components/schemas/ae.asset.deal.unsold'
+      - $ref: '#/components/schemas/ae.asset.checked-out.ams'
+      - $ref: '#/components/schemas/ae.asset.checked-in.ams'
+      - $ref: '#/components/schemas/ae.ams.payment-vendor.upsert'
+      - $ref: '#/components/schemas/ae.advisory.request.asset-sold'
+      - $ref: '#/components/schemas/ae.advisory.request.asset'
+      - $ref: '#/components/schemas/ae.advisory.request.account.ams'
+      - $ref: '#/components/schemas/ae.advisory.asset.ams'
+      - $ref: '#/components/schemas/ae.advisory.account.ams'
+      - $ref: '#/components/schemas/ae.advisory.account.representatives.ams'
+      - $ref: '#/components/schemas/ae.accounting.payment.source.updated'
+      - $ref: '#/components/schemas/ae.account.payment-source.upsert.ams'
+      - $ref: '#/components/schemas/ae.account.payment-source.removed.ams'
+      - $ref: '#/components/schemas/ae.account.representative.payer-authorized'
+      - $ref: '#/components/schemas/ae.account.representative.payer-deauthorized'
+      - $ref: '#/components/schemas/ae.account.representative.upserted.ams'
+      - $ref: '#/components/schemas/ae.account.representative.removed.ams'
+      - $ref: '#/components/schemas/ae.account.upserted.ams'
+      - $ref: '#/components/schemas/ae.account.removed.ams'
+      - $ref: '#/components/schemas/ae.asset.deal.payment.apply-source'
+      - $ref: '#/components/schemas/ae.asset.deal.payment.status-changed'
+      - $ref: '#/components/schemas/ae.asset.deal.offer.made'
+      - $ref: '#/components/schemas/ae.asset.deal.offer.accepted'
+      - $ref: '#/components/schemas/ae.asset.deal.offer.rejected'
+      - $ref: '#/components/schemas/ae.asset.deal.charge.upsert'
+      - $ref: '#/components/schemas/ae.asset.deal.charge.removed'
+      - $ref: '#/components/schemas/ae.asset.gatepass.send-email'
+      - $ref: '#/components/schemas/ae.asset.gatepass.created'
+      - $ref: '#/components/schemas/ae.asset.gatepass.voided'
+      - $ref: '#/components/schemas/ae.asset.gatepass.delivered'
+      - $ref: '#/components/schemas/ae.asset.gatepass.buyer.releasable'
+      - $ref: '#/components/schemas/ae.asset.gatepass.buyer.revoked'
+      x-implements:
+      - com.auctionedge.events.models.IEdgeEvent
+    BaseEdgeEvent:
+      additionalProperties: false
+      properties:
+        account:
+          description: The publisher AWS account number
+          example: "123456789012"
+          type: string
+        detail-type:
+          description: "Identifies, in combination with the source field, the fields\
+            \ and values that appear in the detail field."
+          example: "${detailType}"
+          type: string
+        id:
+          description: A Version 4 UUID that's generated for every event. You can
+            use id to trace events as they move through rules to targets.
+          minLength: 1
+          type: string
+        region:
+          description: Identifies the AWS Region where the event originated
+          example: us-west-2
+          type: string
+        resources:
+          description: Identifiers for any resources involved in the event
+          items:
+            description: Event specific resource identifiers. For AWS resources this
+              will be an ARN.
+            type: string
+          type: array
+        source:
+          description: Identifies the service that generated the event. May not begin
+            with 'aws.'
+          example: ae.post-sale-app
+          type: string
+        time:
+          description: "The event timestamp, which can be specified by the service\
+            \ originating the event. May be before the actual publication of the event.\
+            \ ISO-8601 format"
+          format: date-time
+          type: string
+        auction-id:
+          description: UA id of the auction. Not all events will need the identification
+            of an auction.
+          example: scsa
+          type: string
+        expires-at:
+          description: Timestamp after which the consumer should no longer process
+            the message. ISO-8601 format
+          example: 2019-08-31T14:15:22Z
+          format: date-time
+          type: string
+        deprecated:
+          default: false
+          description: True if this version has been deprecated.
+          type: boolean
+        idempotency-key:
+          description: MD5 content hash on the entire event content (Library generated)
+          type: string
+      required:
+      - detail-type
+      - id
+      - source
+      type: object
+    common.ua-id:
+      description: Auction Edge unique identifier for an auction.
+      example: daanw
+      type: string
+    common.ams.account.key:
+      description: The account key of an AMS account (i.e. the account or dealer number)
+      example: A12345
+      type: string
+    common.ams.rep-id-nullable:
+      deprecated: true
+      description: "The rep id an AMS account.  This common object is deprecated,\
+        \ please use common.ams.representative-id instead."
+      example: "1"
+      nullable: true
+      type: string
+      x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+    common.ams.account-pointer:
+      description: Identifiers that reference an AMS account.
+      properties:
+        account-key:
+          description: The account key of an AMS account (i.e. the account or dealer
+            number)
+          example: A12345
+          type: string
+        aa-id:
+          description: The Auction Access ID of the AMS account.
+          example: "5000123"
+          nullable: true
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        account-id:
+          description: Source's unique identifier for account
+          example: 503519-20210827T144732
+          type: string
+      required:
+      - aa-id
+      - account-key
+      type: object
+    common.ams.asset-pointer:
+      description: Identifiers that reference an asset.
+      properties:
+        id:
+          description: Source's unique identifier for asset
+          example: 503519-20210827T144732
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+      required:
+      - id
+      - stock
+      - vin
+      type: object
+    common.ams.rep-pointer:
+      deprecated: true
+      description: "Identifiers that reference an AMS rep account.  This may not be\
+        \ the one that you want, please reference common.ams.representative-pointer"
+      properties:
+        rep-id:
+          deprecated: true
+          description: "The rep id an AMS account.  This common object is deprecated,\
+            \ please use common.ams.representative-id instead."
+          example: "1"
+          nullable: true
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        aa-id:
+          description: The Auction Access ID of the AMS Representative account.
+          example: "100023848"
+          nullable: true
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+      required:
+      - aa-id
+      - rep-id
+      type: object
+    common.asset.check-in:
+      properties:
+        recorded-at:
+          description: Date and time that the Asset first got a stock number in the
+            AMS.
+          example: 2024-05-24T13:19:23.238Z
+          format: date-time
+          type: string
+        recorded-by:
+          description: The user responsible for checking in the asset.
+          example: DD
+          type: string
+      required:
+      - recorded-at
+      type: object
+    common.asset.floor-amount:
+      description: The lowest amount the seller is willing to take for this asset.
+      example: 10500
+      type: number
+    common.asset.id:
+      description: Source's unique identifier for asset
+      example: 503519-20210827T144732
+      type: string
+    common.asset.negotiation.base-offer:
+      properties:
+        id:
+          description: unique identifier of the offer
+          type: string
+        source:
+          description: the source system that created the offer
+          type: string
+        authorized-by:
+          description: user that entered the offer
+          type: string
+        rep:
+          $ref: '#/components/schemas/common.ams.rep-pointer'
+        amount:
+          $ref: '#/components/schemas/common.currency'
+        note:
+          description: a noted added at the time of the offfer
+          type: string
+        notification:
+          $ref: '#/components/schemas/common_asset_negotiation_base_offer_notification'
+      required:
+      - amount
+      - authorized-by
+      - id
+      - note
+      - notification
+      - rep
+      - source
+      type: object
+    common.asset.negotiation.id:
+      description: Uniquie identifier for a specific negotiation.
+      type: string
+    common.asset.negotiation.offer.by:
+      description: the role of the person that made the offer
+      enum:
+      - buyer
+      - seller
+      type: string
+    common.asset.stock:
+      description: The stock number of the asset.
+      example: "5349083"
+      type: string
+    common.asset.vin:
+      description: The Vehicle Identification Number(VIN) of the asset.
+      example: 4T3ZK3BB7BU042861
+      type: string
+    common.auction-access.person-id-nullable:
+      description: The Auction Access ID of the AMS Representative account.
+      example: "100023848"
+      nullable: true
+      type: string
+      x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+    common.auction-access.company-id-nullable:
+      description: The Auction Access ID of the AMS account.
+      example: "5000123"
+      nullable: true
+      type: string
+      x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+    common.currency:
+      properties:
+        cents:
+          description: Amount of money in cents so $175.00 would be 17500 cents.
+          example: 17500
+          type: integer
+        currency-code:
+          enum:
+          - cad
+          - usd
+          type: string
+      required:
+      - cents
+      - currency-code
+      type: object
+    common.vehicle.body-style:
+      description: The body style of the vehicle
+      example: 4 Door Sport Utility Vehicle
+      type: string
+    common.vehicle.engine:
+      description: Attributes that define an engine
+      properties:
+        cylinders:
+          description: The number of cylinders the engine has.
+          example: 8
+          type: number
+        cylinder-configuration:
+          description: How the cylinders are arranged in an engine.
+          enum:
+          - flat
+          - inline
+          - radial
+          - rotary
+          - v
+          - w
+          type: string
+        displacement:
+          description: the total amount of air and fuel that can be drawn into the
+            cylinders at one time.
+          example: 1.8L
+          type: string
+        fuel-type:
+          description: The type of fuel the engine consumes to operate.
+          example: Gas
+          type: string
+      type: object
+    common.vehicle.exterior:
+      description: Attributes defining the exterior of the asset.
+      properties:
+        bottom-color:
+          description: The color for the bottom half of the asset.
+          example: Red
+          type: string
+        top-color:
+          description: The color for the top half of the asset.
+          example: White
+          type: string
+        roof-type:
+          description: A description of the type of roof the asset has
+          example: Convertible
+          type: string
+      type: object
+    common.vehicle.interior:
+      description: Attributes defining the interior of the asset
+      properties:
+        color:
+          description: The primary color of the interior of the asset
+          example: Tan
+          type: string
+        seat-trim:
+          description: The type of material used inside of the asset.
+          example: leather
+          type: string
+      type: object
+    common.vehicle.make:
+      description: The manufacturer of the vehicle.
+      example: Jeep
+      type: string
+    common.vehicle.model:
+      description: The model of the vehicle.
+      example: Renegade
+      type: string
+    common.vehicle.odometer-reading:
+      description: The vehicle's odometer reading
+      type: number
+    common.vehicle.odometer-reading-nullable:
+      description: The vehicle's odometer reading
+      nullable: true
+      type: number
+    common.vehicle.trimline:
+      description: The trim of the vehicle.
+      example: Altitude
+      type: string
+    common.vehicle.year:
+      description: The year the vehicle was manufactured.
+      example: 2024
+      format: int32
+      type: integer
+    common.ams.account.id:
+      description: Source's unique identifier for account
+      example: 503519-20210827T144732
+      type: string
+    common.ams.payment-source:
+      properties:
+        payment-source-id:
+          description: auction unique id for payment source in AMS
+          example: "81941"
+          type: string
+        payment-vendor-id:
+          description: auction unique id for payment vendor in AMS
+          example: "47"
+          type: string
+        display-name:
+          description: The display name of the payment source.
+          example: Bank of America
+          type: string
+      required:
+      - display-name
+      - payment-source-id
+      - payment-vendor-id
+      type: object
+    common.ams.payment-source.id:
+      description: auction unique id for payment source in AMS
+      example: "81941"
+      type: string
+    common.ams.payment-vendor.id:
+      description: auction unique id for payment vendor in AMS
+      example: "47"
+      type: string
+    common.ams.representative-pointer:
+      description: Identifiers that reference an AMS representative.
+      properties:
+        id:
+          description: The representative id an AMS account
+          example: "1"
+          nullable: false
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        aa-id:
+          description: The Auction Access ID of the AMS Representative account.
+          example: "100023848"
+          nullable: true
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        rep-number:
+          description: "Rep number as denoted in ASI, AOS to use same value as representative-id"
+          example: 0
+          type: number
+      required:
+      - aa-id
+      - id
+      type: object
+    common.ams.postal-address:
+      description: Postal address of entity
+      properties:
+        address1:
+          description: Address line 1 of location
+          example: 123 Main St
+          type: string
+        address2:
+          description: Address line 2 of location
+          example: Apt 2a
+          type: string
+        address3:
+          description: Address line 2 of location
+          example: "Attn: Accounting"
+          type: string
+        city:
+          description: City of location
+          example: Franklin
+          type: string
+        state:
+          description: State of location
+          example: TN
+          type: string
+        postal-code:
+          description: Postal code of location
+          example: G1A 0A2
+          type: string
+      required:
+      - address1
+      - city
+      - postal-code
+      - state
+      type: object
+    common.ams.representative-id:
+      description: The representative id an AMS account
+      example: "1"
+      nullable: false
+      type: string
+      x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+    common.ams.person-info:
+      description: Common person properties that an AMS would produce
+      properties:
+        first-name:
+          description: Representative first name
+          example: John
+          type: string
+        last-name:
+          description: Representative Last name
+          example: Dutton
+          type: string
+        nickname:
+          description: Representative nickname
+          example: JD
+          type: string
+        title:
+          description: Representative title
+          example: President
+          type: string
+        home-phone-number:
+          description: Home phone number of representative
+          example: 407-888-1233
+          type: string
+        cell-phone-number:
+          description: Cell phone number of representative
+          example: 407-888-1234
+          type: string
+        fax-number:
+          description: Fax phone number of representative
+          example: 407-222-1212
+          type: string
+        email:
+          description: Email of representative
+          example: JD@JDAuto.com
+          format: email
+          maxLength: 320
+          type: string
+      type: object
+    common.charge:
+      description: Standard definition of a charge with associated properties
+      properties:
+        id:
+          description: Unique id for this charge
+          example: PSI-1234-90393F456
+          type: string
+        display-name:
+          description: Description of the charge
+          example: Ship.cars transportation fuel costs.
+          type: string
+        charge-type:
+          description: The type of charge that is being requested to be added.
+          enum:
+          - fuel
+          - misc
+          - sell
+          - transportation
+          type: string
+        amount:
+          $ref: '#/components/schemas/common.currency'
+        cost:
+          $ref: '#/components/schemas/common.currency'
+        note:
+          description: Notes for the auction relating to the charge
+          type: string
+      required:
+      - amount
+      - charge-type
+      - display-name
+      - id
+      type: object
+    common.initiator:
+      description: Common object of who initiated a request
+      example:
+        auction:
+          type: application
+          initiator-key: ams/daanw
+        auction-user:
+          type: user
+          initiator-key: daanw/SPS
+        spark-code:
+          type: application
+          initiator-key: spark/vdp/if-offers-tab
+        spark-user:
+          type: user
+          initiator-key: us-west-2_wwYsnwlPF/natalie.briggs
+        auction-account:
+          type: user
+          initiator-key: daanw/12332123
+        etl-sync-subsystem:
+          type: application
+          initiator-key: edge-datapipe-adb/sync-manager
+      properties:
+        initiator-type:
+          description: Identify if the event was initiated by an application or a
+            user
+          enum:
+          - application
+          - user
+          type: string
+        initiator-key:
+          description: "Identifier (or URI) of a system/service component (e.g., code\
+            \ module) or user (username)"
+          example: us-west-2_wwYsnwlPF/natalie.briggs
+          type: string
+      required:
+      - initiator-key
+      - initiator-type
+      type: object
+    common.asset.sale-listing:
+      description: Common object of a sale listing for an asset
+      properties:
+        id:
+          description: AMS unique identifier for this sale listing of the asset
+          example: pipeline20241123B75
+          type: string
+        status:
+          description: Status of the sale listing
+          enum:
+          - published
+          - retracted
+          - voided
+          type: string
+        venue:
+          $ref: '#/components/schemas/common.venue'
+        sale-start-at:
+          description: The time that this sale listing for the asset begins
+          format: date-time
+          type: string
+        sale-end-at:
+          description: The time that this sale listing for the asset ends
+          format: date-time
+          type: string
+        seller-rep:
+          description: The representative id an AMS account
+          example: "1"
+          nullable: false
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        lane:
+          description: The lane the asset was in when deal made.
+          example: A
+          type: string
+        lot:
+          description: The lot the asset was in when deal made.
+          example: "0001"
+          type: string
+        announcements-text:
+          description: Auction announcements on the asset
+          example:
+          - As Is
+          - No Arb
+          items:
+            type: string
+          minItems: 0
+          type: array
+        announcement-lights:
+          description: The current lights on the asset when the sale listing was made.
+          example: "Green,Yellow"
+          type: string
+        floor-amount:
+          $ref: '#/components/schemas/common.currency'
+        start-bid:
+          $ref: '#/components/schemas/common.currency'
+        high-bid:
+          $ref: '#/components/schemas/common.currency'
+        bid-increment:
+          $ref: '#/components/schemas/common.currency'
+        main-image-url:
+          description: The URL for the main image of the asset to be posted on the
+            listing
+          example: https://file3.autolookout.net/30608/041637/0225/Ow==/zaccjabt9gpd66101
+            -110376-pano.jpg
+          type: string
+        photo-count:
+          description: total number of photos attached to the asset
+          example: "11"
+          type: string
+        photo-count-updated-at:
+          description: timestamp of when photo count was last changed
+          example: 2024-11-25T12:45:23.002Z
+          format: date-time
+          type: string
+        buy-now:
+          $ref: '#/components/schemas/common.asset.buy-now'
+        updated-at:
+          description: The time in ISO-8601 formatted at which the record was generated
+          example: 2025-01-17T12:45:23.002Z
+          format: date-time
+          type: string
+      required:
+      - announcement-lights
+      - announcements-text
+      - id
+      - sale-start-at
+      - seller-rep
+      - status
+      - updated-at
+      - venue
+      type: object
+    common.asset.buy-now:
+      description: An object representation for an asset's buy now properties
+      properties:
+        buy-now-price:
+          $ref: '#/components/schemas/common.currency'
+        buy-now-valid-at:
+          description: The time that this buy-now price is available for the asset
+          example: 2025-01-20T10:00:00Z
+          format: date-time
+          type: string
+        buy-now-valid-until:
+          description: The time that this buy-now price for the asset expires.
+          format: date-time
+          type: string
+      required:
+      - buy-now-price
+      - buy-now-valid-at
+      - buy-now-valid-until
+      type: object
+    common.venue:
+      properties:
+        display-name:
+          description: The name of this specific venue for the organization
+          type: string
+        organization:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        location:
+          $ref: '#/components/schemas/common.physical-location'
+        venue-type:
+          description: The type of the venue
+          enum:
+          - auction
+          - mobile_auction
+          - virtual_auction
+          - virtual_marketplace
+          type: string
+      required:
+      - display-name
+      - location
+      - organization
+      - venue-type
+      type: object
+    common.physical-location:
+      description: Properties of a location
+      properties:
+        display-name:
+          description: Name to be displayed by human
+          example: AuctionEdge Home Office
+          type: string
+        address1:
+          description: First line of address
+          example: 123 Main Street
+          type: string
+        address2:
+          description: Second line of address
+          example: Suite 75
+          type: string
+        city:
+          description: The city that the location is in
+          example: franklin
+          type: string
+        state:
+          description: The state or province that the location is in
+          enum:
+          - ab
+          - ak
+          - al
+          - ar
+          - as
+          - az
+          - bc
+          - ca
+          - co
+          - ct
+          - dc
+          - de
+          - fl
+          - ga
+          - gu
+          - hi
+          - ia
+          - id
+          - il
+          - in
+          - ks
+          - ky
+          - la
+          - ma
+          - mb
+          - md
+          - me
+          - mi
+          - mn
+          - mo
+          - mp
+          - ms
+          - mt
+          - nb
+          - nc
+          - nd
+          - ne
+          - nf
+          - nh
+          - nj
+          - nl
+          - nm
+          - ns
+          - nt
+          - nv
+          - ny
+          - oh
+          - ok
+          - or
+          - pa
+          - pe
+          - pr
+          - qc
+          - ri
+          - sc
+          - sd
+          - sk
+          - tn
+          - tx
+          - um
+          - ut
+          - va
+          - vi
+          - vt
+          - wa
+          - wi
+          - wv
+          - wy
+          type: string
+        postal-code:
+          description: The postal code of this location
+          example: "37067"
+          type: string
+        zip4:
+          description: The 4-number suffix of the postal-code
+          example: "2611"
+          type: string
+        country-iso-code:
+          description: The ISO code for the country that this location is in
+          enum:
+          - ca
+          - mx
+          - us
+          type: string
+        region-code:
+          description: Auction Edge region that this location is in
+          enum:
+          - ae_ne
+          - ae_se
+          - ae_mw
+          - ae_nw
+          - ae_sw
+          type: string
+        time-zone:
+          description: The time zone that the location is in
+          enum:
+          - akst
+          - ariz
+          - ast
+          - cst
+          - est
+          - hst
+          - mst
+          - pst
+          type: string
+      required:
+      - address1
+      - city
+      - country-iso-code
+      - postal-code
+      - state
+      type: object
+    common.ams.sale-listing.id:
+      description: Uniquie identifier for a sale listing.
+      type: string
+    common.deal.id:
+      description: Unique id for a deal
+      example: 250127-81941
+      type: string
+    common.vehicle.transmission-type:
+      description: The type of transmission the asset has.
+      example: Automatic
+      type: string
+    common.vehicle.drivetrain:
+      description: The type of drivetrain the asset has.
+      enum:
+      - fwd
+      - rwd
+      - awd
+      - 4wd
+      type: string
+    common.vehicle.auction-grade:
+      description: A value rating the over all condition of the vehicle typically
+        a number between 0-5 (5 being the best).
+      example: 1.4
+      type: number
+    common.title-exempt:
+      default: false
+      description: Defines whether or not the asset can even have a title.  For example
+        a lawn mower would be title exempt.
+      type: boolean
+    common.title-number:
+      description: "A unique identifier, typically a string of 7-8 digits or characters,\
+        \ found on your car's title document."
+      example: AV34019
+      type: string
+    common.title-state:
+      description: The state in which the asset's title was issued.
+      example: NC
+      type: string
+    common.title-received-at:
+      description: The date and time at which the title document was received by the
+        auction.
+      format: date-time
+      nullable: true
+      type: string
+    common.title:
+      description: Attributes defining the title document for the asset.
+      properties:
+        exempt:
+          default: false
+          description: Defines whether or not the asset can even have a title.  For
+            example a lawn mower would be title exempt.
+          type: boolean
+        number:
+          description: "A unique identifier, typically a string of 7-8 digits or characters,\
+            \ found on your car's title document."
+          example: AV34019
+          type: string
+        state:
+          description: The state in which the asset's title was issued.
+          example: NC
+          type: string
+        received-at:
+          description: The date and time at which the title document was received
+            by the auction.
+          format: date-time
+          nullable: true
+          type: string
+      type: object
+    common.service.id:
+      description: Source's unique identifier for service
+      example: 503519-20210827T144732
+      type: string
+    common.service.parameter:
+      properties:
+        name:
+          description: Service parameter name
+          enum:
+          - buyer_payment_received
+          - seller_check_printed
+          - offer
+          - payment_on_file
+          - check_number_assigned
+          - red_light_deal
+          type: string
+        value:
+          description: Service parameter value checked against
+          type: string
+      type: object
+    ae.user-info.advisory.data-source-updated:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.user-info.advisory.data-source-updated-detail'
+      required:
+      - detail
+      type: object
+    ae.user-info.advisory.data-source-updated-detail:
+      additionalProperties: false
+      description: Advisory message for user-info
+      properties:
+        version:
+          example: "0"
+          minLength: 1
+          type: string
+        bucket:
+          $ref: '#/components/schemas/ae_user_info_advisory_data_source_updated_detail_bucket'
+        object:
+          $ref: '#/components/schemas/ae_user_info_advisory_data_source_updated_detail_object'
+        request-id:
+          example: JFK4SWXNXV7K65B1
+          type: string
+        requester:
+          example: "125147775665"
+          type: string
+        source-ip-address:
+          example: 127.0.0.1
+          type: string
+        reason:
+          example: PutObject
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - bucket
+      - object
+      - reason
+      - request-id
+      - requester
+      - source-ip-address
+      - version
+      type: object
+    ae.service.request:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.service.request-detail'
+      required:
+      - detail
+      type: object
+    ae.service.order-placed:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.service.order-placed-detail'
+      required:
+      - detail
+      type: object
+    ae.service.waived:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.service.waived-detail'
+      required:
+      - detail
+      type: object
+    ae.service.completed:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.service.completed-detail'
+      required:
+      - detail
+      type: object
+    ae.service.cancelled:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.service.cancelled-detail'
+      required:
+      - detail
+      type: object
+    ae.service.ordered:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.service.ordered-detail'
+      required:
+      - detail
+      type: object
+    ae.service.order-rejected:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.service.order-rejected-detail'
+      required:
+      - detail
+      type: object
+    ae.service.order-updated:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.service.order-updated-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.service.eligibility-updated:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.service.eligibility-updated-detail'
+      required:
+      - detail
+      type: object
+    ae.service.request-detail:
+      additionalProperties: false
+      description: Request that a service be performed
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        service:
+          $ref: '#/components/schemas/service-order'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - service
+      - stock
+      - vin
+      type: object
+    service-class-enum:
+      description: Service class
+      enum:
+      - psi
+      - transportation
+      example: psi
+      type: string
+    service-code-enum:
+      description: Service code
+      example: "1"
+      type: string
+    service-order:
+      properties:
+        class:
+          $ref: '#/components/schemas/service-class-enum'
+        code:
+          description: Service code
+          example: "1"
+          type: string
+        description:
+          description: Description of service chosen
+          example: 6-day
+          type: string
+        printer:
+          description: "Printer name, default configuration used if not provided"
+          example: PRT07
+          type: string
+        canPrint:
+          description: Not currently used
+          example: false
+          type: boolean
+        isOverridden:
+          description: Normal checks to allow service are bypassed.
+          example: true
+          type: boolean
+        feeAmount:
+          description: Fee amount
+          example: 55
+          nullable: true
+          type: number
+        serviceNote:
+          description: Note on desired service (not currently used)
+          example: Questionable repair on suspension-ators
+          type: string
+      required:
+      - class
+      - code
+      type: object
+    ae.service.order-placed-detail:
+      additionalProperties: false
+      description: Notification that a service order has been placed
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        service:
+          $ref: '#/components/schemas/ae_service_order_placed_detail_service'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - service
+      - stock
+      - vin
+      type: object
+    ae.service.waived-detail:
+      additionalProperties: false
+      description: Notification that a service has been waived
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        service:
+          $ref: '#/components/schemas/ae_service_waived_detail_service'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - service
+      - stock
+      - vin
+      type: object
+    ae.service.completed-detail:
+      additionalProperties: false
+      description: Notification that a service has been completed
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        service:
+          $ref: '#/components/schemas/ae_service_completed_detail_service'
+        passed:
+          description: Result of service (pass/fail)
+          type: boolean
+        messages:
+          items:
+            description: Any messages associated with the completion of the service
+            type: string
+          type: array
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - service
+      - stock
+      - vin
+      type: object
+    ae.service.cancelled-detail:
+      additionalProperties: false
+      description: Notification that a service has been cancelled
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        service:
+          $ref: '#/components/schemas/ae_service_order_placed_detail_service'
+        reason:
+          description: Reason that the service was cancelled
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - service
+      - stock
+      - vin
+      type: object
+    ae.service.ordered-detail:
+      additionalProperties: false
+      description: Notification that a service has been ordered
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        service:
+          $ref: '#/components/schemas/ae_service_order_placed_detail_service'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - service
+      - stock
+      - vin
+      type: object
+    ae.service.order-rejected-detail:
+      additionalProperties: false
+      description: Notification that a service order has been rejected
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        service:
+          $ref: '#/components/schemas/ae_service_order_placed_detail_service'
+        reason:
+          description: Reason that the service order was rejected
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - service
+      - stock
+      - vin
+      type: object
+    ae.service.order-updated-detail:
+      additionalProperties: false
+      description: "Notification that a service order has changed status, other than\
+        \ completed or cancelled"
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        service:
+          $ref: '#/components/schemas/ae_service_order_updated_detail_service'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - service
+      - stock
+      - vin
+      type: object
+    service:
+      description: Service option
+      properties:
+        id:
+          description: Source's unique identifier for service
+          example: 503519-20210827T144732
+          type: string
+        service-class:
+          $ref: '#/components/schemas/service-class-enum'
+        name:
+          description: The name of the inspection option.
+          type: string
+        description:
+          description: Description of service being performed for information to be
+            presented
+          type: string
+        specific-details:
+          $ref: '#/components/schemas/service-specific-details'
+        reject-reason:
+          description: Reason why this service option is not eligible
+          type: string
+        parameters:
+          items:
+            $ref: '#/components/schemas/common.service.parameter'
+          minItems: 0
+          type: array
+      required:
+      - description
+      - id
+      - name
+      - price-fail
+      - price-pass
+      - returnable-within-days
+      - service-class
+      type: object
+    service-specific-details:
+      properties:
+        returnable-within-days:
+          description: The number of days available to be returned.
+          format: int32
+          minimum: 1
+          type: integer
+        price-pass:
+          $ref: '#/components/schemas/common.currency'
+        price-fail:
+          $ref: '#/components/schemas/common.currency'
+      type: object
+    ae.asset.service.eligibility-updated-detail:
+      additionalProperties: false
+      description: Service options eligibility and ineligibility list
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        eligible-services:
+          items:
+            $ref: '#/components/schemas/service'
+          minItems: 0
+          type: array
+        ineligible-services:
+          items:
+            $ref: '#/components/schemas/service'
+          minItems: 0
+          type: array
+        updated-at:
+          description: The updated date time of the gatepass status
+          example: 2024-06-01T14:35:12.311Z
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - eligible-options
+      - ineligible-options
+      - initiator
+      - updated-at
+      type: object
+    ae.notification.request-delivery:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.notification.request-delivery-detail'
+      required:
+      - detail
+      type: object
+    ae.notification.request-delivery-detail:
+      description: Notification to be delivered
+      properties:
+        message:
+          description: The message to be delivered
+          example: Your vehicle is ready for pickup
+          type: string
+        target-list:
+          items:
+            $ref: '#/components/schemas/notification-target'
+          minItems: 1
+          type: array
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - message
+      - target-list
+      type: object
+    notification-target:
+      description: The target to deliver the notification to
+      properties:
+        delivery-method:
+          description: The method to deliver the notification
+          enum:
+          - email
+          - sms
+          example: email
+          type: string
+        delivery-address:
+          description: The address to deliver the notification to
+          type: string
+      required:
+      - delivery-address
+      - delivery-method
+      type: object
+    ae.document.asset.added:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.document.asset.added-detail'
+      required:
+      - detail
+      type: object
+    ae.document.asset.removed:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.document.asset.removed-detail'
+      required:
+      - detail
+      type: object
+    ae.document.asset.added-detail:
+      additionalProperties: false
+      description: Document uploaded and available
+      properties:
+        document-id:
+          description: Unique identifier for Spark Document
+          type: string
+        document-type:
+          $ref: '#/components/schemas/document-type'
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset-stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        asset-vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        service-id:
+          description: Id to access the service(SparkDocs) that will provide the method
+            to retrieve the resource.
+          type: string
+        recorded-at:
+          description: Date and time the document was added
+          example: 2024-06-01T14:35:12.311Z
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset-stock
+      - asset-vin
+      - auction-id
+      - document-id
+      - document-type
+      - recorded-at
+      - service-id
+      type: object
+    ae.document.asset.removed-detail:
+      additionalProperties: false
+      description: Document removed and no long available
+      properties:
+        document-id:
+          description: Unique identifier for Spark Document
+          type: string
+        document-type:
+          $ref: '#/components/schemas/document-type'
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset-stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        asset-vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        recorded-at:
+          description: Date and time the document was added
+          example: 2024-06-01T14:35:12.311Z
+          format: date-time
+          type: string
+      required:
+      - asset-stock
+      - asset-vin
+      - auction-id
+      - document-id
+      - document-type
+      - recorded-at
+      type: object
+    document-id:
+      description: Unique identifier for Spark Document
+      type: string
+    service-id:
+      description: Id to access the service(SparkDocs) that will provide the method
+        to retrieve the resource.
+      type: string
+    recorded-at:
+      description: Date and time the document was added
+      example: 2024-06-01T14:35:12.311Z
+      format: date-time
+      type: string
+    document-type:
+      description: Type of document
+      enum:
+      - approval_for_work_orders
+      - arbitration
+      - autoims_notification
+      - bill_of_sale
+      - bill_of_sale_auction_copy
+      - bill_of_sale_buyer_copy
+      - bill_of_sale_seller_copy
+      - booksheet
+      - bpp_claim
+      - buyback_form
+      - buyer_check
+      - buyer_gate_pass
+      - buyer_protection_plan
+      - condition_report_scanned
+      - correspondance
+      - electronic_condition_report
+      - general_motors_window_sticker
+      - gsa_form_97
+      - if_sheet
+      - miscellaneous
+      - pickup_transportation
+      - post_sale_inspection
+      - pre_sale_inspection
+      - pre_inspection_certification
+      - property_log_sheet
+      - receipt
+      - redemption
+      - repair_estimates
+      - repair_gate_pass
+      - repo_check_in_ticket
+      - seller_check
+      - seller_gate_pass
+      - service_invoice
+      - south_carolina_pto
+      - thank_you_note_to_buyer
+      - title_supporting_documents
+      - tracker
+      - unknown
+      - vendor_invoice
+      - window_sticker
+      - work_order
+      type: string
+    ae.deal.upserted:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.deal.upserted-detail'
+      required:
+      - detail
+      type: object
+    ae.deal.upserted-detail:
+      additionalProperties: false
+      description: Deal entity
+      properties:
+        id:
+          description: Unique id for a deal
+          example: 250127-81941
+          type: string
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        seller:
+          description: Source's unique identifier for account
+          example: 503519-20210827T144732
+          type: string
+        seller-agent:
+          description: The representative id an AMS account
+          example: "1"
+          nullable: false
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        sale-listing:
+          description: Uniquie identifier for a sale listing.
+          type: string
+        sold-at:
+          description: The time in ISO-8601 formatted at which the asset was sold
+          example: 2024-05-24T13:19:23.238Z
+          format: date-time
+          type: string
+        buyer:
+          description: Source's unique identifier for account
+          example: 503519-20210827T144732
+          type: string
+        buyer-agent:
+          description: The representative id an AMS account
+          example: "1"
+          nullable: false
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        amount:
+          $ref: '#/components/schemas/common.currency'
+        sold-method:
+          description: The type of sale the deal was made in.
+          enum:
+          - inlane
+          - online
+          example: inlane
+          type: string
+        updated-at:
+          description: The time in ISO-8601 format in UTC timezone at which the record
+            was generated
+          example: 2024-05-24T13:19:23.238Z
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - amount
+      - asset
+      - auction-id
+      - buyer
+      - id
+      - initiator
+      - sale-listing
+      - seller
+      - sold-at
+      - updated-at
+      type: object
+    ae.asset.updated.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.updated.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.updated.ams-detail:
+      allOf:
+      - $ref: '#/components/schemas/common.ams.asset-pointer'
+      - properties:
+          auction-id:
+            $ref: '#/components/schemas/common.ua-id'
+          seller:
+            $ref: '#/components/schemas/common.ams.account-pointer'
+          check-in:
+            $ref: '#/components/schemas/common.asset.check-in'
+          year:
+            $ref: '#/components/schemas/common.vehicle.year'
+          make:
+            $ref: '#/components/schemas/common.vehicle.make'
+          model:
+            $ref: '#/components/schemas/common.vehicle.model'
+          trimline:
+            $ref: '#/components/schemas/common.vehicle.trimline'
+          body-style:
+            $ref: '#/components/schemas/common.vehicle.body-style'
+          floor-amount:
+            $ref: '#/components/schemas/common.currency'
+          floor-amount-usd:
+            $ref: '#/components/schemas/common.asset.floor-amount'
+          interior:
+            $ref: '#/components/schemas/common.vehicle.interior'
+          exterior:
+            $ref: '#/components/schemas/common.vehicle.exterior'
+          current-odometer-reading:
+            $ref: '#/components/schemas/common.vehicle.odometer-reading'
+          engine:
+            $ref: '#/components/schemas/common.vehicle.engine'
+          transmission-type:
+            $ref: '#/components/schemas/common.vehicle.transmission-type'
+          drivetrain:
+            $ref: '#/components/schemas/common.vehicle.drivetrain'
+          auction-grade:
+            $ref: '#/components/schemas/common.vehicle.auction-grade'
+          updated-at:
+            description: The date and time at which the asset was last updated at.
+            format: date-time
+            nullable: true
+            type: string
+          initiator:
+            $ref: '#/components/schemas/common.initiator'
+          valuations:
+            description: The valuations of the asset.
+            items:
+              $ref: '#/components/schemas/valuation'
+            type: array
+          title:
+            $ref: '#/components/schemas/common.title'
+          presale-announcements:
+            description: The announcements on the asset.
+            example: "[\"As Is\",\"No Arb\"]"
+            type: string
+          location:
+            description: The location of the asset.
+            example: Auction Lane 1
+            type: string
+          auto-grade:
+            description: A value rating the over all condition of the vehicle typically
+              a number between 0-5 (5 being the best).
+            example: 1.4
+            type: number
+        required:
+        - auction-id
+        - check-in
+        - seller
+        type: object
+        x-entities:
+        - asset
+      description: Asset updated event for AMS assets
+    valuation:
+      description: A valuation of the asset
+      properties:
+        amount:
+          $ref: '#/components/schemas/common.currency'
+        source:
+          description: The source of the valuation
+          example: "[\"AMS\",\"MMR\",\"PMR\"]"
+          type: string
+      type: object
+    ae.asset.sold-status-updated:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.sold-status-updated-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.paid-status-updated:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.paid-status-updated-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.sold-status-updated-detail:
+      additionalProperties: false
+      description: Notification that an asset sold status has been updated.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        amount:
+          description: "Amount asset was sold for, will be null if reversed"
+          example: 123.45
+          nullable: true
+          type: number
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        updated-at:
+          description: ISO-8601 formatted date time
+          format: date-time
+          type: string
+        is-sold:
+          description: "True if vehicle is sold, false if not (reversed)"
+          example: true
+          type: boolean
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - amount
+      - auction-id
+      - is-sold
+      - stock
+      - updated-at
+      - vin
+      type: object
+      x-entities:
+      - asset
+    ae.asset.paid-status-updated-detail:
+      additionalProperties: false
+      description: Notification that an asset has been paid for
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        is-paid:
+          description: "True if vehicle is paid for, false if not (reversed)"
+          example: true
+          type: boolean
+        updated-at:
+          description: ISO-8601 formatted date time
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - is-paid
+      - stock
+      - updated-at
+      - vin
+      type: object
+    ae.asset.seller-charge.add-requested:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.seller-charge.add-requested-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.seller-charge.add-request-failed:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.seller-charge.add-request-failed-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.seller-charge.upsert:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.seller-charge.upsert-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.seller-charge.add-requested.v2:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.seller-charge.add-requested.v2-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.seller-charge.remove-requested:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.seller-charge.remove-requested-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.seller-charge.remove-failed:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.seller-charge.remove-failed-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.seller-charge.removed:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.seller-charge.removed-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.seller-charge.upsert.v2:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.seller-charge.upsert.v2-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.seller-charge.add-requested-detail:
+      additionalProperties: false
+      description: A request for a charge to be added to an asset for a seller.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        asset-id:
+          description: Source's unique identifier for asset
+          example: 503519-20210827T144732
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        reference-id:
+          description: Identifier that can be used to identify this event in a response
+            event.
+          type: string
+        charge:
+          $ref: '#/components/schemas/ae_asset_seller_charge_add_requested_detail_charge'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset-id
+      - auction-id
+      - charge
+      - reference-id
+      - seller
+      - stock
+      - vin
+      type: object
+    ae.asset.seller-charge.add-request-failed-detail:
+      additionalProperties: false
+      description: A response to an add-requested event to show the request was successful.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        asset-id:
+          description: Source's unique identifier for asset
+          example: 503519-20210827T144732
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        reference-id:
+          description: Identifier that can be used to identify this event in a response
+            event.
+          type: string
+        reason:
+          description: An explaination for why the charge could not be added.
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset-id
+      - auction-id
+      - reason
+      - reference-id
+      - seller
+      - stock
+      - vin
+      type: object
+    ae.asset.seller-charge.upsert-detail:
+      additionalProperties: false
+      description: An event denoting an insert or update of a charge on a seller's
+        asset.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        asset-id:
+          description: Source's unique identifier for asset
+          example: 503519-20210827T144732
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        add-request-reference-id:
+          description: Unique identifier referencing the add request event that created
+            the charge
+          nullable: true
+          type: string
+        charge:
+          $ref: '#/components/schemas/ae_asset_seller_charge_upsert_detail_charge'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset-id
+      - auction-id
+      - charge
+      - seller
+      - stock
+      - vin
+      type: object
+    ae.asset.seller-charge.add-requested.v2-detail:
+      additionalProperties: false
+      description: A request for a charge to be added to an asset for a seller.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        reference-id:
+          description: Identifier that can be used to identify this event in a response
+            event.
+          type: string
+        charge:
+          $ref: '#/components/schemas/common.charge'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - charge
+      - reference-id
+      - seller
+      type: object
+    ae.asset.seller-charge.remove-requested-detail:
+      additionalProperties: false
+      description: A request for a seller charge to be removed.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        reference-id:
+          description: Identifier that can be used to identify this event in a response
+            event.
+          type: string
+        charge-id:
+          description: Unique identifier of the charge to be removed.
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - charge-id
+      - reference-id
+      - seller
+      type: object
+    ae.asset.seller-charge.remove-failed-detail:
+      additionalProperties: false
+      description: triggered when a seller charge fails to be removed for any reason.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        charge-id:
+          description: Unique identifier of the charge to be removed.
+          type: string
+        remove-request-reference-id:
+          description: Unique identifier referencing a remove request event that requested
+            the charge be removed
+          nullable: true
+          type: string
+        reason:
+          description: An explaination for why the charge could not be added.
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - charge-id
+      - reason
+      - seller
+      type: object
+    ae.asset.seller-charge.removed-detail:
+      additionalProperties: false
+      description: triggered when a seller charge is removed successfully.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        charge-id:
+          description: Unique identifier of the charge being removed.
+          type: string
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        remove-request-reference-id:
+          description: Unique identifier referencing the remove request event that
+            removed the charge
+          nullable: true
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - charge-id
+      - seller
+      type: object
+    ae.asset.seller-charge.upsert.v2-detail:
+      additionalProperties: false
+      description: An event denoting an insert or update of a charge on a seller's
+        asset.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        add-request-reference-id:
+          description: Unique identifier referencing the add request event that created
+            the charge
+          nullable: true
+          type: string
+        charge:
+          $ref: '#/components/schemas/common.charge'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - charge
+      - seller
+      type: object
+    ae.asset.sale-listing.upserted.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.sale-listing.upserted.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.sale-listing.removed.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.sale-listing.removed.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.sale-listing.upserted.ams-detail:
+      additionalProperties: false
+      description: A sale listing for an asset has been created or modified by the
+        AMS
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        sale-listing:
+          $ref: '#/components/schemas/common.asset.sale-listing'
+        updated-at:
+          description: The updated date time of the gatepass status
+          example: 2024-06-01T14:35:12.311Z
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - initiator
+      - sale-listing
+      - updated-at
+      type: object
+    ae.asset.sale-listing.removed.ams-detail:
+      additionalProperties: false
+      description: A sale listing has been removed from an asset by the AMS
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        sale-listing-id:
+          description: Uniquie identifier for a sale listing.
+          type: string
+        updated-at:
+          description: The updated date time of the gatepass status
+          example: 2024-06-01T14:35:12.311Z
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - initiator
+      - sale-listing-id
+      - updated-at
+      type: object
+    ae.asset.not-sold:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.not-sold-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.not-sold-detail:
+      additionalProperties: false
+      description: "Vehicle ran in a sale, but did not sell"
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        sale-listing-id:
+          description: Uniquie identifier for a sale listing.
+          type: string
+        updated-at:
+          description: The updated date time of the gatepass status
+          example: 2024-06-01T14:35:12.311Z
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - initiator
+      - sale-listing-id
+      - updated-at
+      type: object
+    ae.asset.negotiation.upserted:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.negotiation.upserted-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.negotiation.offer.accepted:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.negotiation.offer.accepted-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.negotiation.offer.rejected:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.negotiation.offer.rejected-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.negotiation.offer.countered:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.negotiation.offer.countered-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.negotiation.note-added:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.negotiation.note-added-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.negotiation.upserted-detail:
+      additionalProperties: false
+      description: Event emitted by negotiation service when a negotiation is upserted.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        id:
+          description: Uniquie identifier for a specific negotiation.
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        conditions:
+          $ref: '#/components/schemas/ae_asset_negotiation_upserted_detail_conditions'
+        initial-floor-amount:
+          $ref: '#/components/schemas/common.currency'
+        opened-at:
+          format: date-time
+          type: string
+        closed-at:
+          format: date-time
+          nullable: true
+          type: string
+        successful:
+          nullable: true
+          type: boolean
+        failure-reason:
+          enum:
+          - rejected_by_buyer
+          - rejected_by_seller
+          - deal_changed
+          type: string
+        ball-control:
+          enum:
+          - buyer
+          - seller
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - ball-control
+      - closed-at
+      - conditions
+      - id
+      - opened-at
+      - successful
+      type: object
+    ae.asset.negotiation.offer.accepted-detail:
+      additionalProperties: false
+      description: emitted by the negotiation service when an offer is accepted.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        negotiation-id:
+          description: Uniquie identifier for a specific negotiation.
+          type: string
+        accepted-offer-id:
+          description: unique identifier of the offer that is being accepted
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        offer:
+          $ref: '#/components/schemas/ae_asset_negotiation_offer_accepted_detail_offer'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - accepted-offer-id
+      - asset
+      - auction-id
+      - negotiation-id
+      - offer
+      type: object
+    ae.asset.negotiation.offer.rejected-detail:
+      additionalProperties: false
+      description: emitted by the negotiation service when an offer is rejected.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        negotiation-id:
+          description: Uniquie identifier for a specific negotiation.
+          type: string
+        rejected-offer-id:
+          description: unique identifier of the offer that is being rejected
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        offer:
+          $ref: '#/components/schemas/ae_asset_negotiation_offer_rejected_detail_offer'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - negotiation-id
+      - offer
+      - rejected-offer-id
+      type: object
+    ae.asset.negotiation.offer.countered-detail:
+      additionalProperties: false
+      description: emitted by the negotiation service when an offer is countered.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        negotiation-id:
+          description: Uniquie identifier for a specific negotiation.
+          type: string
+        countered-offer-id:
+          description: unique identifier of the offer that is being countered
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        offer:
+          $ref: '#/components/schemas/ae_asset_negotiation_offer_countered_detail_offer'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - countered-offer-id
+      - negotiation-id
+      - offer
+      type: object
+    ae.asset.negotiation.note-added-detail:
+      additionalProperties: false
+      description: emitted by the negotiation service when a note is added to a negotiation.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        negotiation-id:
+          description: the unique identifier of the negotiation
+          type: string
+        note:
+          $ref: '#/components/schemas/ae_asset_negotiation_note_added_detail_note'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - negotiation-id
+      - note
+      type: object
+    ae.asset.label.requested:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.label.requested-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.label.generated:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.label.generated-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.label.failed:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.label.failed-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.label.requested-detail:
+      additionalProperties: false
+      description: A request has been made to generate an asset label
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        request-id:
+          description: Unique identifier for the request
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        asset-id:
+          description: Source's unique identifier for asset
+          example: 503519-20210827T144732
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        quantity:
+          description: Number of copies of the label to generate for asset
+          example: 2
+          type: number
+        label-type:
+          $ref: '#/components/schemas/label-type'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset-id
+      - auction-id
+      - label-type
+      - quantity
+      - request-id
+      - stock
+      - vin
+      type: object
+    ae.asset.label.generated-detail:
+      additionalProperties: false
+      description: Event fired when prints label request is successfully processed
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        request-id:
+          description: Unique identifier for the request
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        asset-id:
+          description: Source's unique identifier for asset
+          example: 503519-20210827T144732
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        quantity:
+          description: Number of copies of the label to generate for asset
+          example: 2
+          type: number
+        label-type:
+          $ref: '#/components/schemas/label-type'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset-id
+      - auction-id
+      - label-type
+      - quantity
+      - request-id
+      - stock
+      - vin
+      type: object
+    ae.asset.label.failed-detail:
+      additionalProperties: false
+      description: Event fired when the label request is unable to be successfully
+        processed
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        request-id:
+          description: Unique identifier for the request
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        asset-id:
+          description: Source's unique identifier for asset
+          example: 503519-20210827T144732
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        message:
+          description: Error message when generation was attempted
+          type: string
+        quantity:
+          description: Number of copies of the label to generate for asset
+          example: 2
+          type: number
+        label-type:
+          $ref: '#/components/schemas/label-type'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset-id
+      - auction-id
+      - label-type
+      - message
+      - quantity
+      - request-id
+      - stock
+      - vin
+      type: object
+    label-type:
+      description: The type of label the user requested
+      enum:
+      - default
+      - inventory
+      - photo-booth
+      type: string
+    quantity:
+      description: Number of copies of the label to generate for asset
+      example: 2
+      type: number
+    ae.asset.deal.sold:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.deal.sold-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.deal.unsold:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.deal.unsold-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.deal.sold-detail:
+      additionalProperties: false
+      description: Vehicle sold event
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        deal-id:
+          description: Unique id for a deal
+          example: 250127-81941
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        buyer:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        year:
+          description: The year the vehicle was manufactured.
+          example: 2024
+          format: int32
+          type: integer
+        make:
+          description: The manufacturer of the vehicle.
+          example: Jeep
+          type: string
+        model:
+          description: The model of the vehicle.
+          example: Renegade
+          type: string
+        trimline:
+          description: The trim of the vehicle.
+          example: Altitude
+          type: string
+        mileage:
+          description: The mileage of the asset being sold.
+          example: 1234567
+          format: int32
+          type: integer
+        fuel-type:
+          description: The type of fuel required by the asset being sold.
+          example: gas
+          type: string
+        sale-type:
+          description: The type of sale the deal was made in.
+          example: inlane
+          type: string
+        lights:
+          description: The lights on the asset when the deal was made.
+          example: "Green,Yellow"
+          type: string
+        announcements:
+          description: The announcments on the asset when deal was made.
+          example: "Green,Yellow"
+          type: string
+        sale-date:
+          description: The sale date of the deal.
+          example: 2024-07-24
+          format: date
+          type: string
+        lane:
+          description: The lane the asset was in when deal made.
+          example: A
+          type: string
+        lot:
+          description: The lot the asset was in when deal made.
+          example: "0001"
+          type: string
+        amount:
+          description: The amount the asset sold for.
+          example: 12345.67
+          type: number
+        updated-at:
+          description: The updated date time of the gatepass status
+          example: 2024-06-01T14:35:12.311Z
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - amount
+      - auction-id
+      - buyer
+      - lane
+      - lot
+      - sale-date
+      - seller
+      - stock
+      - vin
+      type: object
+      x-entities:
+      - asset
+    ae.asset.deal.unsold-detail:
+      additionalProperties: false
+      description: Vehicle unsold event.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        deal-id:
+          description: Unique id for a deal
+          example: 250127-81941
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        sale-date:
+          description: The sale date of the deal.
+          example: 2024-07-24
+          format: date
+          type: string
+        lane:
+          description: The lane the asset was in when deal made.
+          example: A
+          type: string
+        lot:
+          description: The lot the asset was in when deal made.
+          example: "0001"
+          type: string
+        updated-at:
+          description: The updated date time of the gatepass status
+          example: 2024-06-01T14:35:12.311Z
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - lane
+      - lot
+      - sale-date
+      - stock
+      - vin
+      type: object
+    ae.asset.checked-out.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.checked-out.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.checked-out.ams-detail:
+      additionalProperties: false
+      description: Event that designates that an asset has been checked-out of the
+        AMS.  Which means that the asset no longer resides at the auction and will
+        not be checked back in under same stock number.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        updated-at:
+          description: The updated date time of the gatepass status
+          example: 2024-06-01T14:35:12.311Z
+          format: date-time
+          type: string
+        checked-out-by:
+          description: The auction personnel that checked out the vehicle
+          example: JSmith
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - checked-out-by
+      - updated-at
+      type: object
+    ae.asset.checked-in.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.checked-in.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.checked-in.ams-detail:
+      additionalProperties: false
+      description: Event that designates that an asset has been checked-in to the
+        AMS.  Which means that the asset now has a stock number.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        id:
+          description: Source's unique identifier for asset
+          example: 503519-20210827T144732
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        check-in:
+          $ref: '#/components/schemas/common.asset.check-in'
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - check-in
+      - id
+      - seller
+      - stock
+      - vin
+      type: object
+      x-entities:
+      - asset
+    ae.ams.payment-vendor.upsert:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.ams.payment-vendor.upsert-detail'
+      required:
+      - detail
+      type: object
+    ae.ams.payment-vendor.upsert-detail:
+      additionalProperties: false
+      description: Information about payment vendor accepted by auction
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        payment-vendor-id:
+          description: auction unique id for payment vendor in AMS
+          example: "47"
+          type: string
+        display-name:
+          description: display name of the payment vendor
+          example: KINETIC
+          type: string
+        auction-access-id:
+          description: AuctionACCESS id for the vendor payment is made with.
+          example: "700029"
+          nullable: true
+          type: string
+        vendor-type:
+          enum:
+          - ach
+          - credit_card
+          - floorplan
+          type: string
+        transaction-fee:
+          $ref: '#/components/schemas/ae_ams_payment_vendor_upsert_detail_transaction_fee'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - display-name
+      - payment-vendor-id
+      - transaction-fee
+      - vendor-type
+      type: object
+    ae.advisory.request.asset-sold:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.advisory.request.asset-sold-detail'
+      required:
+      - detail
+      type: object
+    ae.advisory.request.asset:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.advisory.request.asset-detail'
+      required:
+      - detail
+      type: object
+    ae.advisory.request.account.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.advisory.request.account.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.advisory.request.asset-sold-detail:
+      additionalProperties: false
+      description: Request for advisory messages be produced for sold assets by date
+        range
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        event-types:
+          description: Array of advisory messages that are being requested to be produced
+          items:
+            description: detail-type for advisory message to be produced
+            type: string
+          minItems: 1
+          type: array
+        date-range:
+          $ref: '#/components/schemas/date-range'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - date-range
+      - event-types
+      type: object
+    ae.advisory.request.asset-detail:
+      additionalProperties: false
+      description: Request to ask for advisory messages be produced for a particular
+        asset(s)
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        event-types:
+          description: Array of advisory messages that are being requested to be produced
+          items:
+            description: detail-type for advisory message to be produced
+            type: string
+          minItems: 1
+          type: array
+        ids:
+          items:
+            description: ID of advisory resource to be produced
+            type: string
+          minItems: 1
+          type: array
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - event-types
+      - ids
+      type: object
+    ae.advisory.request.account.ams-detail:
+      additionalProperties: false
+      description: Request to ask for advisory messages be produced for a particular
+        AMS account(s)
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        event-types:
+          description: Array of advisory messages that are being requested to be produced
+          items:
+            description: detail-type for advisory message to be produced
+            type: string
+          minItems: 1
+          type: array
+        ids:
+          items:
+            description: ID of advisory resource to be produced
+            type: string
+          minItems: 1
+          type: array
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - event-types
+      - ids
+      type: object
+    event-type-list:
+      description: Array of advisory messages that are being requested to be produced
+      items:
+        description: detail-type for advisory message to be produced
+        type: string
+      minItems: 1
+      type: array
+    id-list:
+      items:
+        description: ID of advisory resource to be produced
+        type: string
+      minItems: 1
+      type: array
+    date-range:
+      properties:
+        start-at:
+          description: ISO Date
+          example: 2024-05-24T13:19:23.238Z
+          format: date-time
+          type: string
+        end-at:
+          description: ISO Date
+          example: 2024-05-24T13:19:23.238Z
+          format: date-time
+          type: string
+      required:
+      - start-at
+      type: object
+    date-type:
+      description: ISO Date
+      example: 2024-05-24T13:19:23.238Z
+      format: date-time
+      type: string
+    ae.advisory.asset.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.advisory.asset.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.advisory.asset.ams-detail:
+      additionalProperties: false
+      description: Advisory Asset event for AMS assets
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        id:
+          description: Source's unique identifier for asset
+          example: 503519-20210827T144732
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        check-in:
+          $ref: '#/components/schemas/common.asset.check-in'
+        year:
+          description: The year the vehicle was manufactured.
+          example: 2024
+          format: int32
+          type: integer
+        make:
+          description: The manufacturer of the vehicle.
+          example: Jeep
+          type: string
+        model:
+          description: The model of the vehicle.
+          example: Renegade
+          type: string
+        trimline:
+          description: The trim of the vehicle.
+          example: Altitude
+          type: string
+        body-style:
+          description: The body style of the vehicle
+          example: 4 Door Sport Utility Vehicle
+          type: string
+        deal:
+          $ref: '#/components/schemas/deal'
+        floor-amount-usd:
+          description: The lowest amount the seller is willing to take for this asset.
+          example: 10500
+          type: number
+        interior:
+          $ref: '#/components/schemas/common.vehicle.interior'
+        exterior:
+          $ref: '#/components/schemas/common.vehicle.exterior'
+        current-odometer-reading:
+          description: The vehicle's odometer reading
+          type: number
+        engine:
+          $ref: '#/components/schemas/common.vehicle.engine'
+        transmission-type:
+          description: The type of transmission the asset has.
+          example: Automatic
+          type: string
+        drivetrain:
+          $ref: '#/components/schemas/common.vehicle.drivetrain'
+        title:
+          $ref: '#/components/schemas/common.title'
+        auction-grade:
+          description: A value rating the over all condition of the vehicle typically
+            a number between 0-5 (5 being the best).
+          example: 1.4
+          type: number
+        updated-at:
+          description: The date and time at which the asset was last updated at.
+          format: date-time
+          nullable: true
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - check-in
+      - id
+      - seller
+      - stock
+      - vin
+      type: object
+      x-entities:
+      - asset
+    ams-sale-listing-sale-date:
+      description: Date on which the asset ran that the deal was created for.
+      example: 2024-05-25
+      format: date
+      type: string
+    ams-sale-listing-lane:
+      description: The lane that the asset ran in.
+      example: L
+      type: string
+    ams-sale-listing-lot:
+      description: The lot that the asset was attached to.
+      example: "0001"
+      type: string
+    deal-ams-sale-listing:
+      properties:
+        sale-date:
+          description: Date on which the asset ran that the deal was created for.
+          example: 2024-05-25
+          format: date
+          type: string
+        lane:
+          description: The lane that the asset ran in.
+          example: L
+          type: string
+        lot:
+          description: The lot that the asset was attached to.
+          example: "0001"
+          type: string
+      required:
+      - lane
+      - lot
+      - sale-date
+      type: object
+    deal-sold-at:
+      description: The date time that asset was sold at.
+      example: 2024-05-23T15:02:00Z
+      format: date-time
+      nullable: true
+      type: string
+    deal-sold-amount-usd:
+      description: The amount that the asset was sold for.
+      example: 10000
+      type: number
+    deal-on-offer:
+      default: false
+      description: Whether or not the current deal is "on offer" / "on IF"
+      type: boolean
+    deal-in-arbitration:
+      default: false
+      description: Whether or not the current deal is being arbitrated.
+      type: boolean
+    deal:
+      description: Details on the current deal for the asset.
+      properties:
+        ams-sale-listing:
+          $ref: '#/components/schemas/deal-ams-sale-listing'
+        buyer:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        sold-at:
+          description: The date time that asset was sold at.
+          example: 2024-05-23T15:02:00Z
+          format: date-time
+          nullable: true
+          type: string
+        sold-amount-usd:
+          description: The amount that the asset was sold for.
+          example: 10000
+          type: number
+        on-offer:
+          default: false
+          description: Whether or not the current deal is "on offer" / "on IF"
+          type: boolean
+        in-arbitration:
+          default: false
+          description: Whether or not the current deal is being arbitrated.
+          type: boolean
+      required:
+      - ams-sale-listing
+      - buyer
+      - sold-amount-usd
+      type: object
+    ae.advisory.account.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.advisory.account.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.advisory.account.representatives.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.advisory.account.representatives.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.advisory.account.ams-detail:
+      allOf:
+      - $ref: '#/components/schemas/common.ams.account-pointer'
+      - properties:
+          auction-id:
+            $ref: '#/components/schemas/common.ua-id'
+          id:
+            $ref: '#/components/schemas/common.ams.account.id'
+          established-at:
+            description: The date and time that the record was initially created in
+              the AMS
+            example: 2024-05-24T13:19:23.238Z
+            format: date-time
+            type: string
+          display-name:
+            description: The display name of the account
+            example: John Doe
+            type: string
+          legal-name:
+            description: The legal name of the account
+            example: John Doe
+            type: string
+          dba-name:
+            description: The 'doing business as' name of the account
+            example: John Doe
+            type: string
+          primary-email:
+            description: Primary email of dealership
+            example: John@JohnsAuto.com
+            format: email
+            maxLength: 320
+            type: string
+          website-uri:
+            description: URI dealer website
+            example: http://www.johnsauto.com
+            type: string
+          primary-phone-number:
+            description: Main phone number of account
+            example: 407-888-1233
+            type: string
+          cell-phone-number:
+            description: Cell phone number on record at AMS for account
+            example: 407-888-1233
+            type: string
+          primary-fax-number:
+            description: Fax phone number
+            example: 407-888-1233
+            type: string
+          physical-location:
+            $ref: '#/components/schemas/common.ams.postal-address'
+          mailing-location:
+            $ref: '#/components/schemas/common.ams.postal-address'
+          can-buy:
+            description: "True if account is allowed to buy a vehicle, false if not"
+            example: true
+            type: boolean
+          can-sell:
+            description: "True if account is allowed to sell a vehicle, false if not"
+            example: true
+            type: boolean
+          is-active:
+            description: "True if account is active, false if not"
+            example: true
+            type: boolean
+          is-in-violation:
+            description: "True if account is in violation of an auction rule such\
+              \ as expired license, false if not"
+            example: true
+            type: boolean
+          is-tax-exempt:
+            description: "True if account is tax exempt, false if not"
+            example: true
+            type: boolean
+          auction-seller-rep:
+            description: Auction staff member that assists account selling vehicles
+            example: Joe Blout
+            type: string
+          auction-buyer-rep:
+            description: Auction staff member that assists account buying vehicles
+            example: Sandy Cheeks
+            type: string
+          autoims-id:
+            deprecated: true
+            description: AutoIMS id
+            example: 1234567
+            type: number
+          autoims-id-str:
+            description: AutoIMS id
+            example: BED1234567
+            type: string
+          payment-sources:
+            description: The payment sources for the account
+            items:
+              $ref: '#/components/schemas/common.ams.payment-source'
+            type: array
+          updated-at:
+            description: The time in ISO-8601 formatted at which the record was generated
+            format: date-time
+            type: string
+          initiator:
+            $ref: '#/components/schemas/common.initiator'
+        required:
+        - auction-id
+        - display-name
+        - updated-at
+        type: object
+        x-entities:
+        - ams-account
+      description: Advisory Account event for AMS accounts
+    ae.advisory.account.representatives.ams-detail:
+      additionalProperties: false
+      description: Advisory Account Representatives event for AMS accounts
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        account:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        updated-at:
+          description: The time in ISO-8601 formatted at which the record was generated
+          format: date-time
+          type: string
+        representatives:
+          description: The representatives and their permissions for the account
+          items:
+            $ref: '#/components/schemas/ae_advisory_account_representatives_ams_detail_representatives_inner'
+          type: array
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - account
+      - auction-id
+      - representatives
+      - updated-at
+      type: object
+    ae.accounting.payment.source.updated:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.accounting.payment.source.updated-detail'
+      required:
+      - detail
+      type: object
+    ae.accounting.payment.source.updated-detail:
+      additionalProperties: false
+      deprecated: true
+      description: Notification that the payment source or status for a vehicle has
+        been updated
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        prior-source:
+          description: Simple text describing the prior funding source if any.
+          example: kinetic
+          nullable: true
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        current-source:
+          description: Simple text describing the current funding source if any.
+          example: kinetic
+          nullable: true
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        prior-status:
+          $ref: '#/components/schemas/payment-status'
+        current-status:
+          $ref: '#/components/schemas/payment-status'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - current-source
+      - prior-source
+      - stock
+      - vin
+      type: object
+    payment-status:
+      description: Status of a payment
+      enum:
+      - applied
+      - completed
+      - reversed
+      - failed
+      type: string
+    ae.account.payment-source.upsert.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.account.payment-source.upsert.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.account.payment-source.removed.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.account.payment-source.removed.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.account.payment-source.upsert.ams-detail:
+      additionalProperties: false
+      description: A payment source has been inserted or updated in the AMS
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        account:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        display-name:
+          description: display name of the account's payment source
+          example: KINETIC ***1234
+          type: string
+        payment-source-id:
+          description: auction unique id for payment source in AMS
+          example: "81941"
+          type: string
+        payment-vendor-id:
+          description: auction unique id for payment vendor in AMS
+          example: "47"
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - account
+      - auction-id
+      - display-name
+      - payment-source-id
+      - payment-vendor-id
+      type: object
+    ae.account.payment-source.removed.ams-detail:
+      additionalProperties: false
+      description: A payment source has been removed in the AMS
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        account:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        payment-source-id:
+          description: auction unique id for payment source in AMS
+          example: "81941"
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - account
+      - auction-id
+      - payment-source-id
+      type: object
+    ae.account.representative.payer-authorized:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.account.representative.payer-authorized-detail'
+      required:
+      - detail
+      type: object
+    ae.account.representative.payer-deauthorized:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.account.representative.payer-deauthorized-detail'
+      required:
+      - detail
+      type: object
+    ae.account.representative.payer-authorized-detail:
+      additionalProperties: false
+      description: A representative has been authorized to pay for an account
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        account:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        rep-account:
+          $ref: '#/components/schemas/common.ams.rep-pointer'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - account
+      - auction-id
+      - rep-account
+      type: object
+    ae.account.representative.payer-deauthorized-detail:
+      additionalProperties: false
+      description: A representative has been de-authorized to pay for an account
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        account:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        rep-account:
+          $ref: '#/components/schemas/common.ams.rep-pointer'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - account
+      - auction-id
+      - rep-account
+      type: object
+    ae.account.representative.upserted.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.account.representative.upserted.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.account.representative.removed.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.account.representative.removed.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.account.representative.upserted.ams-detail:
+      allOf:
+      - $ref: '#/components/schemas/common.ams.representative-pointer'
+      - properties:
+          auction-id:
+            $ref: '#/components/schemas/common.ua-id'
+          account-id:
+            $ref: '#/components/schemas/common.ams.account.id'
+          person-info:
+            $ref: '#/components/schemas/common.ams.person-info'
+          internal-notes:
+            description: Any notes on representative
+            example: Likes to know what his folks are buying and selling
+            type: string
+          can-buy:
+            description: "True if representative is allowed to buy a vehicle, false\
+              \ if not"
+            example: true
+            type: boolean
+          initiator:
+            $ref: '#/components/schemas/common.initiator'
+        required:
+        - auction-id
+        type: object
+      description: Upserted data for an representative in the AMS
+    ae.account.representative.removed.ams-detail:
+      additionalProperties: false
+      description: Representative has been removed
+      properties:
+        id:
+          description: The representative id an AMS account
+          example: "1"
+          nullable: false
+          type: string
+          x-field-extra-annotation: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)'
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        account-id:
+          description: Source's unique identifier for account
+          example: 503519-20210827T144732
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - account-id
+      - auction-id
+      - id
+      type: object
+    ae.account.upserted.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.account.upserted.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.account.removed.ams:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.account.removed.ams-detail'
+      required:
+      - detail
+      type: object
+    ae.account.upserted.ams-detail:
+      allOf:
+      - $ref: '#/components/schemas/common.ams.account-pointer'
+      - properties:
+          auction-id:
+            $ref: '#/components/schemas/common.ua-id'
+          id:
+            $ref: '#/components/schemas/common.ams.account.id'
+          established-at:
+            description: The date and time that the record was initially created in
+              the AMS
+            example: 2024-05-24T13:19:23.238Z
+            format: date-time
+            type: string
+          display-name:
+            description: The display name of the account
+            example: John Doe
+            type: string
+          legal-name:
+            description: The legal name of the account
+            example: John Doe
+            type: string
+          dba-name:
+            description: The 'doing business as' name of the account
+            example: John Doe
+            type: string
+          primary-email:
+            description: Primary email of dealership
+            example: John@JohnsAuto.com
+            format: email
+            maxLength: 320
+            type: string
+          website-uri:
+            description: URI dealer website
+            example: http://www.johnsauto.com
+            type: string
+          primary-phone-number:
+            description: Main phone number of account
+            example: 407-888-1233
+            type: string
+          cell-phone-number:
+            description: Cell phone number on record at AMS for account
+            example: 407-888-1233
+            type: string
+          primary-fax-number:
+            description: Fax phone number
+            example: 407-888-1233
+            type: string
+          physical-location:
+            $ref: '#/components/schemas/common.ams.postal-address'
+          mailing-location:
+            $ref: '#/components/schemas/common.ams.postal-address'
+          can-buy:
+            description: "True if account is allowed to buy a vehicle, false if not"
+            example: true
+            type: boolean
+          can-sell:
+            description: "True if account is allowed to sell a vehicle, false if not"
+            example: true
+            type: boolean
+          is-active:
+            description: "True if account is active, false if not"
+            example: true
+            type: boolean
+          is-in-violation:
+            description: "True if account is in violation of an auction rule such\
+              \ as expired license, false if not"
+            example: true
+            type: boolean
+          is-tax-exempt:
+            description: "True if account is tax exempt, false if not"
+            example: true
+            type: boolean
+          auction-seller-rep:
+            description: Auction staff member that assists account selling vehicles
+            example: Joe Blout
+            type: string
+          auction-buyer-rep:
+            description: Auction staff member that assists account buying vehicles
+            example: Sandy Cheeks
+            type: string
+          autoims-id:
+            deprecated: true
+            description: AutoIMS id
+            example: 1234567
+            type: number
+          autoims-id-str:
+            description: AutoIMS id
+            example: BED1234567
+            type: string
+          payment-sources:
+            description: The payment sources for the account
+            items:
+              $ref: '#/components/schemas/common.ams.payment-source'
+            type: array
+          initiator:
+            $ref: '#/components/schemas/common.initiator'
+        required:
+        - auction-id
+        - display-name
+        - id
+        type: object
+      description: Upserted data for an account in the AMS
+    ae.account.removed.ams-detail:
+      additionalProperties: false
+      description: AMS account has been removed
+      properties:
+        id:
+          description: Source's unique identifier for account
+          example: 503519-20210827T144732
+          type: string
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        account:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - id
+      type: object
+    ae.asset.deal.payment.apply-source:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.deal.payment.apply-source-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.deal.payment.status-changed:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.deal.payment.status-changed-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.deal.payment.apply-source-detail:
+      additionalProperties: false
+      description: Payment source selected by user.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset-id:
+          description: Source's unique identifier for asset
+          example: 503519-20210827T144732
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+        deal:
+          $ref: '#/components/schemas/ae_asset_deal_payment_apply_source_detail_deal'
+      required:
+      - auction-id
+      - deal
+      - stock
+      - vin
+      type: object
+    ae.asset.deal.payment.status-changed-detail:
+      additionalProperties: false
+      description: Event fired when status of a payment is changing.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset-id:
+          description: Source's unique identifier for asset
+          example: 503519-20210827T144732
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+        deal:
+          $ref: '#/components/schemas/ae_asset_deal_payment_status_changed_detail_deal'
+      required:
+      - asset-id
+      - auction-id
+      - deal
+      - stock
+      - vin
+      type: object
+    ae.asset.deal.offer.made:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.deal.offer.made-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.deal.offer.accepted:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.deal.offer.accepted-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.deal.offer.rejected:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.deal.offer.rejected-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.deal.offer.made-detail:
+      additionalProperties: false
+      description: Offer made on asset.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        deal-id:
+          description: Unique id for a deal
+          example: 250127-81941
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        buyer:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        sale-date:
+          description: The sale date of the deal.
+          example: 2024-07-24
+          format: date
+          type: string
+        lane:
+          description: The lane the asset was in when deal made.
+          example: A
+          type: string
+        lot:
+          description: The lot the asset was in when deal made.
+          example: "0001"
+          type: string
+        amount:
+          description: The amount the asset sold for.
+          example: 12345.67
+          type: number
+        updated-at:
+          description: The updated date time of the gatepass status
+          example: 2024-06-01T14:35:12.311Z
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - amount
+      - auction-id
+      - buyer
+      - lane
+      - lot
+      - sale-date
+      - seller
+      - stock
+      - vin
+      type: object
+    ae.asset.deal.offer.accepted-detail:
+      additionalProperties: false
+      description: Event emitted by the AMS when an offer on a deal is accepted.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        deal-id:
+          description: Unique id for a deal
+          example: 250127-81941
+          type: string
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        buyer:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        sale-date:
+          description: The sale date of the deal.
+          example: 2024-07-24
+          format: date
+          type: string
+        lane:
+          description: The lane the asset was in when deal made.
+          example: A
+          type: string
+        lot:
+          description: The lot the asset was in when deal made.
+          example: "0001"
+          type: string
+        amount:
+          description: The amount the asset sold for.
+          example: 12345.67
+          type: number
+        updated-at:
+          description: The updated date time of the gatepass status
+          example: 2024-06-01T14:35:12.311Z
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - buyer
+      - lane
+      - lot
+      - sale-date
+      - seller
+      type: object
+    ae.asset.deal.offer.rejected-detail:
+      additionalProperties: false
+      description: Event emitted by the AMS when an offer on a deal is rejected.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        deal-id:
+          description: Unique id for a deal
+          example: 250127-81941
+          type: string
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        buyer:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        sale-date:
+          description: The sale date of the deal.
+          example: 2024-07-24
+          format: date
+          type: string
+        lane:
+          description: The lane the asset was in when deal made.
+          example: A
+          type: string
+        lot:
+          description: The lot the asset was in when deal made.
+          example: "0001"
+          type: string
+        amount:
+          description: The amount the asset sold for.
+          example: 12345.67
+          type: number
+        updated-at:
+          description: The updated date time of the gatepass status
+          example: 2024-06-01T14:35:12.311Z
+          format: date-time
+          type: string
+        rejected-reason:
+          description: The reason the offer was rejected
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset
+      - auction-id
+      - buyer
+      - lane
+      - lot
+      - rejected-reason
+      - sale-date
+      - seller
+      type: object
+    ae.asset.deal.charge.upsert:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.deal.charge.upsert-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.deal.charge.removed:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.deal.charge.removed-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.deal.charge.upsert-detail:
+      additionalProperties: false
+      description: Vehicle charge upsert event.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        deal-id:
+          description: Unique id for a deal
+          example: 250127-81941
+          type: string
+        asset-id:
+          description: Source's unique identifier for asset
+          example: 503519-20210827T144732
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        account:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+        charge:
+          $ref: '#/components/schemas/ae_asset_deal_charge_upsert_detail_charge'
+      required:
+      - account
+      - asset-id
+      - auction-id
+      - charge
+      - stock
+      - vin
+      type: object
+    ae.asset.deal.charge.removed-detail:
+      additionalProperties: false
+      description: Vehicle charge removed event.
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        deal-id:
+          description: Unique id for a deal
+          example: 250127-81941
+          type: string
+        asset-id:
+          description: Source's unique identifier for asset
+          example: 503519-20210827T144732
+          type: string
+        charge-id:
+          description: Charge ID.
+          example: MychargeID123
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset-id
+      - auction-id
+      - charge-id
+      type: object
+    sale-date:
+      description: The sale date of the deal.
+      example: 2024-07-24
+      format: date
+      type: string
+    lane:
+      description: The lane the asset was in when deal made.
+      example: A
+      type: string
+    lot:
+      description: The lot the asset was in when deal made.
+      example: "0001"
+      type: string
+    updated-at:
+      description: The updated date time of the gatepass status
+      example: 2024-06-01T14:35:12.311Z
+      format: date-time
+      type: string
+    amount:
+      description: The amount the asset sold for.
+      example: 12345.67
+      type: number
+    ae.asset.gatepass.send-email:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.gatepass.send-email-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.gatepass.created:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.gatepass.created-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.gatepass.voided:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.gatepass.voided-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.gatepass.delivered:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.gatepass.delivered-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.gatepass.buyer.releasable:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.gatepass.buyer.releasable-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.gatepass.buyer.revoked:
+      additionalProperties: false
+      allOf:
+      - $ref: '#/components/schemas/BaseEdgeEvent'
+      description: Notification that a service order has been placed
+      properties:
+        detail:
+          $ref: '#/components/schemas/ae.asset.gatepass.buyer.revoked-detail'
+      required:
+      - detail
+      type: object
+    ae.asset.gatepass.send-email-detail:
+      additionalProperties: false
+      description: Email asset gate pass to the provided email address(es)
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        initiator-email:
+          description: The email address of the initiator of the gatepass email request.  Errors
+            will be sent here.
+          format: email
+          maxLength: 320
+          type: string
+        send-to-email:
+          items:
+            description: The email address to send the gatepass for the given stock
+              number to.
+            format: email
+            maxLength: 320
+            type: string
+          minItems: 1
+          type: array
+        gatepass-type:
+          $ref: '#/components/schemas/gatepass-type'
+        senderName:
+          description: Optional name of the sender.
+          maxLength: 50
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - send-to-email
+      - stock
+      - vin
+      type: object
+    gatepass-type:
+      default: G
+      description: "Allowed values:  \n  * 'G' - Buyer or Seller gatepass (depending\
+        \ on asset status) - Default  \n  * 'T' - Test drive gatepass  \n  * 'R' -\
+        \ Repair gatepass\n"
+      enum:
+      - G
+      - T
+      - R
+      maxLength: 1
+      type: string
+    ae.asset.gatepass.created-detail:
+      additionalProperties: false
+      description: Notification that a gatepass document has been created
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        download-uri:
+          description: URI to download the document
+          example: https://downloads.auctionedge.net/raa/5349083/gatepass.pdf
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - download-uri
+      - stock
+      - vin
+      type: object
+    ae.asset.gatepass.voided-detail:
+      additionalProperties: false
+      description: Notification that a gatepass document has been voided
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - stock
+      - vin
+      type: object
+    ae.asset.gatepass.delivered-detail:
+      additionalProperties: false
+      description: Notification that a gatepass document has been delivered
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        vin:
+          description: The Vehicle Identification Number(VIN) of the asset.
+          example: 4T3ZK3BB7BU042861
+          type: string
+        stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        delivery-method:
+          description: "Allowed values:  \n  * 'email' - gatepass delivered via email,\
+            \ targets are the email addresses\n"
+          enum:
+          - email
+          type: string
+        targets:
+          items:
+            description: Where the gatepass was delivered
+            type: string
+          minItems: 1
+          type: array
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - auction-id
+      - delivery-method
+      - stock
+      - targets
+      - vin
+      type: object
+    ae.asset.gatepass.buyer.releasable-detail:
+      additionalProperties: false
+      description: information needed for generating a gatepass
+      properties:
+        auction:
+          $ref: '#/components/schemas/ae_asset_gatepass_buyer_releasable_detail_auction'
+        account:
+          $ref: '#/components/schemas/ae_asset_gatepass_buyer_releasable_detail_account'
+        asset:
+          $ref: '#/components/schemas/ae_asset_gatepass_buyer_releasable_detail_asset'
+        ams-sale-listing:
+          $ref: '#/components/schemas/ae_asset_gatepass_buyer_releasable_detail_ams_sale_listing'
+        barcode-prefix:
+          description: The prefix of the string to generate the barcode from
+          example: BGP
+          type: string
+        show-vin-barcode:
+          default: false
+          description: Flag to show asset VIN on gate pass
+          example: false
+          type: boolean
+        notes:
+          description: Text customized by auction to print on gate pass
+          example: "Once vehicle leaves lot, cannot be arbitrated"
+          type: string
+        print-signature-line:
+          default: false
+          description: Flag to print a line of signature on gate pass
+          example: false
+          type: boolean
+        print-driver-license-line:
+          default: false
+          description: Flag to print line on gate pass so write driver license number
+          example: true
+          type: boolean
+        updated-at:
+          description: The updated date time of the gatepass status
+          example: 2024-06-01T14:35:12.311Z
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - account
+      - ams-sale-listing
+      - asset
+      - auction
+      type: object
+    ae.asset.gatepass.buyer.revoked-detail:
+      additionalProperties: false
+      description: Gate pass eligibility has been revoked
+      properties:
+        auction-id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        asset:
+          $ref: '#/components/schemas/common.ams.asset-pointer'
+        asset-id:
+          description: Source's unique identifier for asset
+          example: 503519-20210827T144732
+          type: string
+        asset-stock:
+          description: The stock number of the asset.
+          example: "5349083"
+          type: string
+        buyer-account-key:
+          description: The account key of an AMS account (i.e. the account or dealer
+            number)
+          example: A12345
+          type: string
+        updated-at:
+          description: The updated date time of the gatepass status
+          example: 2024-06-01T14:35:12.311Z
+          format: date-time
+          type: string
+        initiator:
+          $ref: '#/components/schemas/common.initiator'
+      required:
+      - asset-id
+      - asset-stock
+      - auction-id
+      - buyer-account-key
+      type: object
+    organization-name:
+      description: The name of the account
+      example: Richmond Auto Auction
+      type: string
+    address:
+      description: The physical address of the account
+      example: 123 East Main Street
+      type: string
+    city:
+      description: The city location of the account
+      example: Pensacola
+      type: string
+    state:
+      description: The state location of the account
+      example: FL
+      type: string
+    postal-code:
+      description: The zip code of the account
+      example: 32503-2411
+      type: string
+    phone-number:
+      description: The phone number of the account
+      example: 555-867-5309
+      type: string
+    barcode-prefix:
+      description: The prefix of the string to generate the barcode from
+      example: BGP
+      type: string
+    show-vin-barcode:
+      default: false
+      description: Flag to show asset VIN on gate pass
+      example: false
+      type: boolean
+    notes:
+      description: Text customized by auction to print on gate pass
+      example: "Once vehicle leaves lot, cannot be arbitrated"
+      type: string
+    print-signature-line:
+      default: false
+      description: Flag to print a line of signature on gate pass
+      example: false
+      type: boolean
+    print-driver-license-line:
+      default: false
+      description: Flag to print line on gate pass so write driver license number
+      example: true
+      type: boolean
+    common_asset_negotiation_base_offer_notification:
+      properties:
+        requested:
+          description: whether or not a notification of the offer was requested to
+            be sent
+          type: boolean
+        methods:
+          items:
+            type: string
+          minItems: 1
+          type: array
+      required:
+      - requested
+      type: object
+    ae_user_info_advisory_data_source_updated_detail_bucket:
+      properties:
+        name:
+          example: ae-pdp-production
+          type: string
+      required:
+      - name
+      type: object
+    ae_user_info_advisory_data_source_updated_detail_object:
+      properties:
+        key:
+          example: auth-data/spark-api.json
+          minLength: 1
+          type: string
+        size:
+          example: 777319
+          type: integer
+        etag:
+          example: 4e3f4656cae1e3d9427df4fb92773d6c
+          type: string
+        sequencer:
+          example: 0066E47DA09EE2B277
+          type: string
+      required:
+      - etag
+      - key
+      - sequencer
+      - size
+      type: object
+    ae_service_order_placed_detail_service:
+      properties:
+        class:
+          $ref: '#/components/schemas/service-class-enum'
+        code:
+          description: Service code
+          example: "1"
+          type: string
+      required:
+      - class
+      - code
+      type: object
+    ae_service_waived_detail_service:
+      properties:
+        class:
+          $ref: '#/components/schemas/service-class-enum'
+        code:
+          description: Service code
+          example: "1"
+          type: string
+      required:
+      - class
+      type: object
+    ae_service_completed_detail_service:
+      properties:
+        class:
+          $ref: '#/components/schemas/service-class-enum'
+        code:
+          description: Service code
+          example: "1"
+          type: string
+        feeAmount:
+          description: Fee amount
+          example: 55
+          nullable: true
+          type: number
+      required:
+      - class
+      - code
+      type: object
+    ae_service_order_updated_detail_service:
+      properties:
+        class:
+          $ref: '#/components/schemas/service-class-enum'
+        code:
+          description: Service code
+          example: "1"
+          type: string
+        status:
+          description: Status of current state of service
+          enum:
+          - completed
+          - failed
+          - open
+          - pending
+          example: completed
+          type: string
+        note:
+          description: "Notes, summaries, or details about service that may be shared\
+            \ with end user"
+          example: Frame Inspection Completed
+          type: string
+      required:
+      - class
+      - code
+      - status
+      type: object
+    ae_asset_seller_charge_add_requested_detail_charge:
+      properties:
+        display-name:
+          description: Description of the charge
+          example: Ship.cars transportation fuel costs.
+          type: string
+        charge-type:
+          description: The type of charge that is being requested to be added.
+          enum:
+          - fuel
+          - misc
+          - sell
+          - transportation
+          type: string
+        amount:
+          description: Amount to be charged to the seller
+          type: number
+        cost:
+          description: Amount of money the auction is out related to the charge.
+          type: number
+        note:
+          description: Notes for the auction relating to the charge
+          type: string
+      required:
+      - amount
+      - charge-type
+      - display-name
+      type: object
+    ae_asset_seller_charge_upsert_detail_charge:
+      properties:
+        id:
+          description: AMS's unique identifier for the charge
+          example: TRANS-5035119-20210827T144732
+          type: string
+        display-name:
+          description: Description of the charge
+          example: Ship.cars transportation fuel costs.
+          type: string
+        charge-type:
+          description: The type of charge that is being requested to be added.
+          enum:
+          - fuel
+          - misc
+          - sell
+          - transportation
+          type: string
+        amount:
+          description: Amount to be charged to the seller
+          type: number
+        cost:
+          description: Amount of money the auction is out related to the charge.
+          type: number
+        note:
+          description: Notes for the auction relating to the charge
+          type: string
+      required:
+      - amount
+      - charge-type
+      - display-name
+      - id
+      type: object
+    ae_asset_negotiation_upserted_detail_conditions:
+      properties:
+        seller:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        buyer:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        lights:
+          description: Light that was on the vehicle when negotiations started
+          example: G
+          type: string
+        announcements:
+          items:
+            type: string
+          type: array
+      required:
+      - announcements
+      - buyer
+      - lights
+      - seller
+      type: object
+    ae_asset_negotiation_offer_accepted_detail_offer:
+      allOf:
+      - $ref: '#/components/schemas/common.asset.negotiation.base-offer'
+      - properties:
+          accepted-by:
+            $ref: '#/components/schemas/common.asset.negotiation.offer.by'
+        required:
+        - accepted-by
+        type: object
+    ae_asset_negotiation_offer_rejected_detail_offer:
+      allOf:
+      - $ref: '#/components/schemas/common.asset.negotiation.base-offer'
+      - properties:
+          rejected-by:
+            $ref: '#/components/schemas/common.asset.negotiation.offer.by'
+        required:
+        - rejected-by
+        type: object
+    ae_asset_negotiation_offer_countered_detail_offer:
+      allOf:
+      - $ref: '#/components/schemas/common.asset.negotiation.base-offer'
+      - properties:
+          countered-by:
+            $ref: '#/components/schemas/common.asset.negotiation.offer.by'
+        required:
+        - countered-by
+        type: object
+    ae_asset_negotiation_note_added_detail_note:
+      properties:
+        id:
+          description: unique identifier of the note
+          type: string
+        noted-by:
+          description: User that added the note
+          type: string
+        noted-at:
+          description: the time the note was taken
+          format: date-time
+          type: string
+        source:
+          description: the source system that created the note
+          type: string
+        subject:
+          enum:
+          - auction
+          - buyer
+          - seller
+          type: string
+        body:
+          description: The body of the note
+          type: string
+      required:
+      - body
+      - id
+      - noted-at
+      - noted-by
+      - source
+      - subject
+      type: object
+    ae_ams_payment_vendor_upsert_detail_transaction_fee:
+      description: Amount to be charged when payment is made using vendor
+      properties:
+        flat-rate:
+          example: 25
+          type: number
+        percentage-of-total:
+          example: 20
+          type: number
+      required:
+      - flat-rate
+      - percentage-of-total
+      type: object
+    ae_advisory_account_representatives_ams_detail_representatives_inner:
+      allOf:
+      - $ref: '#/components/schemas/common.ams.representative-pointer'
+      - properties:
+          person-info:
+            $ref: '#/components/schemas/common.ams.person-info'
+          internal-notes:
+            description: Any notes on representative
+            example: Likes to know what his folks are buying and selling
+            type: string
+          can-buy:
+            description: "True if representative is allowed to buy a vehicle, false\
+              \ if not"
+            example: true
+            type: boolean
+        type: object
+    ae_asset_deal_payment_apply_source_detail_deal_payment:
+      properties:
+        source-id:
+          description: Payment Source ID.
+          example: "12345678"
+          type: string
+      required:
+      - source-id
+      type: object
+    ae_asset_deal_payment_apply_source_detail_deal:
+      properties:
+        id:
+          description: Unique id for a deal
+          example: 250127-81941
+          type: string
+        buyer:
+          $ref: '#/components/schemas/common.ams.account-pointer'
+        payment:
+          $ref: '#/components/schemas/ae_asset_deal_payment_apply_source_detail_deal_payment'
+      required:
+      - buyer
+      - payment
+      type: object
+    ae_asset_deal_payment_status_changed_detail_deal_payment:
+      properties:
+        status:
+          enum:
+          - unassigned
+          - assigned
+          - processing
+          - paid
+          - denied
+          - failed
+          type: string
+        updated-at:
+          description: The time at which the status changed
+          format: date-time
+          type: string
+      required:
+      - status
+      - updated-at
+      type: object
+    ae_asset_deal_payment_status_changed_detail_deal:
+      properties:
+        id:
+          description: Unique id for a deal
+          example: 250127-81941
+          type: string
+        payment:
+          $ref: '#/components/schemas/ae_asset_deal_payment_status_changed_detail_deal_payment'
+      required:
+      - id
+      - payment
+      type: object
+    ae_asset_deal_charge_upsert_detail_charge:
+      description: Charge details
+      properties:
+        id:
+          description: Charge ID.
+          example: MychargeID123
+          type: string
+        display-name:
+          description: Charge ID Description.
+          example: Flooring plan
+          type: string
+        charge-type:
+          description: Type of charge.
+          enum:
+          - buy
+          - credit_card
+          - dealshield
+          - floorplan
+          - fuel
+          - misc
+          - post_sale_inspection
+          - sales_tax
+          - sell
+          - simulcast
+          - transportation
+          type: string
+        amount:
+          $ref: '#/components/schemas/common.currency'
+      required:
+      - amount
+      - charge-type
+      - display-name
+      - id
+      type: object
+    ae_asset_gatepass_buyer_releasable_detail_auction:
+      description: required info about an auction
+      properties:
+        id:
+          description: Auction Edge unique identifier for an auction.
+          example: daanw
+          type: string
+        organization-name:
+          description: The name of the account
+          example: Richmond Auto Auction
+          type: string
+        address:
+          description: The physical address of the account
+          example: 123 East Main Street
+          type: string
+        city:
+          description: The city location of the account
+          example: Pensacola
+          type: string
+        state:
+          description: The state location of the account
+          example: FL
+          type: string
+        postal-code:
+          description: The zip code of the account
+          example: 32503-2411
+          type: string
+        phone-number:
+          description: The phone number of the account
+          example: 555-867-5309
+          type: string
+      required:
+      - address
+      - city
+      - id
+      - organization-name
+      - phone-number
+      - postal-code
+      - state
+      type: object
+    ae_asset_gatepass_buyer_releasable_detail_account:
+      description: The account that the gate pass will be printed for
+      properties:
+        key:
+          description: The account key of an AMS account (i.e. the account or dealer
+            number)
+          example: A12345
+          type: string
+        organization-name:
+          description: The name of the account
+          example: Richmond Auto Auction
+          type: string
+        address:
+          description: The physical address of the account
+          example: 123 East Main Street
+          type: string
+        city:
+          description: The city location of the account
+          example: Pensacola
+          type: string
+        state:
+          description: The state location of the account
+          example: FL
+          type: string
+        postal-code:
+          description: The zip code of the account
+          example: 32503-2411
+          type: string
+        phone-number:
+          description: The phone number of the account
+          example: 555-867-5309
+          type: string
+      required:
+      - address
+      - city
+      - key
+      - organization-name
+      - phone-number
+      - postal-code
+      - state
+      type: object
+    ae_asset_gatepass_buyer_releasable_detail_asset:
+      allOf:
+      - $ref: '#/components/schemas/common.ams.asset-pointer'
+      description: The vehicle that the gate pass is for
+      properties:
+        year:
+          description: The year the vehicle was manufactured.
+          example: 2024
+          format: int32
+          type: integer
+        make:
+          description: The manufacturer make of the asset
+          example: Chevrolet
+          nullable: true
+          type: string
+        model:
+          description: The model of the asset
+          example: Silverado
+          nullable: true
+          type: string
+        trimline:
+          description: The trim of the asset
+          example: RST
+          nullable: true
+          type: string
+        exterior:
+          $ref: '#/components/schemas/common.vehicle.exterior'
+        current-odometer-reading:
+          description: The vehicle's odometer reading
+          nullable: true
+          type: number
+        lot-location:
+          description: The name of the auction lot assigned to the asset
+          example: AA
+          nullable: true
+          type: string
+      required:
+      - year
+      type: object
+    ae_asset_gatepass_buyer_releasable_detail_ams_sale_listing:
+      description: The sale listing information of the asset at time of event
+      properties:
+        sale-date:
+          description: The date that the asset has been registered for a sale on
+          example: 2024-06-05
+          type: string
+        lane:
+          description: The lane the asset has been assigned to for the sale
+          example: D
+          type: string
+        lot:
+          description: The individual id of the asset within the lane
+          example: "115"
+          type: string
+        announcements:
+          description: Auction announcements about the asset
+          example: "As Is, No Arb"
+          type: string
+      required:
+      - announcements
+      - lane
+      - lot
+      - sale-date
+      type: object

@@ -71,6 +71,7 @@ type EdgeEvent struct {
 	AeAssetSellerChargeRemoved *AeAssetSellerChargeRemoved
 	AeAssetSellerChargeUpsert *AeAssetSellerChargeUpsert
 	AeAssetSellerChargeUpsertV2 *AeAssetSellerChargeUpsertV2
+	AeAssetServiceEligibilityUpdated *AeAssetServiceEligibilityUpdated
 	AeAssetSoldStatusUpdated *AeAssetSoldStatusUpdated
 	AeAssetUpdatedAms *AeAssetUpdatedAms
 	AeDealUpserted *AeDealUpserted
@@ -456,6 +457,13 @@ func AeAssetSellerChargeUpsertAsEdgeEvent(v *AeAssetSellerChargeUpsert) EdgeEven
 func AeAssetSellerChargeUpsertV2AsEdgeEvent(v *AeAssetSellerChargeUpsertV2) EdgeEvent {
 	return EdgeEvent{
 		AeAssetSellerChargeUpsertV2: v,
+	}
+}
+
+// AeAssetServiceEligibilityUpdatedAsEdgeEvent is a convenience function that returns AeAssetServiceEligibilityUpdated wrapped in EdgeEvent
+func AeAssetServiceEligibilityUpdatedAsEdgeEvent(v *AeAssetServiceEligibilityUpdated) EdgeEvent {
+	return EdgeEvent{
+		AeAssetServiceEligibilityUpdated: v,
 	}
 }
 
@@ -1470,6 +1478,23 @@ func (dst *EdgeEvent) UnmarshalJSON(data []byte) error {
 		dst.AeAssetSellerChargeUpsertV2 = nil
 	}
 
+	// try to unmarshal data into AeAssetServiceEligibilityUpdated
+	err = newStrictDecoder(data).Decode(&dst.AeAssetServiceEligibilityUpdated)
+	if err == nil {
+		jsonAeAssetServiceEligibilityUpdated, _ := json.Marshal(dst.AeAssetServiceEligibilityUpdated)
+		if string(jsonAeAssetServiceEligibilityUpdated) == "{}" { // empty struct
+			dst.AeAssetServiceEligibilityUpdated = nil
+		} else {
+			if err = validator.Validate(dst.AeAssetServiceEligibilityUpdated); err != nil {
+				dst.AeAssetServiceEligibilityUpdated = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.AeAssetServiceEligibilityUpdated = nil
+	}
+
 	// try to unmarshal data into AeAssetSoldStatusUpdated
 	err = newStrictDecoder(data).Decode(&dst.AeAssetSoldStatusUpdated)
 	if err == nil {
@@ -1780,6 +1805,7 @@ func (dst *EdgeEvent) UnmarshalJSON(data []byte) error {
 		dst.AeAssetSellerChargeRemoved = nil
 		dst.AeAssetSellerChargeUpsert = nil
 		dst.AeAssetSellerChargeUpsertV2 = nil
+		dst.AeAssetServiceEligibilityUpdated = nil
 		dst.AeAssetSoldStatusUpdated = nil
 		dst.AeAssetUpdatedAms = nil
 		dst.AeDealUpserted = nil
@@ -2016,6 +2042,10 @@ func (src EdgeEvent) MarshalJSON() ([]byte, error) {
 
 	if src.AeAssetSellerChargeUpsertV2 != nil {
 		return json.Marshal(&src.AeAssetSellerChargeUpsertV2)
+	}
+
+	if src.AeAssetServiceEligibilityUpdated != nil {
+		return json.Marshal(&src.AeAssetServiceEligibilityUpdated)
 	}
 
 	if src.AeAssetSoldStatusUpdated != nil {
@@ -2296,6 +2326,10 @@ func (obj *EdgeEvent) GetActualInstance() (interface{}) {
 
 	if obj.AeAssetSellerChargeUpsertV2 != nil {
 		return obj.AeAssetSellerChargeUpsertV2
+	}
+
+	if obj.AeAssetServiceEligibilityUpdated != nil {
+		return obj.AeAssetServiceEligibilityUpdated
 	}
 
 	if obj.AeAssetSoldStatusUpdated != nil {

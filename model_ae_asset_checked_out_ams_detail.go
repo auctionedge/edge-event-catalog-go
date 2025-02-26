@@ -25,7 +25,7 @@ type AeAssetCheckedOutAmsDetail struct {
 	// Auction Edge unique identifier for an auction.
 	AuctionId string `json:"auction-id"`
 	Asset CommonAmsAssetPointer `json:"asset"`
-	// The updated date time of the deal.
+	// The updated date time of the gatepass status
 	UpdatedAt time.Time `json:"updated-at"`
 	// The auction personnel that checked out the vehicle
 	CheckedOutBy string `json:"checked-out-by"`

@@ -1,10 +1,10 @@
-# EdgeEvent
+# AeAssetServiceEligibilityUpdated
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Detail** | [**AeAssetGatepassBuyerRevokedDetail**](AeAssetGatepassBuyerRevokedDetail.md) |  | 
+**Detail** | [**AeAssetServiceEligibilityUpdatedDetail**](AeAssetServiceEligibilityUpdatedDetail.md) |  | 
 **Account** | Pointer to **string** | The publisher AWS account number | [optional] 
 **DetailType** | **string** | Identifies, in combination with the source field, the fields and values that appear in the detail field. | 
 **Id** | **string** | A Version 4 UUID that&#39;s generated for every event. You can use id to trace events as they move through rules to targets. | 
@@ -19,309 +19,303 @@ Name | Type | Description | Notes
 
 ## Methods
 
-### NewEdgeEvent
+### NewAeAssetServiceEligibilityUpdated
 
-`func NewEdgeEvent(detail AeAssetGatepassBuyerRevokedDetail, detailType string, id string, source string, ) *EdgeEvent`
+`func NewAeAssetServiceEligibilityUpdated(detail AeAssetServiceEligibilityUpdatedDetail, detailType string, id string, source string, ) *AeAssetServiceEligibilityUpdated`
 
-NewEdgeEvent instantiates a new EdgeEvent object
+NewAeAssetServiceEligibilityUpdated instantiates a new AeAssetServiceEligibilityUpdated object
 This constructor will assign default values to properties that have it defined,
 and makes sure properties required by API are set, but the set of arguments
 will change when the set of required properties is changed
 
-### NewEdgeEventWithDefaults
+### NewAeAssetServiceEligibilityUpdatedWithDefaults
 
-`func NewEdgeEventWithDefaults() *EdgeEvent`
+`func NewAeAssetServiceEligibilityUpdatedWithDefaults() *AeAssetServiceEligibilityUpdated`
 
-NewEdgeEventWithDefaults instantiates a new EdgeEvent object
+NewAeAssetServiceEligibilityUpdatedWithDefaults instantiates a new AeAssetServiceEligibilityUpdated object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
 ### GetDetail
 
-`func (o *EdgeEvent) GetDetail() AeAssetGatepassBuyerRevokedDetail`
+`func (o *AeAssetServiceEligibilityUpdated) GetDetail() AeAssetServiceEligibilityUpdatedDetail`
 
 GetDetail returns the Detail field if non-nil, zero value otherwise.
 
 ### GetDetailOk
 
-`func (o *EdgeEvent) GetDetailOk() (*AeAssetGatepassBuyerRevokedDetail, bool)`
+`func (o *AeAssetServiceEligibilityUpdated) GetDetailOk() (*AeAssetServiceEligibilityUpdatedDetail, bool)`
 
 GetDetailOk returns a tuple with the Detail field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetDetail
 
-`func (o *EdgeEvent) SetDetail(v AeAssetGatepassBuyerRevokedDetail)`
+`func (o *AeAssetServiceEligibilityUpdated) SetDetail(v AeAssetServiceEligibilityUpdatedDetail)`
 
 SetDetail sets Detail field to given value.
 
 
 ### GetAccount
 
-`func (o *EdgeEvent) GetAccount() string`
+`func (o *AeAssetServiceEligibilityUpdated) GetAccount() string`
 
 GetAccount returns the Account field if non-nil, zero value otherwise.
 
 ### GetAccountOk
 
-`func (o *EdgeEvent) GetAccountOk() (*string, bool)`
+`func (o *AeAssetServiceEligibilityUpdated) GetAccountOk() (*string, bool)`
 
 GetAccountOk returns a tuple with the Account field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetAccount
 
-`func (o *EdgeEvent) SetAccount(v string)`
+`func (o *AeAssetServiceEligibilityUpdated) SetAccount(v string)`
 
 SetAccount sets Account field to given value.
 
 ### HasAccount
 
-`func (o *EdgeEvent) HasAccount() bool`
+`func (o *AeAssetServiceEligibilityUpdated) HasAccount() bool`
 
 HasAccount returns a boolean if a field has been set.
 
 ### GetDetailType
 
-`func (o *EdgeEvent) GetDetailType() string`
+`func (o *AeAssetServiceEligibilityUpdated) GetDetailType() string`
 
 GetDetailType returns the DetailType field if non-nil, zero value otherwise.
 
 ### GetDetailTypeOk
 
-`func (o *EdgeEvent) GetDetailTypeOk() (*string, bool)`
+`func (o *AeAssetServiceEligibilityUpdated) GetDetailTypeOk() (*string, bool)`
 
 GetDetailTypeOk returns a tuple with the DetailType field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetDetailType
 
-`func (o *EdgeEvent) SetDetailType(v string)`
+`func (o *AeAssetServiceEligibilityUpdated) SetDetailType(v string)`
 
 SetDetailType sets DetailType field to given value.
 
 
 ### GetId
 
-`func (o *EdgeEvent) GetId() string`
+`func (o *AeAssetServiceEligibilityUpdated) GetId() string`
 
 GetId returns the Id field if non-nil, zero value otherwise.
 
 ### GetIdOk
 
-`func (o *EdgeEvent) GetIdOk() (*string, bool)`
+`func (o *AeAssetServiceEligibilityUpdated) GetIdOk() (*string, bool)`
 
 GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetId
 
-`func (o *EdgeEvent) SetId(v string)`
+`func (o *AeAssetServiceEligibilityUpdated) SetId(v string)`
 
 SetId sets Id field to given value.
 
 
 ### GetRegion
 
-`func (o *EdgeEvent) GetRegion() string`
+`func (o *AeAssetServiceEligibilityUpdated) GetRegion() string`
 
 GetRegion returns the Region field if non-nil, zero value otherwise.
 
 ### GetRegionOk
 
-`func (o *EdgeEvent) GetRegionOk() (*string, bool)`
+`func (o *AeAssetServiceEligibilityUpdated) GetRegionOk() (*string, bool)`
 
 GetRegionOk returns a tuple with the Region field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetRegion
 
-`func (o *EdgeEvent) SetRegion(v string)`
+`func (o *AeAssetServiceEligibilityUpdated) SetRegion(v string)`
 
 SetRegion sets Region field to given value.
 
 ### HasRegion
 
-`func (o *EdgeEvent) HasRegion() bool`
+`func (o *AeAssetServiceEligibilityUpdated) HasRegion() bool`
 
 HasRegion returns a boolean if a field has been set.
 
 ### GetResources
 
-`func (o *EdgeEvent) GetResources() []string`
+`func (o *AeAssetServiceEligibilityUpdated) GetResources() []string`
 
 GetResources returns the Resources field if non-nil, zero value otherwise.
 
 ### GetResourcesOk
 
-`func (o *EdgeEvent) GetResourcesOk() (*[]string, bool)`
+`func (o *AeAssetServiceEligibilityUpdated) GetResourcesOk() (*[]string, bool)`
 
 GetResourcesOk returns a tuple with the Resources field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetResources
 
-`func (o *EdgeEvent) SetResources(v []string)`
+`func (o *AeAssetServiceEligibilityUpdated) SetResources(v []string)`
 
 SetResources sets Resources field to given value.
 
 ### HasResources
 
-`func (o *EdgeEvent) HasResources() bool`
+`func (o *AeAssetServiceEligibilityUpdated) HasResources() bool`
 
 HasResources returns a boolean if a field has been set.
 
 ### GetSource
 
-`func (o *EdgeEvent) GetSource() string`
+`func (o *AeAssetServiceEligibilityUpdated) GetSource() string`
 
 GetSource returns the Source field if non-nil, zero value otherwise.
 
 ### GetSourceOk
 
-`func (o *EdgeEvent) GetSourceOk() (*string, bool)`
+`func (o *AeAssetServiceEligibilityUpdated) GetSourceOk() (*string, bool)`
 
 GetSourceOk returns a tuple with the Source field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetSource
 
-`func (o *EdgeEvent) SetSource(v string)`
+`func (o *AeAssetServiceEligibilityUpdated) SetSource(v string)`
 
 SetSource sets Source field to given value.
 
 
 ### GetTime
 
-`func (o *EdgeEvent) GetTime() time.Time`
+`func (o *AeAssetServiceEligibilityUpdated) GetTime() time.Time`
 
 GetTime returns the Time field if non-nil, zero value otherwise.
 
 ### GetTimeOk
 
-`func (o *EdgeEvent) GetTimeOk() (*time.Time, bool)`
+`func (o *AeAssetServiceEligibilityUpdated) GetTimeOk() (*time.Time, bool)`
 
 GetTimeOk returns a tuple with the Time field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTime
 
-`func (o *EdgeEvent) SetTime(v time.Time)`
+`func (o *AeAssetServiceEligibilityUpdated) SetTime(v time.Time)`
 
 SetTime sets Time field to given value.
 
 ### HasTime
 
-`func (o *EdgeEvent) HasTime() bool`
+`func (o *AeAssetServiceEligibilityUpdated) HasTime() bool`
 
 HasTime returns a boolean if a field has been set.
 
 ### GetAuctionId
 
-`func (o *EdgeEvent) GetAuctionId() string`
+`func (o *AeAssetServiceEligibilityUpdated) GetAuctionId() string`
 
 GetAuctionId returns the AuctionId field if non-nil, zero value otherwise.
 
 ### GetAuctionIdOk
 
-`func (o *EdgeEvent) GetAuctionIdOk() (*string, bool)`
+`func (o *AeAssetServiceEligibilityUpdated) GetAuctionIdOk() (*string, bool)`
 
 GetAuctionIdOk returns a tuple with the AuctionId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetAuctionId
 
-`func (o *EdgeEvent) SetAuctionId(v string)`
+`func (o *AeAssetServiceEligibilityUpdated) SetAuctionId(v string)`
 
 SetAuctionId sets AuctionId field to given value.
 
 ### HasAuctionId
 
-`func (o *EdgeEvent) HasAuctionId() bool`
+`func (o *AeAssetServiceEligibilityUpdated) HasAuctionId() bool`
 
 HasAuctionId returns a boolean if a field has been set.
 
 ### GetExpiresAt
 
-`func (o *EdgeEvent) GetExpiresAt() time.Time`
+`func (o *AeAssetServiceEligibilityUpdated) GetExpiresAt() time.Time`
 
 GetExpiresAt returns the ExpiresAt field if non-nil, zero value otherwise.
 
 ### GetExpiresAtOk
 
-`func (o *EdgeEvent) GetExpiresAtOk() (*time.Time, bool)`
+`func (o *AeAssetServiceEligibilityUpdated) GetExpiresAtOk() (*time.Time, bool)`
 
 GetExpiresAtOk returns a tuple with the ExpiresAt field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetExpiresAt
 
-`func (o *EdgeEvent) SetExpiresAt(v time.Time)`
+`func (o *AeAssetServiceEligibilityUpdated) SetExpiresAt(v time.Time)`
 
 SetExpiresAt sets ExpiresAt field to given value.
 
 ### HasExpiresAt
 
-`func (o *EdgeEvent) HasExpiresAt() bool`
+`func (o *AeAssetServiceEligibilityUpdated) HasExpiresAt() bool`
 
 HasExpiresAt returns a boolean if a field has been set.
 
 ### GetDeprecated
 
-`func (o *EdgeEvent) GetDeprecated() bool`
+`func (o *AeAssetServiceEligibilityUpdated) GetDeprecated() bool`
 
 GetDeprecated returns the Deprecated field if non-nil, zero value otherwise.
 
 ### GetDeprecatedOk
 
-`func (o *EdgeEvent) GetDeprecatedOk() (*bool, bool)`
+`func (o *AeAssetServiceEligibilityUpdated) GetDeprecatedOk() (*bool, bool)`
 
 GetDeprecatedOk returns a tuple with the Deprecated field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetDeprecated
 
-`func (o *EdgeEvent) SetDeprecated(v bool)`
+`func (o *AeAssetServiceEligibilityUpdated) SetDeprecated(v bool)`
 
 SetDeprecated sets Deprecated field to given value.
 
 ### HasDeprecated
 
-`func (o *EdgeEvent) HasDeprecated() bool`
+`func (o *AeAssetServiceEligibilityUpdated) HasDeprecated() bool`
 
 HasDeprecated returns a boolean if a field has been set.
 
 ### GetIdempotencyKey
 
-`func (o *EdgeEvent) GetIdempotencyKey() string`
+`func (o *AeAssetServiceEligibilityUpdated) GetIdempotencyKey() string`
 
 GetIdempotencyKey returns the IdempotencyKey field if non-nil, zero value otherwise.
 
 ### GetIdempotencyKeyOk
 
-`func (o *EdgeEvent) GetIdempotencyKeyOk() (*string, bool)`
+`func (o *AeAssetServiceEligibilityUpdated) GetIdempotencyKeyOk() (*string, bool)`
 
 GetIdempotencyKeyOk returns a tuple with the IdempotencyKey field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetIdempotencyKey
 
-`func (o *EdgeEvent) SetIdempotencyKey(v string)`
+`func (o *AeAssetServiceEligibilityUpdated) SetIdempotencyKey(v string)`
 
 SetIdempotencyKey sets IdempotencyKey field to given value.
 
 ### HasIdempotencyKey
 
-`func (o *EdgeEvent) HasIdempotencyKey() bool`
+`func (o *AeAssetServiceEligibilityUpdated) HasIdempotencyKey() bool`
 
 HasIdempotencyKey returns a boolean if a field has been set.
 
-
-### Ascom.auctionedge.events.models.IEdgeEvent
-
-`func (s *EdgeEvent) Ascom.auctionedge.events.models.IEdgeEvent() com.auctionedge.events.models.IEdgeEvent`
-
-Convenience method to wrap this instance of EdgeEvent in com.auctionedge.events.models.IEdgeEvent
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

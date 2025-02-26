@@ -52,8 +52,8 @@ type AeAdvisoryAssetAmsDetail struct {
 	Engine *CommonVehicleEngine `json:"engine,omitempty"`
 	// The type of transmission the asset has.
 	TransmissionType *string `json:"transmission-type,omitempty"`
-	Drivetrain *Drivetrain `json:"drivetrain,omitempty"`
-	Title *Title `json:"title,omitempty"`
+	Drivetrain *CommonVehicleDrivetrain `json:"drivetrain,omitempty"`
+	Title *CommonTitle `json:"title,omitempty"`
 	// A value rating the over all condition of the vehicle typically a number between 0-5 (5 being the best).
 	AuctionGrade *float32 `json:"auction-grade,omitempty"`
 	// The date and time at which the asset was last updated at.
@@ -615,9 +615,9 @@ func (o *AeAdvisoryAssetAmsDetail) SetTransmissionType(v string) {
 }
 
 // GetDrivetrain returns the Drivetrain field value if set, zero value otherwise.
-func (o *AeAdvisoryAssetAmsDetail) GetDrivetrain() Drivetrain {
+func (o *AeAdvisoryAssetAmsDetail) GetDrivetrain() CommonVehicleDrivetrain {
 	if o == nil || IsNil(o.Drivetrain) {
-		var ret Drivetrain
+		var ret CommonVehicleDrivetrain
 		return ret
 	}
 	return *o.Drivetrain
@@ -625,7 +625,7 @@ func (o *AeAdvisoryAssetAmsDetail) GetDrivetrain() Drivetrain {
 
 // GetDrivetrainOk returns a tuple with the Drivetrain field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AeAdvisoryAssetAmsDetail) GetDrivetrainOk() (*Drivetrain, bool) {
+func (o *AeAdvisoryAssetAmsDetail) GetDrivetrainOk() (*CommonVehicleDrivetrain, bool) {
 	if o == nil || IsNil(o.Drivetrain) {
 		return nil, false
 	}
@@ -641,15 +641,15 @@ func (o *AeAdvisoryAssetAmsDetail) HasDrivetrain() bool {
 	return false
 }
 
-// SetDrivetrain gets a reference to the given Drivetrain and assigns it to the Drivetrain field.
-func (o *AeAdvisoryAssetAmsDetail) SetDrivetrain(v Drivetrain) {
+// SetDrivetrain gets a reference to the given CommonVehicleDrivetrain and assigns it to the Drivetrain field.
+func (o *AeAdvisoryAssetAmsDetail) SetDrivetrain(v CommonVehicleDrivetrain) {
 	o.Drivetrain = &v
 }
 
 // GetTitle returns the Title field value if set, zero value otherwise.
-func (o *AeAdvisoryAssetAmsDetail) GetTitle() Title {
+func (o *AeAdvisoryAssetAmsDetail) GetTitle() CommonTitle {
 	if o == nil || IsNil(o.Title) {
-		var ret Title
+		var ret CommonTitle
 		return ret
 	}
 	return *o.Title
@@ -657,7 +657,7 @@ func (o *AeAdvisoryAssetAmsDetail) GetTitle() Title {
 
 // GetTitleOk returns a tuple with the Title field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AeAdvisoryAssetAmsDetail) GetTitleOk() (*Title, bool) {
+func (o *AeAdvisoryAssetAmsDetail) GetTitleOk() (*CommonTitle, bool) {
 	if o == nil || IsNil(o.Title) {
 		return nil, false
 	}
@@ -673,8 +673,8 @@ func (o *AeAdvisoryAssetAmsDetail) HasTitle() bool {
 	return false
 }
 
-// SetTitle gets a reference to the given Title and assigns it to the Title field.
-func (o *AeAdvisoryAssetAmsDetail) SetTitle(v Title) {
+// SetTitle gets a reference to the given CommonTitle and assigns it to the Title field.
+func (o *AeAdvisoryAssetAmsDetail) SetTitle(v CommonTitle) {
 	o.Title = &v
 }
 
